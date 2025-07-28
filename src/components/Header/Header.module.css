@@ -1,0 +1,16 @@
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.header p {
+    color: #5B5B5B;
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+.header h2, .header h3 {
+    margin: 0;
+}

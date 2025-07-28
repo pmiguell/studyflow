@@ -1,0 +1,49 @@
+.sidebar {
+    background-color: #966CF7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 64px;
+    height: 100vh;
+    justify-content: space-between;
+    padding: 1rem 0;
+}
+
+.top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.top h1 {
+    font-size: 1rem;
+    color: #FFF;
+    text-align: center;
+    margin: 0;
+}
+
+.navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.navigation a {
+    color: #FFF;
+    font-size: 1.5rem;
+}
+
+.bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bottom button {
+  background: none;
+  border: none;
+  color: #FFF;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
