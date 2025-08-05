@@ -1,17 +1,34 @@
-import style from './TasksPage.module.css';
-import Button from '../../../../components/Button/Button';
-import { Plus } from 'lucide-react';
+import style from "./TasksPage.module.css";
+import ActionsContainer from "../../components/ActionsContainer/ActionsContainer.jsx";
+import TaskCard from "../../components/TaskCard/TaskCard.jsx";
 
 export default function TasksPage() {
   return (
     <div className={style.tasksPage}>
-        <div className={style.actionsContainer}>
-          <FilterContainer />
-          <Button>
-            <Plus size={18} />
-            Nova tarefa
-          </Button>
-        </div>
+      <ActionsContainer />
+      <div className={style.tasksContainer}>
+        <TaskCard
+          title={"Estudar Serie de Fourrier"}
+          description={"lorem impsum dolor sit amet."}
+          subject={"Cálculo I"}
+          status={"Concluída"}
+          date={"08/04/2025"}
+        />
+        <TaskCard
+          title={"Estudar Serie de Fourrier"}
+          description={"lorem impsum dolor sit amet."}
+          subject={"Cálculo I"}
+          status={"Concluída"}
+          date={"08/04/2025"}
+        />
+        <TaskCard
+          title={"Estudar Serie de Fourrier"}
+          description={"lorem impsum dolor sit amet."}
+          subject={"Cálculo I"}
+          status={"Concluída"}
+          date={"08/04/2025"}
+        />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 .header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     gap: 2rem;
     margin-top: 1rem;
 }
@@ -8,9 +8,33 @@
 .header p {
     color: #5B5B5B;
     margin: 0;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
 }
 
-.header h2, .header h3 {
+.header h3 {
     margin: 0;
+    font-size: 1.25rem;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 1.75rem;
+}
+
+.headerLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.userIcon {
+    background-color: #966CF7;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
 }

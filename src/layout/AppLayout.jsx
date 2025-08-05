@@ -22,9 +22,7 @@ export default function AppLayout() {
       <Sidebar />
       <main className={style.main}>
         <Header pageName={name} pageDescription={description} />
-        <div className={style.content}>
           <Outlet />
-        </div>
       </main>
     </div>
   );
