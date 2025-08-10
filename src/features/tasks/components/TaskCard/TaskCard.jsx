@@ -1,36 +1,62 @@
 import style from "./TaskCard.module.css";
-import { Ellipsis, Calendar, Book } from "lucide-react";
+import { Calendar, Book } from "lucide-react";
 import TaskSpan from "../TaskSpan/TaskSpan.jsx";
+import { useState } from "react";
+import TaskDropdown from "../TaskDropdown/TaskDropdown.jsx";
 
 export default function TaskCard({
+  id,
   title,
   description,
   subject,
   status,
   date,
+  onEditTask,
 }) {
+  const [checked, setChecked] = useState(false);
+  
   return (
     <div className={style.taskCard}>
       <div className={style.taskCardTop}>
         <div className={style.taskCardHeader}>
           <div className={style.checkboxContainer}>
-            <input type="checkbox" />
-            <label htmlFor="" className={style.taskCardTitle}>
+            <input
+              type="checkbox"
+              checked={checked}
+              onChange={() => setChecked(!checked)}
+              id={`task-checkbox-${title}`}
+            />
+            <label
+              htmlFor={`task-checkbox-${title}`}
+              className={`${style.taskCardTitle} ${
+                checked ? style.checkedTitle : ""
+              }`}
+            >
               {title}
             </label>
           </div>
           <p className={style.taskCardDescription}>{description}</p>
         </div>
-        <button className={style.taskCardSettings}>
-          <Ellipsis />
-        </button>
+
+        <TaskDropdown
+          onEdit={() => onEditTask(id)}
+          onChangeStatus={() => onChangeStatus(id)}
+          onDelete={() => onDeleteTask(id)}
+        />
       </div>
+
       <div className={style.taskCardBottom}>
         <div className={style.taskDetails}>
-          <span className={style.taskDate}><Calendar className={style.calendarIcon} />{date}</span>
-          <span className={style.taskSubject}><Book className={style.bookIcon} />{subject}</span>
+          <span className={style.taskDate}>
+            <Calendar className={style.calendarIcon} />
+            {date}
+          </span>
+          <span className={style.taskSubject}>
+            <Book className={style.bookIcon} />
+            {subject}
+          </span>
         </div>
-          <TaskSpan content={status} />
+        <TaskSpan content={status} />
       </div>
     </div>
   );
