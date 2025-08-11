@@ -5,6 +5,7 @@ import LoginPage from "../features/auth/pages/LoginPage/LoginPage";
 import VerifyUserPage from "../features/auth/pages/VerifyUserPage/VerifyUserPage";
 import AppLayout from "../layout/AppLayout";
 import TasksPage from "../features/tasks/pages/TasksPage/TasksPage";
+import SubjectsPage from "../features/subjects/pages/SubjectsPage/SubjectsPage";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <AppLayout />,
     children: [
-      { path: "materias", element: <LoginPage /> },
+      { path: "materias", element: <SubjectsPage /> },
       { path: "tarefas", element: <TasksPage /> },
       { path: "resumos", element: <LoginPage /> },
     ],
