@@ -13,7 +13,7 @@ export default function AppLayout() {
   };
 
   const { name, description } = pageConfig[location.pathname] || {
-    name: "Página",
+    name: "",
     description: "",
   };
 

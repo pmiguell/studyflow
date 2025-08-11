@@ -14,7 +14,7 @@ export default function TasksPage() {
       description: "lorem impsum dolor sit amet.",
       subject: "IA",
       status: "Não iniciado",
-      date: "08/04/2025",
+      date: "2025-04-08",
     },
     {
       id: 2,
@@ -22,7 +22,7 @@ export default function TasksPage() {
       description: "lorem impsum dolor sit amet.",
       subject: "Cálculo II",
       status: "Em andamento",
-      date: "08/04/2025",
+      date: "2025-04-08",
     },
     {
       id: 3,
@@ -30,7 +30,7 @@ export default function TasksPage() {
       description: "lorem impsum dolor sit amet.",
       subject: "TCC I",
       status: "Em andamento",
-      date: "08/04/2025",
+      date: "2025-04-08",
     },
   ]);
 

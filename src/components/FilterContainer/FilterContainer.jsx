@@ -6,6 +6,9 @@ export default function FilterContainer() {
       <p>Filtrar por matéria</p>
       <select name="subjects" id="subjects" className={style.selectSubject}>
         <option value="">Selecione</option>
+        <option value="">IA</option>
+        <option value="">Cálculo II</option>
+        <option value="">TCC I</option>
       </select>
     </div>
   );

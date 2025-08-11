@@ -46,13 +46,6 @@ export default function SubjectModal({ open, onClose, onSubmit, subject }) {
             onChange={handleChange}
             required
           />
-          <textarea
-            name="progress"
-            placeholder="Progresso"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
           <div className={style.actions}>
             <button type="submit">{subject ? "Salvar Alterações" : "Criar"}</button>
             <button type="button" onClick={onClose}>Cancelar</button>

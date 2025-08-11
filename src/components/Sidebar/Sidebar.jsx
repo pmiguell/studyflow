@@ -6,6 +6,7 @@ import {
   Clock,
   Settings,
   LogOut,
+  Home
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -15,28 +16,31 @@ export default function Sidebar() {
       <div className={style.top}>
         <h1>Study <br /> Flow</h1>
         <nav className={style.navigation}>
-          <NavLink to="/dashboard">
+          <NavLink to="/home">
+            <Home />
+          </NavLink>
+          <NavLink to="/materias">
             <BookOpen />
           </NavLink>
-          <NavLink to="/planner">
+          <NavLink to="/tarefas">
             <Pencil />
           </NavLink>
-          <NavLink to="/tasks">
+          <NavLink to="/tarefas">
             <FileText />
           </NavLink>
-          <NavLink to="/history">
+          <NavLink to="/tarefas">
             <Clock />
           </NavLink>
-          <NavLink to="/settings">
+          <NavLink to="/tarefas">
             <Settings />
           </NavLink>
         </nav>
       </div>
 
       <div className={style.bottom}>
-        <button>
+        <NavLink to="/login">
           <LogOut />
-        </button>
+        </NavLink>
       </div>
     </aside>
   );

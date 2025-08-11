@@ -9,11 +9,6 @@ import SubjectsPage from "../features/subjects/pages/SubjectsPage/SubjectsPage";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <AppLayout />,
-    children: [{ element: <HomePage /> }],
-  },
-  {
     path: "/cadastro",
     element: <RegisterPage />,
   },
@@ -29,6 +24,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <AppLayout />,
     children: [
+      { path: "home", element: <HomePage /> },
       { path: "materias", element: <SubjectsPage /> },
       { path: "tarefas", element: <TasksPage /> },
       { path: "resumos", element: <LoginPage /> },

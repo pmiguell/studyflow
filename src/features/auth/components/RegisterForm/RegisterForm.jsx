@@ -9,15 +9,15 @@ export default function RegisterForm() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    try {
-      await registerUser({ username, email, password });
-      navigate("/verificacao");
-    } catch (error) {
+ const handleRegister = (event) => {
+  event.preventDefault();
+  navigate("/verificacao");
+
+  registerUser({ username, email, password })
+    .catch((error) => {
       console.error("Erro no cadastro:", error);
-    }
-  };
+    });
+};
 
   return (
     <form onSubmit={handleRegister} className={style.form}>
