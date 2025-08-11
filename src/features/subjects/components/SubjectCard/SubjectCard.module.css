@@ -1,0 +1,79 @@
+.subjectCard {
+    background-color: #FFF;
+    box-shadow: 2px 2px 2px #D9D9D9;
+    height: 10rem;
+    border-radius: 20px;
+    padding: 1rem 1rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 20rem;
+}
+
+.subjectCardTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subjectCardSettings {
+    background-color: transparent;
+    border: none;
+    color: #000;
+    cursor: pointer;
+}
+
+.subjectCardTitle {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #000;
+}
+
+.subjectCardMiddle {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #000;
+}
+
+.subjectCardProgress {
+    font-size: 0.9rem;
+    color: #5B5B5B;
+    margin-top: 0rem;
+}
+
+.subjectCardBottom {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0rem;
+}
+
+.percentText {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.progressBarContainer {
+    width: 100%;
+}
+
+.progressBarRoot {
+    height: 8px !important;
+    border-radius: 5px !important;
+    background-color: #e0e0e0 !important;
+}
+
+.progressBarBar {
+    background-color: #a26dff !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
