@@ -6,6 +6,7 @@ import VerifyUserPage from "../features/auth/pages/VerifyUserPage/VerifyUserPage
 import AppLayout from "../layout/AppLayout";
 import TasksPage from "../features/tasks/pages/TasksPage/TasksPage";
 import SubjectsPage from "../features/subjects/pages/SubjectsPage/SubjectsPage";
+import PomodoroPage from "../features/pomodoro/pages/PomodoroPage/PomodoroPage";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       { path: "materias", element: <SubjectsPage /> },
       { path: "tarefas", element: <TasksPage /> },
       { path: "resumos", element: <LoginPage /> },
+      { path: "pomodoro", element: <PomodoroPage /> },
     ],
   },
 ]);
