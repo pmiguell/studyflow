@@ -7,6 +7,7 @@ import AppLayout from "../layout/AppLayout";
 import TasksPage from "../features/tasks/pages/TasksPage/TasksPage";
 import SubjectsPage from "../features/subjects/pages/SubjectsPage/SubjectsPage";
 import PomodoroPage from "../features/pomodoro/pages/PomodoroPage/PomodoroPage";
+import SummaryPage from "../features/summary/pages/SummaryPage/SummaryPage"
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
       { path: "home", element: <HomePage /> },
       { path: "materias", element: <SubjectsPage /> },
       { path: "tarefas", element: <TasksPage /> },
-      { path: "resumos", element: <LoginPage /> },
+      { path: "resumos", element: <SummaryPage /> },
       { path: "pomodoro", element: <PomodoroPage /> },
     ],
   },
