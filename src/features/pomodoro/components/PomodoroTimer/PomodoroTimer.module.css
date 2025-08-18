@@ -1,0 +1,80 @@
+.timerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.modeButtons {
+  display: flex;
+  gap: 1rem;
+  background-color: #f0f0f0;
+  border-radius: 20px;
+  padding: 0.3rem;
+}
+
+.modeButtons button {
+  background-color: transparent;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #555;
+  transition: all 0.2s ease-in-out;
+}
+
+.modeButtons button:hover {
+  background-color: #e0e0e0;
+}
+
+.modeButtons button.active {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.timeDisplay {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #333;
+  letter-spacing: 2px;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.actionButtons button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  border: none;
+}
+
+.actionButtons button:first-child {
+  background-color: #966CF7;
+  color: #ffffff;
+}
+
+.actionButtons button:first-child:hover {
+  background-color: #966CF7;
+}
+
+.actionButtons button:last-child {
+  background-color: #e0e0e0;
+  color: #555;
+}
+
+.actionButtons button:last-child:hover {
+  background-color: #d0d0d0;
+}
