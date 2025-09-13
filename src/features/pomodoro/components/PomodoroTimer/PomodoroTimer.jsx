@@ -12,6 +12,8 @@ export default function PomodoroTimer({ timerDurations }) {
   const [seconds, setSeconds] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [currentMode, setCurrentMode] = useState(MODES.POMODORO);
+  
+  const [pomodoroCount, setPomodoroCount] = useState(0);
 
   useEffect(() => {
     const newMinutes = timerDurations[currentMode];
@@ -30,11 +32,28 @@ export default function PomodoroTimer({ timerDurations }) {
           setSeconds(59);
         } else {
           setIsRunning(false);
+          
+          const alarmSound = new Audio('/alarmPomodoro.mp3'); 
+          alarmSound.volume = 1;
+          alarmSound.play();
+
+          if (currentMode === MODES.POMODORO) {
+            const nextCount = pomodoroCount + 1;
+            setPomodoroCount(nextCount);
+            
+            if (nextCount % 4 === 0) {
+              setCurrentMode(MODES.LONG_BREAK);
+            } else {
+              setCurrentMode(MODES.SHORT_BREAK);
+            }
+          } else {
+            setCurrentMode(MODES.POMODORO);
+          }
         }
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [isRunning, minutes, seconds]);
+  }, [isRunning, minutes, seconds, currentMode, pomodoroCount]);
 
   const handleStart = () => {
     setIsRunning(!isRunning);

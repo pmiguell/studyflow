@@ -6,7 +6,17 @@ export default function SettingsModal({ onSave, onClose, initialDurations }) {
   const [shortBreakMinutes, setShortBreakMinutes] = useState(initialDurations.shortBreak);
   const [longBreakMinutes, setLongBreakMinutes] = useState(initialDurations.longBreak);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleSave = () => {
+    if (isNaN(pomodoroMinutes) || isNaN(shortBreakMinutes) || isNaN(longBreakMinutes) ||
+        pomodoroMinutes < 1 || shortBreakMinutes < 1 || longBreakMinutes < 1) {
+      
+      setErrorMessage("Por favor, preencha todos os campos com valores maiores que zero.");
+      return;
+    }
+    
+    setErrorMessage("");
     onSave({
       pomodoro: pomodoroMinutes,
       shortBreak: shortBreakMinutes,
@@ -15,11 +25,13 @@ export default function SettingsModal({ onSave, onClose, initialDurations }) {
     onClose();
   };
 
+
   return (
     <div className={style.modalOverlay}>
       <div className={style.modalContainer}>
         <h2>Configurações</h2>
         
+        {errorMessage && <p className={style.errorMessage}>{errorMessage}</p>}
         <div className={style.inputGroup}>
           <label>Tempo de Foco (minutos):</label>
           <input
