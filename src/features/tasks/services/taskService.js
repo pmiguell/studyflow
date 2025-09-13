@@ -1,38 +1,22 @@
-import axios from "axios"
+import axios from "axios";
 
-const API_URL = 'https://seu-backend/api/tasks';
+const API_URL = "http://localhost:8080/api"; // ajuste para sua URL real
 
-export const getTasks = async () => {
-  const res = await fetch(API_URL);
-  if (!res.ok) throw new Error('Erro ao buscar tarefas');
-  return res.json();
-}
+export const getTasks = async (subjectId) => {
+  const res = await axios.get(`${API_URL}/subjects/${subjectId}/tasks`);
+  return res.data;
+};
 
-export const editTask = async (task) => {
-  const res = await fetch(`${API_URL}/${task.id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(task),
-  });
-  if (!res.ok) throw new Error('Erro ao atualizar tarefa');
-  return res.json();
-}
+export const createTask = async (subjectId, task) => {
+  const res = await axios.post(`${API_URL}/subjects/${subjectId}/tasks`, task);
+  return res.data;
+};
 
-export const createTask = async (task) => {
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(task),
-  });
-  if (!res.ok) throw new Error('Erro ao criar tarefa');
-  return res.json();
-}
+export const editTask = async (subjectId, task) => {
+  const res = await axios.put(`${API_URL}/subjects/${subjectId}/tasks/${task.id}`, task);
+  return res.data;
+};
 
-export const deleteTask = async (id) => {
-  const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-  if (!res.ok) throw new Error('Erro ao deletar tarefa');
-  return true;
-}
-
-
-//Pensar em filtros e ordenação
+export const deleteTask = async (subjectId, id) => {
+  await axios.delete(`${API_URL}/subjects/${subjectId}/tasks/${id}`);
+};
