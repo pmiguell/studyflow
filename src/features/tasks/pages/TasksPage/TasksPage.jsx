@@ -1,50 +1,27 @@
 import style from "./TasksPage.module.css";
 import ActionsContainer from "../../components/ActionsContainer/ActionsContainer.jsx";
 import TaskCard from "../../components/TaskCard/TaskCard.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TaskModal from "../../components/TaskModal/TaskModal.jsx";
+import * as taskService from "../../services/taskService";
 
-export default function TasksPage() {
+export default function TasksPage({ subjectId }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Estudar Algoritmos de Busca",
-      description: "lorem impsum dolor sit amet.",
-      subject: "IA",
-      status: "Não iniciado",
-      date: "2025-04-08",
-    },
-    {
-      id: 2,
-      title: "Fazer exercícios Série de Fourier",
-      description: "lorem impsum dolor sit amet.",
-      subject: "Cálculo II",
-      status: "Em andamento",
-      date: "2025-04-08",
-    },
-    {
-      id: 3,
-      title: "Escrever rascunho de Fundamentação Teórica",
-      description: "lorem impsum dolor sit amet.",
-      subject: "TCC I",
-      status: "Em andamento",
-      date: "2025-04-08",
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
 
-  /*useEffect(() => {
+  useEffect(() => {
     async function loadTasks() {
       try {
-        const data = await taskService.fetchTasks();
+        const data = await taskService.getTasks(subjectId);
         setTasks(data);
       } catch (err) {
         console.error(err);
+        alert("Erro ao carregar tarefas");
       }
     }
     loadTasks();
-  }, []);*/
+  }, [subjectId]);
 
   const handleEditTask = (id) => {
     const task = tasks.find((t) => t.id === id);
@@ -52,23 +29,14 @@ export default function TasksPage() {
     setModalOpen(true);
   };
 
-  /*const handleChangeStatus = async (newStatus) => {
-  // Atualiza status no backend e localmente
-  const updatedTask = { ...statusTask, status: newStatus };
-  // Chamada API para atualizar o status...
-  setTasks(tasks.map(t => t.id === updatedTask.id ? updatedTask : t));
-  setStatusModalOpen(false);
-  setStatusTask(null);
-};*/
-
-  /*const handleSubmit = async (taskData) => {
+  const handleSubmit = async (taskData) => {
     try {
       let updatedTask;
       if (taskData.id) {
-        updatedTask = await taskService.updateTask(taskData);
-        setTasks(tasks.map(t => (t.id === updatedTask.id ? updatedTask : t)));
+        updatedTask = await taskService.editTask(subjectId, taskData);
+        setTasks(tasks.map((t) => (t.id === updatedTask.id ? updatedTask : t)));
       } else {
-        updatedTask = await taskService.createTask(taskData);
+        updatedTask = await taskService.createTask(subjectId, taskData);
         setTasks([...tasks, updatedTask]);
       }
       setModalOpen(false);
@@ -77,17 +45,17 @@ export default function TasksPage() {
       console.error(error);
       alert("Erro ao salvar tarefa");
     }
-  };*/
+  };
 
-  /* const handleDeleteTask = async (id) => {
+  const handleDeleteTask = async (id) => {
     try {
-      await taskService.deleteTask(id);
-      setTasks(tasks.filter(t => t.id !== id));
+      await taskService.deleteTask(subjectId, id);
+      setTasks(tasks.filter((t) => t.id !== id));
     } catch (err) {
       console.error(err);
       alert("Erro ao deletar tarefa");
     }
-  };*/
+  };
 
   return (
     <div className={style.tasksPage}>
@@ -101,12 +69,17 @@ export default function TasksPage() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         task={editingTask}
-        //onSubmit
+        onSubmit={handleSubmit}
       />
 
       <div className={style.tasksContainer}>
         {tasks.map((task) => (
-          <TaskCard key={task.id} {...task} onEditTask={handleEditTask} />
+          <TaskCard
+            key={task.id}
+            {...task}
+            onEditTask={handleEditTask}
+            onDeleteTask={() => handleDeleteTask(task.id)}
+          />
         ))}
       </div>
     </div>

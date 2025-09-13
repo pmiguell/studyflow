@@ -25,7 +25,7 @@ export default function Sidebar() {
           <NavLink to="/tarefas">
             <Pencil />
           </NavLink>
-          <NavLink to="/tarefas">
+          <NavLink to="/resumos">
             <FileText />
           </NavLink>
           <NavLink to="/pomodoro">
