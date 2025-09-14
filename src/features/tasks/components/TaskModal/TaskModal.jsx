@@ -1,26 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import style from "./TaskModal.module.css";
 
-export default function TaskModal({ open, onClose, onSubmit, task }) {
+export default function TaskModal({ open, onClose, onSubmit, task, subjects }) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    subject: "",
-    date: "",
-    status: "Não iniciado"
+    subjectId: "", // 🔹 agora é ID
+    deadline: "",
+    status: "NAO_INICIADO"
   });
 
-  // Preenche o formulário quando task muda (modo edição)
   useEffect(() => {
     if (task) {
-      setFormData(task);
+      setFormData({
+        ...task,
+        subjectId: task.subject.id // 🔹 pegar ID da matéria
+      });
     } else {
       setFormData({
         title: "",
         description: "",
-        subject: "",
-        date: "",
-        status: "Não iniciado"
+        subjectId: "",
+        deadline: "",
+        status: "NAO_INICIADO"
       });
     }
   }, [task]);
@@ -31,11 +33,24 @@ export default function TaskModal({ open, onClose, onSubmit, task }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-    onClose();
-  };
+const handleSubmit = (e) => {
+  e.preventDefault();
+
+  // Se task existe, é edição
+  if (task) {
+    if (!task?.id) {
+      console.error("Task id undefined");
+      return;
+    }
+    onSubmit({ ...task, ...formData }); // envia task completa para edição
+  } else {
+    // Se task não existe, é criação
+    onSubmit({ ...formData }); // envia apenas formData para criação
+  }
+
+  onClose();
+};
+
 
   return (
     <div className={style.overlay}>
@@ -43,40 +58,39 @@ export default function TaskModal({ open, onClose, onSubmit, task }) {
         <h2>{task ? "Editar Tarefa" : "Nova Tarefa"}</h2>
         <form onSubmit={handleSubmit}>
           <input
-            type="text"
             name="title"
-            placeholder="Título"
             value={formData.title}
             onChange={handleChange}
+            placeholder="Título"
             required
           />
           <textarea
             name="description"
-            placeholder="Descrição"
             value={formData.description}
             onChange={handleChange}
+            placeholder="Descrição"
             required
           />
           <select
-            name="subject"
-            value={formData.subject}
+            name="subjectId"
+            value={formData.subjectId}
             onChange={handleChange}
             required
           >
             <option value="">Selecione a Matéria</option>
-            <option value="IA">IA</option>
-            <option value="Cálculo II">Cálculo II</option>
-            <option value="TCC I">TCC I</option>
+            {subjects.map((s) => (
+              <option value={s.id}>{s.title}</option>
+            ))}
           </select>
           <input
             type="date"
-            name="date"
-            value={formData.date}
+            name="deadline"
+            value={formData.deadline}
             onChange={handleChange}
             required
           />
           <div className={style.actions}>
-            <button type="submit">{task ? "Salvar Alterações" : "Criar"}</button>
+            <button type="submit">{task ? "Salvar" : "Criar"}</button>
             <button type="button" onClick={onClose}>Cancelar</button>
           </div>
         </form>

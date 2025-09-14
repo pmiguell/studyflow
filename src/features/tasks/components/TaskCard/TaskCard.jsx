@@ -1,20 +1,26 @@
 import style from "./TaskCard.module.css";
 import { Calendar, Book } from "lucide-react";
 import TaskSpan from "../TaskSpan/TaskSpan.jsx";
-import { useState } from "react";
 import TaskDropdown from "../TaskDropdown/TaskDropdown.jsx";
 
-export default function TaskCard({
-  id,
-  title,
-  description,
-  subject,
-  status,
-  date,
-  onEditTask,
-}) {
-  const [checked, setChecked] = useState(false);
-  
+export default function TaskCard({ task, onEditTask, onDeleteTask, onOpenStatusModal, onUpdateStatus }) {
+  const { id, title, description, subject, status, deadline } = task;
+
+  const friendlyStatusMap = {
+    NAO_INICIADO: "Não iniciado",
+    EM_ANDAMENTO: "Em andamento",
+    CONCLUIDO: "Concluído",
+  };
+
+  const formattedDate = deadline ? deadline.split("-").reverse().join("/") : "Sem data";
+
+  const handleCheckboxChange = () => {
+    const newStatus = status === "CONCLUIDO" ? "NAO_INICIADO" : "CONCLUIDO";
+    if (onUpdateStatus) {
+      onUpdateStatus({ ...task, status: newStatus });
+    }
+  };
+
   return (
     <div className={style.taskCard}>
       <div className={style.taskCardTop}>
@@ -22,15 +28,13 @@ export default function TaskCard({
           <div className={style.checkboxContainer}>
             <input
               type="checkbox"
-              checked={checked}
-              onChange={() => setChecked(!checked)}
-              id={`task-checkbox-${title}`}
+              checked={status === "CONCLUIDO"}
+              onChange={handleCheckboxChange}
+              id={`task-checkbox-${id}`}
             />
             <label
-              htmlFor={`task-checkbox-${title}`}
-              className={`${style.taskCardTitle} ${
-                checked ? style.checkedTitle : ""
-              }`}
+              htmlFor={`task-checkbox-${id}`}
+              className={`${style.taskCardTitle} ${status === "CONCLUIDO" ? style.checkedTitle : ""}`}
             >
               {title}
             </label>
@@ -39,24 +43,25 @@ export default function TaskCard({
         </div>
 
         <TaskDropdown
-          onEdit={() => onEditTask(id)}
-          onChangeStatus={() => onChangeStatus(id)}
-          onDelete={() => onDeleteTask(id)}
-        />
+  onEdit={() => onEditTask(task)}       // envia objeto completo
+  onChangeStatus={() => onOpenStatusModal(task)} // envia objeto completo
+  onDelete={() => onDeleteTask(task.id)}
+/>
+
       </div>
 
       <div className={style.taskCardBottom}>
         <div className={style.taskDetails}>
           <span className={style.taskDate}>
             <Calendar className={style.calendarIcon} />
-            {date}
+            {formattedDate}
           </span>
           <span className={style.taskSubject}>
             <Book className={style.bookIcon} />
-            {subject}
+            {subject?.title || ""}
           </span>
         </div>
-        <TaskSpan content={status} />
+        <TaskSpan content={friendlyStatusMap[status]} />
       </div>
     </div>
   );

@@ -4,8 +4,6 @@ import style from "./SubjectModal.module.css";
 export default function SubjectModal({ open, onClose, onSubmit, subject }) {
   const [formData, setFormData] = useState({
     title: "",
-    progress: "",
-    status: "Não iniciado"
   });
 
   // Preenche o formulário quando materia muda (modo edição)
@@ -15,8 +13,6 @@ export default function SubjectModal({ open, onClose, onSubmit, subject }) {
     } else {
       setFormData({
         title: "",
-        progress: "",
-        status: "Não iniciado"
       });
     }
   }, [subject]);

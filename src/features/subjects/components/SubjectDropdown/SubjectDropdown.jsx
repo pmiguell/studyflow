@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import style from "./SubjectDropdown.module.css";
 import { Ellipsis, Pencil, RefreshCcw, Trash2 } from "lucide-react";
 
-export default function SubjectDropdown({ onEdit }) {
+export default function SubjectDropdown({ onEdit, onDelete }) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -30,7 +30,7 @@ export default function SubjectDropdown({ onEdit }) {
           <button onClick={() => { onEdit(); setOpen(false); }}>
             <Pencil size={16} /> Editar
           </button>
-          <button>
+          <button onClick={() => { onDelete(); setOpen(false); }}>
             <Trash2 size={16} /> Remover
           </button>
         </div>

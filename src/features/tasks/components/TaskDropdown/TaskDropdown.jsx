@@ -2,26 +2,21 @@ import { useState, useRef, useEffect } from "react";
 import style from "./TaskDropdown.module.css";
 import { Ellipsis, Pencil, RefreshCcw, Trash2 } from "lucide-react";
 
-export default function TaskDropdown({ onEdit }) {
+export default function TaskDropdown({ onEdit, onDelete, onChangeStatus }) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setOpen(false);
-      }
-    }
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) setOpen(false);
+    };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <div className={style.dropdownContainer} ref={dropdownRef}>
-      <button
-        className={style.dropdownButton}
-        onClick={() => setOpen(!open)}
-      >
+      <button className={style.dropdownButton} onClick={() => setOpen(!open)}>
         <Ellipsis />
       </button>
 
@@ -30,10 +25,10 @@ export default function TaskDropdown({ onEdit }) {
           <button onClick={() => { onEdit(); setOpen(false); }}>
             <Pencil size={16} /> Editar
           </button>
-          <button>
+          <button onClick={() => { onChangeStatus(); setOpen(false); }}>
             <RefreshCcw size={16} /> Alterar Status
           </button>
-          <button>
+          <button onClick={() => { onDelete(); setOpen(false); }}>
             <Trash2 size={16} /> Remover
           </button>
         </div>

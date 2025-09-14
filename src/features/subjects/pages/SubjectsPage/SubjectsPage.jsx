@@ -3,60 +3,65 @@ import ActionsContainer from "../../components/ActionsContainer/ActionsContainer
 import SubjectCard from "../../components/SubjectCard/SubjectCard.jsx";
 import { useState, useEffect } from "react";
 import SubjectModal from "../../components/SubjectModal/SubjectModal.jsx";
-import * as subjectService from "../../services/subjectsService";
+import {
+  getSubjects,
+  createSubject,
+  editSubject,
+  deleteSubject,
+} from "../../services/subjectsService.js";
 
 export default function SubjectsPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingSubject, setEditingSubject] = useState(null);
   const [subjects, setSubjects] = useState([]);
-  const [loading, setLoading] = useState(true);
 
+  // 🔹 Carregar matérias da API
   useEffect(() => {
-    async function loadSubjects() {
-      try {
-        const data = await subjectService.getSubjects();
-        setSubjects(data);
-      } catch (err) {
-        console.error(err);
-        alert("Erro ao carregar matérias");
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadSubjects();
+    fetchSubjects();
   }, []);
 
+  const fetchSubjects = async () => {
+    try {
+      const data = await getSubjects();
+      setSubjects(data);
+    } catch (error) {
+      console.error("Erro ao carregar matérias:", error);
+    }
+  };
+
   const handleEditSubject = (id) => {
-    const subject = subjects.find((s) => s.id === id);
+    const subject = subjects.find((t) => t.id === id);
     setEditingSubject(subject);
     setModalOpen(true);
   };
 
-  const handleSubmit = async (subjectData) => {
-    try {
-      let updatedSubject;
-      if (subjectData.id) {
-        updatedSubject = await subjectService.editSubject(subjectData);
-        setSubjects(subjects.map((s) => (s.id === updatedSubject.id ? updatedSubject : s)));
-      } else {
-        updatedSubject = await subjectService.createSubject(subjectData);
-        setSubjects([...subjects, updatedSubject]);
-      }
-      setModalOpen(false);
-      setEditingSubject(null);
-    } catch (err) {
-      console.error(err);
-      alert("Erro ao salvar matéria");
+const handleSubmitSubject = async (formData) => {
+  try {
+    if (editingSubject) {
+      // atualiza o título localmente
+      setSubjects(subjects.map(s =>
+        s.id === editingSubject.id ? { ...s, ...formData } : s
+      ));
+      await editSubject({ id: editingSubject.id, ...formData });
+    } else {
+      const newSubject = await createSubject(formData);
+      setSubjects([...subjects, newSubject]);
     }
-  };
+  } catch (error) {
+    console.error("Erro ao salvar matéria:", error);
+  }
+};
 
-  const handleDelete = async (id) => {
+
+
+
+
+  const handleDeleteSubject = async (id) => {
     try {
-      await subjectService.deleteSubject(id);
+      await deleteSubject(id);
       setSubjects(subjects.filter((s) => s.id !== id));
-    } catch (err) {
-      console.error(err);
-      alert("Erro ao deletar matéria");
+    } catch (error) {
+      console.error("Erro ao deletar matéria:", error);
     }
   };
 
@@ -73,33 +78,30 @@ export default function SubjectsPage() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         subject={editingSubject}
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmitSubject}
       />
 
       <div className={style.subjectsContainer}>
-        {loading ? (
-          <p>Carregando matérias...</p>
-        ) : subjects.length > 0 ? (
-          subjects.map((subject) => {
-            const progressPercent =
-              subject.total > 0 ? (subject.completed / subject.total) * 100 : 0;
-            const progressText = `${subject.completed} de ${subject.total} tarefas completadas`;
+        {subjects.map((subject) => {
+          const completed = (subject.tasks || []).filter(
+            (t) => t.completed
+          ).length;
+          const total = (subject.tasks || []).length;
+          const progressPercent = total > 0 ? (completed / total) * 100 : 0;
+          const progressText = `${completed} de ${total} tarefas completadas`;
 
-            return (
-              <SubjectCard
-                key={subject.id}
-                id={subject.id}
-                title={subject.name}
-                progress={progressPercent}
-                progressText={progressText}
-                onEditSubject={handleEditSubject}
-                onDeleteSubject={() => handleDelete(subject.id)}
-              />
-            );
-          })
-        ) : (
-          <p>Nenhuma matéria cadastrada</p>
-        )}
+          return (
+            <SubjectCard
+              key={subject.id}
+              id={subject.id}
+              title={subject.title}
+              progress={progressPercent}
+              progressText={progressText}
+              onEditSubject={handleEditSubject}
+              onDeleteSubject={handleDeleteSubject}
+            />
+          );
+        })}
       </div>
     </div>
   );

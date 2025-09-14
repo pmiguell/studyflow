@@ -1,22 +1,46 @@
 import axios from "axios";
+import { getToken } from "../../auth/services/tokenService";
 
-const API_URL = "http://localhost:8080/api"; // ajuste para sua URL real
+const API_URL = "http://localhost:8080";
 
-export const getTasks = async (subjectId) => {
-  const res = await axios.get(`${API_URL}/subjects/${subjectId}/tasks`);
+const getAxiosConfig = () => {
+  const token = getToken();
+  if (!token) throw new Error("Usuário não autenticado");
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+};
+
+// Listar tarefas
+export const getTasks = async () => {
+  const config = getAxiosConfig();
+  const res = await axios.get(`${API_URL}/tasks`, config);
   return res.data;
 };
 
-export const createTask = async (subjectId, task) => {
-  const res = await axios.post(`${API_URL}/subjects/${subjectId}/tasks`, task);
+// Criar tarefa vinculada a uma matéria
+export const createTask = async (task) => {
+  const config = getAxiosConfig();
+  const res = await axios.post(
+    `${API_URL}/tasks/subject/${task.subjectId}`,
+    task,
+    config
+  );
   return res.data;
 };
 
-export const editTask = async (subjectId, task) => {
-  const res = await axios.put(`${API_URL}/subjects/${subjectId}/tasks/${task.id}`, task);
+// Editar tarefa
+export const editTask = async (task) => {
+  const config = getAxiosConfig();
+  const res = await axios.put(`${API_URL}/tasks/${task.id}`, task, config);
   return res.data;
 };
 
-export const deleteTask = async (subjectId, id) => {
-  await axios.delete(`${API_URL}/subjects/${subjectId}/tasks/${id}`);
+// Deletar tarefa
+export const deleteTask = async (id) => {
+  const config = getAxiosConfig();
+  await axios.delete(`${API_URL}/tasks/${id}`, config);
 };
