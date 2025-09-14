@@ -1,12 +1,27 @@
 import { useState, useEffect } from "react";
 import style from "./PomodoroTimer.module.css";
 
-export default function PomodoroTimer() {
-  
-  const [minutes, setMinutes] = useState(25);
+const MODES = {
+  POMODORO: "pomodoro",
+  SHORT_BREAK: "shortBreak",
+  LONG_BREAK: "longBreak",
+};
+
+export default function PomodoroTimer({ timerDurations }) {
+  const [minutes, setMinutes] = useState(timerDurations.pomodoro);
   const [seconds, setSeconds] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [currentMode, setCurrentMode] = useState(MODES.POMODORO);
   
+  const [pomodoroCount, setPomodoroCount] = useState(0);
+
+  useEffect(() => {
+    const newMinutes = timerDurations[currentMode];
+    setMinutes(newMinutes);
+    setSeconds(0);
+    setIsRunning(false);
+  }, [currentMode, timerDurations]);
+
   useEffect(() => {
     if (isRunning) {
       const interval = setInterval(() => {
@@ -17,39 +32,83 @@ export default function PomodoroTimer() {
           setSeconds(59);
         } else {
           setIsRunning(false);
+          
+          const alarmSound = new Audio('/alarmPomodoro.mp3'); 
+          alarmSound.volume = 1;
+          alarmSound.play();
+
+          if (currentMode === MODES.POMODORO) {
+            const nextCount = pomodoroCount + 1;
+            setPomodoroCount(nextCount);
+            
+            if (nextCount % 4 === 0) {
+              setCurrentMode(MODES.LONG_BREAK);
+            } else {
+              setCurrentMode(MODES.SHORT_BREAK);
+            }
+          } else {
+            setCurrentMode(MODES.POMODORO);
+          }
         }
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [isRunning, minutes, seconds]);
-  
+  }, [isRunning, minutes, seconds, currentMode, pomodoroCount]);
+
   const handleStart = () => {
-    setIsRunning(true);
+    setIsRunning(!isRunning);
   };
-  
+
   const handleReset = () => {
     setIsRunning(false);
-    setMinutes(25);
+    setMinutes(timerDurations[currentMode]);
     setSeconds(0);
+  };
+
+  const handleModeChange = (mode) => {
+    setCurrentMode(mode);
   };
 
   const formatTime = (time) => {
     return time < 10 ? `0${time}` : time;
   };
-  
+
   return (
     <div className={style.timerContainer}>
       <div className={style.modeButtons}>
-        <button>Foco</button>
-        <button>Pausa curta</button>
-        <button>Pausa longa</button>
+        <button
+          onClick={() => handleModeChange(MODES.POMODORO)}
+          className={currentMode === MODES.POMODORO ? style.active : ""}
+        >
+          Foco
+        </button>
+        <button
+          onClick={() => handleModeChange(MODES.SHORT_BREAK)}
+          className={currentMode === MODES.SHORT_BREAK ? style.active : ""}
+        >
+          Pausa curta
+        </button>
+        <button
+          onClick={() => handleModeChange(MODES.LONG_BREAK)}
+          className={currentMode === MODES.LONG_BREAK ? style.active : ""}
+        >
+          Pausa longa
+        </button>
       </div>
       <div className={style.timeDisplay}>
         {formatTime(minutes)}:{formatTime(seconds)}
       </div>
       <div className={style.actionButtons}>
-        <button onClick={handleStart}>Iniciar</button>
-        <button onClick={handleReset} >Resetar</button>
+        <button onClick={handleStart}>
+          {isRunning
+            ? "Pausar"
+            : minutes === timerDurations[currentMode] && seconds === 0
+            ? "Iniciar"
+            : "Retomar"}
+        </button>
+        <button onClick={handleReset} disabled={!isRunning}>
+          Resetar
+        </button>
       </div>
     </div>
   );
