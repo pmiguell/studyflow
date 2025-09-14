@@ -4,25 +4,27 @@ import SummaryCard from "../../components/SummaryCard/SummaryCard";
 import SummaryModal from "../../components/SummaryModal/SummaryModal";
 import { useEffect, useState } from "react";
 import * as summaryService from "../../services/summaryService";
-import { getSubjects } from "../../../subjects/services/subjectsService"; // ajuste o caminho
+import ViewContent from "../../components/ViewContent";
+import { getSubjects } from "../../../subjects/services/subjectsService";
 
-export default function SummaryPage({ subjectId }) {
+export default function SummaryPage() {
   const [summaries, setSummaries] = useState([]);
+  const [filteredSummaries, setFilteredSummaries] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 controle do modal
   const [modalOpen, setModalOpen] = useState(false);
   const [editingSummary, setEditingSummary] = useState(null);
 
-  // 🔹 lista de matérias
   const [subjects, setSubjects] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [viewingSummary, setViewingSummary] = useState(null);
 
   // 🔹 carregar resumos e matérias
   useEffect(() => {
     async function loadData() {
       try {
         const [summaryData, subjectData] = await Promise.all([
-          summaryService.getSummaries(subjectId),
+          summaryService.getSummaries(),
           getSubjects(),
         ]);
         setSummaries(summaryData);
@@ -35,9 +37,23 @@ export default function SummaryPage({ subjectId }) {
       }
     }
     loadData();
-  }, [subjectId]);
+  }, []);
 
-  // Criar ou editar resumo
+  // 🔹 aplicar filtro sempre que summaries ou selectedSubject mudarem
+  useEffect(() => {
+    if (!selectedSubject) {
+      setFilteredSummaries(summaries);
+    } else {
+      setFilteredSummaries(
+        summaries.filter((s) => s.subject?.id === parseInt(selectedSubject))
+      );
+    }
+  }, [summaries, selectedSubject]);
+
+  const handleFilterChange = (subjectId) => {
+    setSelectedSubject(subjectId);
+  };
+
   const handleSubmitSummary = async (formData) => {
     try {
       if (editingSummary) {
@@ -63,10 +79,9 @@ export default function SummaryPage({ subjectId }) {
     }
   };
 
-  // Deletar resumo
   const handleDelete = async (id) => {
     try {
-      await summaryService.deleteSummary(id); // 🔹 só precisa do id
+      await summaryService.deleteSummary(id);
       setSummaries((prev) => prev.filter((s) => s.id !== id));
     } catch (err) {
       console.error(err);
@@ -77,6 +92,8 @@ export default function SummaryPage({ subjectId }) {
   return (
     <div className={style.summaryPage}>
       <ActionsContainer
+        subjects={subjects}
+        onFilterChange={handleFilterChange}
         onNewSummary={() => {
           setEditingSummary(null);
           setModalOpen(true);
@@ -86,18 +103,20 @@ export default function SummaryPage({ subjectId }) {
       <div className={style.summaryContainer}>
         {loading ? (
           <p>Carregando resumos...</p>
-        ) : summaries.length > 0 ? (
-          summaries.map((summary) => (
+        ) : filteredSummaries.length > 0 ? (
+          filteredSummaries.map((summary) => (
             <SummaryCard
               key={summary.id}
               id={summary.id}
               title={summary.title}
+              content={summary.content}
               subject={summary.subject?.title}
               onEdit={() => {
                 setEditingSummary(summary);
                 setModalOpen(true);
               }}
               onDelete={() => handleDelete(summary.id)}
+              onView={() => setViewingSummary(summary)} // 🔹 aqui
             />
           ))
         ) : (
@@ -110,7 +129,14 @@ export default function SummaryPage({ subjectId }) {
         onClose={() => setModalOpen(false)}
         onSubmit={handleSubmitSummary}
         summary={editingSummary}
-        subjects={subjects} // 🔹 aqui passa todas as matérias
+        subjects={subjects}
+      />
+
+      {/* ... no return */}
+      <ViewContent
+        open={!!viewingSummary}
+        onClose={() => setViewingSummary(null)}
+        summary={viewingSummary}
       />
     </div>
   );

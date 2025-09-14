@@ -14,6 +14,8 @@ export default function SubjectsPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingSubject, setEditingSubject] = useState(null);
   const [subjects, setSubjects] = useState([]);
+  const [filteredSubjects, setFilteredSubjects] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState("");
 
   // 🔹 Carregar matérias da API
   useEffect(() => {
@@ -23,22 +25,42 @@ export default function SubjectsPage() {
   const fetchSubjects = async () => {
     try {
       const data = await getSubjects();
-      setSubjects(data);
+      const arrayData = Array.isArray(data) ? data : [];
+      setSubjects(arrayData);
+      setFilteredSubjects(arrayData);
     } catch (error) {
       console.error("Erro ao carregar matérias:", error);
+      setSubjects([]);
+      setFilteredSubjects([]);
     }
+  };
+
+  // 🔹 Atualiza filteredSubjects sempre que subjects ou filtro mudam
+  useEffect(() => {
+    if (!selectedFilter) {
+      setFilteredSubjects(subjects);
+    } else {
+      const filtered = subjects.filter(
+        (s) => s.id === parseInt(selectedFilter)
+      );
+      setFilteredSubjects(filtered);
+    }
+  }, [subjects, selectedFilter]);
+
+  const handleFilterChange = (subjectId) => {
+    setSelectedFilter(subjectId);
   };
 
   const handleEditSubject = (id) => {
     const subject = subjects.find((t) => t.id === id);
-    setEditingSubject(subject);
+    setEditingSubject(subject || null);
     setModalOpen(true);
   };
 
   const handleSubmitSubject = async (formData) => {
     try {
       if (editingSubject) {
-        // atualiza o título localmente
+        // Atualiza localmente
         setSubjects(
           subjects.map((s) =>
             s.id === editingSubject.id ? { ...s, ...formData } : s
@@ -49,6 +71,8 @@ export default function SubjectsPage() {
         const newSubject = await createSubject(formData);
         setSubjects([...subjects, newSubject]);
       }
+      setModalOpen(false);
+      setEditingSubject(null);
     } catch (error) {
       console.error("Erro ao salvar matéria:", error);
     }
@@ -62,12 +86,16 @@ export default function SubjectsPage() {
       console.error("Erro ao deletar matéria:", error);
     }
   };
+  
 
   return (
     <div className={style.subjectsPage}>
       <ActionsContainer
+        subjects={Array.isArray(subjects) ? subjects : []}
+        onFilterChange={handleFilterChange}
         onNewSubject={() => {
           setEditingSubject(null);
+          setSelectedFilter("");
           setModalOpen(true);
         }}
       />
@@ -80,11 +108,12 @@ export default function SubjectsPage() {
       />
 
       <div className={style.subjectsContainer}>
-        {subjects.map((subject) => {
-          const completed = (subject.tasks || []).filter(
+        {Array.isArray(filteredSubjects) && filteredSubjects.map((subject) => {
+          const tasksArray = Array.isArray(subject.tasks) ? subject.tasks : [];
+          const completed = tasksArray.filter(
             (t) => t.status === "CONCLUIDO"
           ).length;
-          const total = (subject.tasks || []).length;
+          const total = tasksArray.length;
           const progressPercent = total > 0 ? (completed / total) * 100 : 0;
           const progressText = `${completed} de ${total} tarefas concluídas`;
 

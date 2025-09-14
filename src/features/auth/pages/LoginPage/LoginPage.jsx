@@ -10,7 +10,7 @@ export default function Login() {
         <h2>Login</h2>
         <p>Entre com seu e-mail e senha para acessar sua conta</p>
         <LoginForm />
-        <p>Não tem uma conta? <Link to={"/register"} className={style.linkToLogin}>Registre-se aqui</Link></p>
+        <p>Não tem uma conta? <Link to={"/cadastro"} className={style.linkToLogin}>Registre-se aqui</Link></p>
       </div>
     </div>
   );

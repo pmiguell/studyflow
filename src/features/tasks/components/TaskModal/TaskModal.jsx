@@ -48,6 +48,14 @@ const handleSubmit = (e) => {
     onSubmit({ ...formData }); // envia apenas formData para criação
   }
 
+      setFormData({
+      title: "",
+      description: "",
+      subjectId: "",
+      deadline: "",
+      status: "NAO_INICIADO"
+    });
+
   onClose();
 };
 

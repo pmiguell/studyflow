@@ -12,7 +12,9 @@ export default function TasksPage() {
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [filteredTasks, setFilteredTasks] = useState([]);
   const [subjects, setSubjects] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("");
 
   useEffect(() => {
     fetchTasks();
@@ -23,6 +25,7 @@ export default function TasksPage() {
     try {
       const data = await getTasks();
       setTasks(data);
+      setFilteredTasks(data); // inicialmente mostra todas
     } catch (err) {
       console.error(err);
     }
@@ -37,16 +40,28 @@ export default function TasksPage() {
     }
   };
 
+  // 🔹 Reaplica o filtro sempre que tasks ou selectedSubject mudam
+  useEffect(() => {
+    if (!selectedSubject) {
+      setFilteredTasks(tasks);
+    } else {
+      setFilteredTasks(
+  tasks.filter((t) => t.subject && t.subject.id === parseInt(selectedSubject))
+);
+    }
+  }, [tasks, selectedSubject]);
+
+  const handleFilterChange = (subjectId) => {
+    setSelectedSubject(subjectId);
+  };
+
   const handleEditTask = (task) => {
     setEditingTask(task);
     setModalOpen(true);
   };
 
   const handleUpdateStatus = async (updatedTask) => {
-    if (!updatedTask?.id) {
-      console.error("Task id undefined");
-      return;
-    }
+    if (!updatedTask?.id) return;
     try {
       const updated = await editTask(updatedTask);
       setTasks(tasks.map((t) => (t.id === updated.id ? updated : t)));
@@ -73,15 +88,21 @@ export default function TasksPage() {
 
 const handleSaveTask = async (taskData) => {
   try {
+    let updatedTask;
     if (taskData.id) {
-      // Edição
-      const updated = await editTask(taskData);
-      setTasks(tasks.map((t) => (t.id === updated.id ? updated : t)));
+      updatedTask = await editTask(taskData);
+      setTasks(tasks.map((t) => (t.id === updatedTask.id ? updatedTask : t)));
     } else {
-      // Criação
-      const created = await createTask(taskData);
-      setTasks([...tasks, created]);
+      updatedTask = await createTask(taskData);
+      setTasks([...tasks, updatedTask]);
     }
+
+    // 🔹 Recarregar matérias completas
+    const subjectsData = await getSubjects();
+    setSubjects(Array.isArray(subjectsData) ? subjectsData : []);
+
+    setModalOpen(false);
+    setEditingTask(null);
   } catch (err) {
     console.error(err);
     alert("Erro ao salvar tarefa");
@@ -89,23 +110,26 @@ const handleSaveTask = async (taskData) => {
 };
 
 
+
   return (
     <div className={style.tasksPage}>
       <ActionsContainer
+        subjects={subjects}
+        onFilterChange={handleFilterChange}
         onNewTask={() => {
           setEditingTask(null);
+          setSelectedSubject(""); // resetar filtro
           setModalOpen(true);
         }}
       />
 
-<TaskModal
-  open={modalOpen}
-  onClose={() => setModalOpen(false)}
-  task={editingTask}
-  onSubmit={handleSaveTask}  // 🔹 agora funciona tanto para criar quanto editar
-  subjects={subjects}
-/>
-
+      <TaskModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        task={editingTask}
+        onSubmit={handleSaveTask}
+        subjects={subjects}
+      />
 
       {statusModalOpen && (
         <TaskStatusModal
@@ -116,14 +140,14 @@ const handleSaveTask = async (taskData) => {
       )}
 
       <div className={style.tasksContainer}>
-        {tasks.map((task) => (
+        {(filteredTasks || []).map((task) => (
           <TaskCard
             key={task.id}
             task={task}
             onEditTask={handleEditTask}
             onDeleteTask={handleDeleteTask}
             onOpenStatusModal={openStatusModal}
-            onUpdateStatus={handleUpdateStatus} // opcional para checkbox
+            onUpdateStatus={handleUpdateStatus}
           />
         ))}
       </div>

@@ -8,6 +8,7 @@ import TasksPage from "../features/tasks/pages/TasksPage/TasksPage";
 import SubjectsPage from "../features/subjects/pages/SubjectsPage/SubjectsPage";
 import PomodoroPage from "../features/pomodoro/pages/PomodoroPage/PomodoroPage";
 import SummaryPage from "../features/summary/pages/SummaryPage/SummaryPage"
+import AccountPage from "../features/account/pages/AccountPage";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
       { path: "tarefas", element: <TasksPage /> },
       { path: "resumos", element: <SummaryPage /> },
       { path: "pomodoro", element: <PomodoroPage /> },
+      { path: "perfil", element: <AccountPage /> },
     ],
   },
 ]);
