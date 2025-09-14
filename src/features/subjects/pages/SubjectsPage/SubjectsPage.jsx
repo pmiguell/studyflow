@@ -35,26 +35,24 @@ export default function SubjectsPage() {
     setModalOpen(true);
   };
 
-const handleSubmitSubject = async (formData) => {
-  try {
-    if (editingSubject) {
-      // atualiza o título localmente
-      setSubjects(subjects.map(s =>
-        s.id === editingSubject.id ? { ...s, ...formData } : s
-      ));
-      await editSubject({ id: editingSubject.id, ...formData });
-    } else {
-      const newSubject = await createSubject(formData);
-      setSubjects([...subjects, newSubject]);
+  const handleSubmitSubject = async (formData) => {
+    try {
+      if (editingSubject) {
+        // atualiza o título localmente
+        setSubjects(
+          subjects.map((s) =>
+            s.id === editingSubject.id ? { ...s, ...formData } : s
+          )
+        );
+        await editSubject({ id: editingSubject.id, ...formData });
+      } else {
+        const newSubject = await createSubject(formData);
+        setSubjects([...subjects, newSubject]);
+      }
+    } catch (error) {
+      console.error("Erro ao salvar matéria:", error);
     }
-  } catch (error) {
-    console.error("Erro ao salvar matéria:", error);
-  }
-};
-
-
-
-
+  };
 
   const handleDeleteSubject = async (id) => {
     try {
@@ -84,11 +82,11 @@ const handleSubmitSubject = async (formData) => {
       <div className={style.subjectsContainer}>
         {subjects.map((subject) => {
           const completed = (subject.tasks || []).filter(
-            (t) => t.completed
+            (t) => t.status === "CONCLUIDO"
           ).length;
           const total = (subject.tasks || []).length;
           const progressPercent = total > 0 ? (completed / total) * 100 : 0;
-          const progressText = `${completed} de ${total} tarefas completadas`;
+          const progressText = `${completed} de ${total} tarefas concluídas`;
 
           return (
             <SubjectCard
