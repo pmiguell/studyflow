@@ -21,7 +21,7 @@
   position: relative; /* Isso é crucial! Serve como o ponto de referência para o botão de configurações */
   width: 100%;
   max-width: 500px;
-  background-color: #333;
+  background-color: #F5F5F5;
   border-radius: 10px;
   padding: 30px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);

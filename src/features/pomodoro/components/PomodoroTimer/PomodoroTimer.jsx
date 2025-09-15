@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { RiResetLeftFill } from "react-icons/ri";
+import { CiPlay1, CiPause1  } from "react-icons/ci";
 import style from "./PomodoroTimer.module.css";
 
 const MODES = {
@@ -101,12 +103,13 @@ export default function PomodoroTimer({ timerDurations }) {
       <div className={style.actionButtons}>
         <button onClick={handleStart}>
           {isRunning
-            ? "Pausar"
+            ? <span><CiPause1 /> Pausar</span>
             : minutes === timerDurations[currentMode] && seconds === 0
-            ? "Iniciar"
-            : "Retomar"}
+            ? <span><CiPlay1 /> Iniciar</span>
+            : <span><CiPlay1 /> Retomar</span>}
         </button>
-        <button onClick={handleReset} disabled={!isRunning}>
+        <button onClick={handleReset}>
+          <RiResetLeftFill />
           Resetar
         </button>
       </div>

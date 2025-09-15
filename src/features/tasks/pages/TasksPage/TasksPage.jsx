@@ -6,16 +6,23 @@ import TaskModal from "../../components/TaskModal/TaskModal.jsx";
 import TaskStatusModal from "../../components/TaskStatusModal/TaskStatusModal.jsx";
 import { getTasks, createTask, editTask, deleteTask } from "../../services/taskService.js";
 import { getSubjects } from "../../../subjects/services/subjectsService.js";
+import { useLocation } from "react-router-dom";
 
 export default function TasksPage() {
+  const location = useLocation();
+  const subjectFromNav = location.state?.subject; // recebe matéria do navigate
+
   const [modalOpen, setModalOpen] = useState(false);
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [subjects, setSubjects] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState("");
 
+  const [selectedSubject, setSelectedSubject] = useState(subjectFromNav || null);
+
+
+  // Busca tasks e subjects
   useEffect(() => {
     fetchTasks();
     fetchSubjects();
@@ -40,14 +47,14 @@ export default function TasksPage() {
     }
   };
 
-  // 🔹 Reaplica o filtro sempre que tasks ou selectedSubject mudam
+  // Reaplica filtro sempre que tasks ou selectedSubject mudam
   useEffect(() => {
     if (!selectedSubject) {
       setFilteredTasks(tasks);
     } else {
       setFilteredTasks(
-  tasks.filter((t) => t.subject && t.subject.id === parseInt(selectedSubject))
-);
+        tasks.filter((t) => t.subject && t.subject.id === selectedSubject.id)
+      );
     }
   }, [tasks, selectedSubject]);
 
@@ -86,39 +93,38 @@ export default function TasksPage() {
     }
   };
 
-const handleSaveTask = async (taskData) => {
-  try {
-    let updatedTask;
-    if (taskData.id) {
-      updatedTask = await editTask(taskData);
-      setTasks(tasks.map((t) => (t.id === updatedTask.id ? updatedTask : t)));
-    } else {
-      updatedTask = await createTask(taskData);
-      setTasks([...tasks, updatedTask]);
+  const handleSaveTask = async (taskData) => {
+    try {
+      let updatedTask;
+      if (taskData.id) {
+        updatedTask = await editTask(taskData);
+        setTasks(tasks.map((t) => (t.id === updatedTask.id ? updatedTask : t)));
+      } else {
+        updatedTask = await createTask(taskData);
+        setTasks([...tasks, updatedTask]);
+      }
+
+      // Recarrega matérias completas
+      const subjectsData = await getSubjects();
+      setSubjects(Array.isArray(subjectsData) ? subjectsData : []);
+
+      setModalOpen(false);
+      setEditingTask(null);
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao salvar tarefa");
     }
-
-    // 🔹 Recarregar matérias completas
-    const subjectsData = await getSubjects();
-    setSubjects(Array.isArray(subjectsData) ? subjectsData : []);
-
-    setModalOpen(false);
-    setEditingTask(null);
-  } catch (err) {
-    console.error(err);
-    alert("Erro ao salvar tarefa");
-  }
-};
-
-
+  };
 
   return (
     <div className={style.tasksPage}>
       <ActionsContainer
         subjects={subjects}
-        onFilterChange={handleFilterChange}
+        onFilterChange={(subject) => setSelectedSubject(subject)}
+        selectedSubject={selectedSubject} // agora é o objeto da matéria
         onNewTask={() => {
           setEditingTask(null);
-          setSelectedSubject(""); // resetar filtro
+          setSelectedSubject(null); // resetar filtro
           setModalOpen(true);
         }}
       />

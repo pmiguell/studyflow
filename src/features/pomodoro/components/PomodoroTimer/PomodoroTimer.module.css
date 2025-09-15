@@ -39,7 +39,7 @@
 .timeDisplay {
   font-size: 4rem;
   font-weight: 700;
-  color: #fff;
+  color: #333;
   letter-spacing: 2px;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .actionButtons button:last-child {
-  background-color: #e0e0e0;
+  background-color: #fff;
   color: #555;
 }
 

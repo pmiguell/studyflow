@@ -1,7 +1,7 @@
 .tasksContainer {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     gap: 2rem;
     margin: 3rem 0;
@@ -9,4 +9,8 @@
     border-radius: 20px;
     box-shadow: 2px 2px 2px #D9D9D9;
     padding: 2rem;
+}
+
+.tasksContainer > *:only-child {
+    flex: 1 1 100%;
 }
