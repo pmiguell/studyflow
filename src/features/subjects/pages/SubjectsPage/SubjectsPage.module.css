@@ -10,3 +10,7 @@
     box-shadow: 2px 2px 2px #D9D9D9;
     padding: 2rem;
 }
+
+.subjectsContainer > *:only-child {
+    flex: 1 1 100%;
+}

@@ -7,7 +7,7 @@ export default function Header({ pageName, pageDescription }) {
     <header className={style.header}>
       <div className={style.headerLeft}>
         <div className={style.greetings}>
-          <h3>Olá, Pedro!</h3>
+          <h3>Olá!</h3>
           <p>Seja bem-vindo(a) ao StudyFlow</p>
         </div>
         <div>

@@ -4,6 +4,7 @@ import style from "./SubjectModal.module.css";
 export default function SubjectModal({ open, onClose, onSubmit, subject }) {
   const [formData, setFormData] = useState({
     title: "",
+    color: "#a26dff",
   });
 
   // Preenche o formulário quando materia muda (modo edição)
@@ -13,6 +14,7 @@ export default function SubjectModal({ open, onClose, onSubmit, subject }) {
     } else {
       setFormData({
         title: "",
+        color: "#a26dff" // cor padrão
       });
     }
   }, [subject]);
@@ -42,6 +44,21 @@ export default function SubjectModal({ open, onClose, onSubmit, subject }) {
             onChange={handleChange}
             required
           />
+
+          {/* <div className={style.colorPickerWrapper}>
+            <span className={style.colorPickerText}>Cor da matéria:</span>
+            <label className={style.colorBox} style={{ backgroundColor: formData.color }}>
+              <input
+                type="color"
+                name="color"
+                value={formData.color}
+                onChange={handleChange}
+                className={style.colorInput}
+              />
+            </label>
+          </div> */}
+
+
           <div className={style.actions}>
             <button type="submit">{subject ? "Salvar Alterações" : "Criar"}</button>
             <button type="button" onClick={onClose}>Cancelar</button>

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import style from "./SubjectCard.module.css";
 import { LinearProgress, Box } from "@mui/material";
 import SubjectDropdown from "../SubjectDropdown/SubjectDropdown.jsx";
@@ -5,13 +6,22 @@ import SubjectDropdown from "../SubjectDropdown/SubjectDropdown.jsx";
 export default function SubjectCard({
   id,
   title,
+  color,
   progress,
   progressText,
   onEditSubject,
   onDeleteSubject
 }) {
+  const navigate = useNavigate();
+
+  const handleViewTasks = () => {
+    navigate("/tarefas", { state: { subject: { id, name: title } } });
+  };
+
   return (
     <div className={style.subjectCard}>
+      <div className={style.colorLine} style={{ backgroundColor: color }} />
+
       <div className={style.subjectCardTop}>
         <div className={style.subjectCardHeader}>
           <h1 className={style.subjectCardTitle}>{title}</h1>
@@ -42,7 +52,10 @@ export default function SubjectCard({
           </p>
         </Box>
       </div>
-      <p>Ver tarefas</p>
+
+      <p className={style.viewTasks} onClick={handleViewTasks}>
+        Ver tarefas
+      </p>
     </div>
   );
 }

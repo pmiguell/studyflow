@@ -38,6 +38,79 @@
   box-sizing: border-box;
 }
 
+.colorPickerWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.colorPickerText {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.colorBox {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  cursor: pointer;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.colorInput {
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.colorPickerWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  flex-wrap: nowrap;
+}
+
+.colorPickerText {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #444;
+  white-space: nowrap;
+}
+
+/* Quadrado que mostra a cor */
+.colorBox {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 2px solid #ddd;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+}
+
+/* Input real escondido */
+.colorInput {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+
+
 .actions {
   display: flex;
   gap: 1rem;
