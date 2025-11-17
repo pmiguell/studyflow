@@ -31,7 +31,6 @@ export default function SummaryPage() {
         setSubjects(subjectData || []);
       } catch (err) {
         console.error(err);
-        alert("Erro ao carregar dados");
       } finally {
         setLoading(false);
       }
@@ -75,7 +74,6 @@ export default function SummaryPage() {
       setEditingSummary(null);
     } catch (err) {
       console.error(err);
-      alert("Erro ao salvar resumo");
     }
   };
 
@@ -85,7 +83,6 @@ export default function SummaryPage() {
       setSummaries((prev) => prev.filter((s) => s.id !== id));
     } catch (err) {
       console.error(err);
-      alert("Erro ao deletar resumo");
     }
   };
 

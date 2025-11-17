@@ -38,17 +38,16 @@ export default function SubjectsPage() {
   // 🔹 Atualiza filteredSubjects sempre que subjects ou filtro mudam
   useEffect(() => {
     if (!selectedFilter) {
-      setFilteredSubjects(subjects);
+      setFilteredSubjects(subjects); // Todas
     } else {
-      const filtered = subjects.filter(
-        (s) => s.id === parseInt(selectedFilter)
-      );
+      const filterId = Number(selectedFilter);
+      const filtered = subjects.filter((s) => s.id === filterId);
       setFilteredSubjects(filtered);
     }
   }, [subjects, selectedFilter]);
 
   const handleFilterChange = (subjectId) => {
-    setSelectedFilter(subjectId);
+    setSelectedFilter(subjectId); // string ou ""
   };
 
   const handleEditSubject = (id) => {
@@ -60,7 +59,6 @@ export default function SubjectsPage() {
   const handleSubmitSubject = async (formData) => {
     try {
       if (editingSubject) {
-        // Atualiza localmente
         setSubjects(
           subjects.map((s) =>
             s.id === editingSubject.id ? { ...s, ...formData } : s
@@ -86,12 +84,12 @@ export default function SubjectsPage() {
       console.error("Erro ao deletar matéria:", error);
     }
   };
-  
 
   return (
     <div className={style.subjectsPage}>
       <ActionsContainer
-        subjects={Array.isArray(subjects) ? subjects : []}
+        subjects={subjects}
+        selectedFilter={selectedFilter}
         onFilterChange={handleFilterChange}
         onNewSubject={() => {
           setEditingSubject(null);
@@ -108,27 +106,26 @@ export default function SubjectsPage() {
       />
 
       <div className={style.subjectsContainer}>
-        {Array.isArray(filteredSubjects) && filteredSubjects.map((subject) => {
-          const tasksArray = Array.isArray(subject.tasks) ? subject.tasks : [];
-          const completed = tasksArray.filter(
-            (t) => t.status === "CONCLUIDO"
-          ).length;
-          const total = tasksArray.length;
-          const progressPercent = total > 0 ? (completed / total) * 100 : 0;
-          const progressText = `${completed} de ${total} tarefas concluídas`;
+        {Array.isArray(filteredSubjects) &&
+          filteredSubjects.map((subject) => {
+            const tasksArray = Array.isArray(subject.tasks) ? subject.tasks : [];
+            const completed = tasksArray.filter((t) => t.status === "CONCLUIDO").length;
+            const total = tasksArray.length;
+            const progressPercent = total > 0 ? (completed / total) * 100 : 0;
+            const progressText = `${completed} de ${total} tarefas concluídas`;
 
-          return (
-            <SubjectCard
-              key={subject.id}
-              id={subject.id}
-              title={subject.title}
-              progress={progressPercent}
-              progressText={progressText}
-              onEditSubject={handleEditSubject}
-              onDeleteSubject={handleDeleteSubject}
-            />
-          );
-        })}
+            return (
+              <SubjectCard
+                key={subject.id}
+                id={subject.id}
+                title={subject.title}
+                progress={progressPercent}
+                progressText={progressText}
+                onEditSubject={handleEditSubject}
+                onDeleteSubject={handleDeleteSubject}
+              />
+            );
+          })}
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ import { useLocation } from "react-router-dom";
 
 export default function TasksPage() {
   const location = useLocation();
-  const subjectFromNav = location.state?.subject; // recebe matéria do navigate
+  const subjectFromNav = location.state?.subject; // matéria do navigate
 
   const [modalOpen, setModalOpen] = useState(false);
   const [statusModalOpen, setStatusModalOpen] = useState(false);
@@ -19,8 +19,8 @@ export default function TasksPage() {
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [subjects, setSubjects] = useState([]);
 
-  const [selectedSubject, setSelectedSubject] = useState(subjectFromNav || null);
-
+  // Agora guardamos só o ID da matéria para filtro
+  const [selectedSubjectId, setSelectedSubjectId] = useState(subjectFromNav?.id || "");
 
   // Busca tasks e subjects
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function TasksPage() {
     try {
       const data = await getTasks();
       setTasks(data);
-      setFilteredTasks(data); // inicialmente mostra todas
+      setFilteredTasks(data);
     } catch (err) {
       console.error(err);
     }
@@ -47,20 +47,18 @@ export default function TasksPage() {
     }
   };
 
-  // Reaplica filtro sempre que tasks ou selectedSubject mudam
+  // Reaplica filtro sempre que tasks ou selectedSubjectId mudam
   useEffect(() => {
-    if (!selectedSubject) {
+    if (!selectedSubjectId) {
       setFilteredTasks(tasks);
     } else {
       setFilteredTasks(
-        tasks.filter((t) => t.subject && t.subject.id === selectedSubject.id)
+        tasks.filter(
+          (t) => t.subject && t.subject.id.toString() === selectedSubjectId.toString()
+        )
       );
     }
-  }, [tasks, selectedSubject]);
-
-  const handleFilterChange = (subjectId) => {
-    setSelectedSubject(subjectId);
-  };
+  }, [tasks, selectedSubjectId]);
 
   const handleEditTask = (task) => {
     setEditingTask(task);
@@ -120,11 +118,11 @@ export default function TasksPage() {
     <div className={style.tasksPage}>
       <ActionsContainer
         subjects={subjects}
-        onFilterChange={(subject) => setSelectedSubject(subject)}
-        selectedSubject={selectedSubject} // agora é o objeto da matéria
+        selectedSubject={selectedSubjectId}
+        onFilterChange={setSelectedSubjectId}
         onNewTask={() => {
           setEditingTask(null);
-          setSelectedSubject(null); // resetar filtro
+          setSelectedSubjectId(""); // resetar filtro
           setModalOpen(true);
         }}
       />

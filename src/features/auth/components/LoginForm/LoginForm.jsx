@@ -15,7 +15,7 @@ export default function LoginForm() {
     try {
       const data = await loginUser({ email, password });
       saveToken(data.token);
-      navigate("/");
+      navigate("/materias");
     } catch (error) {
       console.error("Erro no login:", error);
     }

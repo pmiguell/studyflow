@@ -7,32 +7,30 @@ import AppLayout from "../layout/AppLayout";
 import TasksPage from "../features/tasks/pages/TasksPage/TasksPage";
 import SubjectsPage from "../features/subjects/pages/SubjectsPage/SubjectsPage";
 import PomodoroPage from "../features/pomodoro/pages/PomodoroPage/PomodoroPage";
-import SummaryPage from "../features/summary/pages/SummaryPage/SummaryPage"
+import SummaryPage from "../features/summary/pages/SummaryPage/SummaryPage";
 import AccountPage from "../features/account/pages/AccountPage";
+import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute"; // <--- import novo
 
 const router = createBrowserRouter([
-  {
-    path: "/cadastro",
-    element: <RegisterPage />,
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/verificacao",
-    element: <VerifyUserPage />,
-  },
+  { path: "/cadastro", element: <RegisterPage /> },
+  { path: "/login", element: <LoginPage /> },
+  { path: "/verificacao", element: <VerifyUserPage /> },
+
   {
     path: "/",
-    element: <AppLayout />,
+    element: <ProtectedRoute />, // protege todas as rotas abaixo
     children: [
-      { path: "home", element: <HomePage /> },
-      { path: "materias", element: <SubjectsPage /> },
-      { path: "tarefas", element: <TasksPage /> },
-      { path: "resumos", element: <SummaryPage /> },
-      { path: "pomodoro", element: <PomodoroPage /> },
-      { path: "perfil", element: <AccountPage /> },
+      {
+        element: <AppLayout />,
+        children: [
+          { path: "home", element: <HomePage /> },
+          { path: "materias", element: <SubjectsPage /> },
+          { path: "tarefas", element: <TasksPage /> },
+          { path: "resumos", element: <SummaryPage /> },
+          { path: "pomodoro", element: <PomodoroPage /> },
+          { path: "perfil", element: <AccountPage /> },
+        ],
+      },
     ],
   },
 ]);

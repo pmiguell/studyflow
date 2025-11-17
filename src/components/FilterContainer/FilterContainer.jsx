@@ -5,14 +5,9 @@ export default function FilterContainer({ subjects, selectedSubject, onFilterCha
     <div className={style.filterContainer}>
       <p>Filtrar por matéria</p>
       <select
-        name="subjects"
-        id="subjects"
+        value={selectedSubject || ""}
+        onChange={(e) => onFilterChange(e.target.value)}
         className={style.selectSubject}
-        value={selectedSubject ? selectedSubject.id : ""} // mostra a matéria selecionada
-        onChange={(e) => {
-          const subject = subjects.find(s => s.id === parseInt(e.target.value));
-          onFilterChange(subject || null);
-        }}
       >
         <option value="">Todas</option>
         {Array.isArray(subjects) &&
