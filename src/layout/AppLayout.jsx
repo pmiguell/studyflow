@@ -10,6 +10,7 @@ export default function AppLayout() {
     "/materias": { name: "Matérias", description: "Gerencie aqui suas matérias de estudo" },
     "/tarefas": { name: "Tarefas", description: "Gerencie aqui suas tarefas por matéria" },
     "/resumos": { name: "Resumos", description: "Gerencie aqui seus resumos por matéria" },
+    "/kanban": { name: "Kanban Board", description: "Gerencie aqui seu board de tarefas"}
   };
 
   const { name, description } = pageConfig[location.pathname] || {

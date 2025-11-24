@@ -6,7 +6,8 @@ import {
   Clock,
   Settings,
   LogOut,
-  Home
+  Home,
+  SquareKanban
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -27,6 +28,9 @@ export default function Sidebar() {
           </NavLink>
           <NavLink to="/resumos">
             <FileText />
+          </NavLink>
+          <NavLink to="/kanban">
+            <SquareKanban />
           </NavLink>
           <NavLink to="/pomodoro">
             <Clock />
