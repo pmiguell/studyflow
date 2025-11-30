@@ -25,12 +25,24 @@
 .navigation {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .navigation a {
   color: #fff;
   font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+}
+
+.navigation a:hover {
+  background-color: #7957D0;
 }
 
 .bottom {
@@ -50,4 +62,16 @@
 .bottom a {
   color: #fff;
   font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+}
+
+.bottom a:hover {
+  background-color: #7957D0;
 }
