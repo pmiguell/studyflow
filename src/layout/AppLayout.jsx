@@ -21,7 +21,7 @@ export default function AppLayout() {
     <div className={style.app}>
       <Sidebar />
       <main className={style.main}>
-        <Header pageName={name} pageDescription={description} />
+        {/* <Header pageName={name} pageDescription={description} /> */}
           <Outlet />
       </main>
     </div>

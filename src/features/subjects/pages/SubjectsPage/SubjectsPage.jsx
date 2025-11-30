@@ -1,5 +1,7 @@
 import style from "./SubjectsPage.module.css";
 import ActionsContainer from "../../components/ActionsContainer/ActionsContainer.jsx";
+import FilterContainer from "../../../../components/FilterContainer/FilterContainer";
+import Header from "../../../../components/Header/Header";
 import SubjectCard from "../../components/SubjectCard/SubjectCard.jsx";
 import { useState, useEffect } from "react";
 import SubjectModal from "../../components/SubjectModal/SubjectModal.jsx";
@@ -87,15 +89,24 @@ export default function SubjectsPage() {
 
   return (
     <div className={style.subjectsPage}>
-      <ActionsContainer
+      <div className={style.topBar}>
+        <Header 
+          pageName="Suas Matérias" 
+          pageDescription="Gerencie e organize seus materiais de estudo." 
+        />
+        <ActionsContainer
+          onNewSubject={() => {
+            setEditingSubject(null);
+            setSelectedFilter("");
+            setModalOpen(true);
+          }}
+        />
+      </div>
+
+      <FilterContainer
         subjects={subjects}
-        selectedFilter={selectedFilter}
+        selectedSubject={selectedFilter}
         onFilterChange={handleFilterChange}
-        onNewSubject={() => {
-          setEditingSubject(null);
-          setSelectedFilter("");
-          setModalOpen(true);
-        }}
       />
 
       <SubjectModal

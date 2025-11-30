@@ -1,8 +1,8 @@
 .button {
     background-color: #966CF7;
-    width: 10rem;
+    width: 12rem;
     height: 2.5rem;
-    border-radius: 20px;
+    border-radius: 6px;
     border: none;
     display: flex;
     align-items: center;
@@ -11,4 +11,14 @@
     color: #FFF;
     font-size: 0.9rem;
     cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.button:hover {
+    background-color: #7957D0;
+}
+
+.button:active {
+    background-color: #6343B8;
 }

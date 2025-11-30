@@ -14,3 +14,10 @@
 .tasksContainer > *:only-child {
     flex: 1 1 100%;
 }
+
+.topBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import style from "./TasksPage.module.css";
 import ActionsContainer from "../../components/ActionsContainer/ActionsContainer.jsx";
+import Header from "../../../../components/Header/Header";
+import FilterContainer from '../../../../components/FilterContainer/FilterContainer';
 import TaskCard from "../../components/TaskCard/TaskCard.jsx";
 import TaskModal from "../../components/TaskModal/TaskModal.jsx";
 import TaskStatusModal from "../../components/TaskStatusModal/TaskStatusModal.jsx";
@@ -116,16 +118,21 @@ export default function TasksPage() {
 
   return (
     <div className={style.tasksPage}>
-      <ActionsContainer
-        subjects={subjects}
-        selectedSubject={selectedSubjectId}
-        onFilterChange={setSelectedSubjectId}
-        onNewTask={() => {
-          setEditingTask(null);
-          setSelectedSubjectId(""); // resetar filtro
-          setModalOpen(true);
-        }}
-      />
+      <div className={style.topBar}>
+        <Header 
+          pageName="Suas Tarefas" 
+          pageDescription="Gerencie e organize seus materiais de estudo." 
+        />
+        <ActionsContainer
+          onNewTask={() => {
+            setEditingTask(null);
+            setSelectedSubjectId("");
+            setModalOpen(true);
+          }}
+        />
+      </div>
+      
+      <FilterContainer subjects={subjects} selectedSubject={selectedSubjectId} onFilterChange={setSelectedSubjectId}/>
 
       <TaskModal
         open={modalOpen}
