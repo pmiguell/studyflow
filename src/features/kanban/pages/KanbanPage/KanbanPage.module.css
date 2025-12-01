@@ -1,0 +1,7 @@
+.kanbanContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: #f5f5f5;
+  box-shadow: 2px 2px 2px #d9d9d9;
+}

@@ -9,7 +9,8 @@ import SubjectsPage from "../features/subjects/pages/SubjectsPage/SubjectsPage";
 import PomodoroPage from "../features/pomodoro/pages/PomodoroPage/PomodoroPage";
 import SummaryPage from "../features/summary/pages/SummaryPage/SummaryPage";
 import AccountPage from "../features/account/pages/AccountPage";
-import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute"; // <--- import novo
+import KanbanPage from "../features/kanban/pages/KanbanPage/KanbanPage"
+import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 
 const router = createBrowserRouter([
   { path: "/cadastro", element: <RegisterPage /> },
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
           { path: "resumos", element: <SummaryPage /> },
           { path: "pomodoro", element: <PomodoroPage /> },
           { path: "perfil", element: <AccountPage /> },
+          { path: "kanban", element: <KanbanPage /> },
         ],
       },
     ],
