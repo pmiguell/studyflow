@@ -18,6 +18,7 @@ export default function SubjectsPage() {
   const [subjects, setSubjects] = useState([]);
   const [filteredSubjects, setFilteredSubjects] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("");
+  const [loading, setLoading] = useState(true);
 
   // 🔹 Carregar matérias da API
   useEffect(() => {
@@ -34,6 +35,8 @@ export default function SubjectsPage() {
       console.error("Erro ao carregar matérias:", error);
       setSubjects([]);
       setFilteredSubjects([]);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -90,9 +93,9 @@ export default function SubjectsPage() {
   return (
     <div className={style.subjectsPage}>
       <div className={style.topBar}>
-        <Header 
-          pageName="Suas Matérias" 
-          pageDescription="Gerencie e organize seus materiais de estudo." 
+        <Header
+          pageName="Suas Matérias"
+          pageDescription="Gerencie e organize seus materiais de estudo."
         />
         <ActionsContainer
           onNewSubject={() => {
@@ -117,11 +120,16 @@ export default function SubjectsPage() {
       />
 
       <div className={style.subjectsContainer}>
-        {Array.isArray(filteredSubjects) &&
+        {loading ? (
+          <p>Carregando matérias...</p>
+        ) : filteredSubjects.length === 0 ? (
+          <p>Nenhuma matéria encontrada</p>
+        ) : (
           filteredSubjects.map((subject) => {
             const tasksArray = Array.isArray(subject.tasks) ? subject.tasks : [];
             const completed = tasksArray.filter((t) => t.status === "CONCLUIDO").length;
             const total = tasksArray.length;
+
             const progressPercent = total > 0 ? (completed / total) * 100 : 0;
             const progressText = `${completed} de ${total} tarefas concluídas`;
 
@@ -136,7 +144,8 @@ export default function SubjectsPage() {
                 onDeleteSubject={handleDeleteSubject}
               />
             );
-          })}
+          })
+        )}
       </div>
     </div>
   );

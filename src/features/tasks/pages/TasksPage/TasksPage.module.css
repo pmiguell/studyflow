@@ -1,16 +1,16 @@
 .tasksContainer {
     display: flex;
     flex-wrap: wrap;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     gap: 2rem;
     margin: 3rem 0;
     padding: 2rem;
 }
 
-.tasksContainer > *:only-child {
+/* .tasksContainer > *:only-child {
     flex: 1 1 100%;
-}
+} */
 
 .topBar {
     display: flex;

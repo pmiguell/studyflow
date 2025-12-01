@@ -20,6 +20,7 @@ export default function TasksPage() {
   const [tasks, setTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [subjects, setSubjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Agora guardamos só o ID da matéria para filtro
   const [selectedSubjectId, setSelectedSubjectId] = useState(subjectFromNav?.id || "");
@@ -37,6 +38,8 @@ export default function TasksPage() {
       setFilteredTasks(data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,9 +122,9 @@ export default function TasksPage() {
   return (
     <div className={style.tasksPage}>
       <div className={style.topBar}>
-        <Header 
-          pageName="Suas Tarefas" 
-          pageDescription="Gerencie e organize seus materiais de estudo." 
+        <Header
+          pageName="Suas Tarefas"
+          pageDescription="Gerencie e organize seus materiais de estudo."
         />
         <ActionsContainer
           onNewTask={() => {
@@ -131,8 +134,8 @@ export default function TasksPage() {
           }}
         />
       </div>
-      
-      <FilterContainer subjects={subjects} selectedSubject={selectedSubjectId} onFilterChange={setSelectedSubjectId}/>
+
+      <FilterContainer subjects={subjects} selectedSubject={selectedSubjectId} onFilterChange={setSelectedSubjectId} />
 
       <TaskModal
         open={modalOpen}
@@ -151,17 +154,24 @@ export default function TasksPage() {
       )}
 
       <div className={style.tasksContainer}>
-        {(filteredTasks || []).map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            onEditTask={handleEditTask}
-            onDeleteTask={handleDeleteTask}
-            onOpenStatusModal={openStatusModal}
-            onUpdateStatus={handleUpdateStatus}
-          />
-        ))}
+        {loading ? (
+          <p>Carregando tarefas...</p>
+        ) : filteredTasks.length > 0 ? (
+          filteredTasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              onEditTask={handleEditTask}
+              onDeleteTask={handleDeleteTask}
+              onOpenStatusModal={openStatusModal}
+              onUpdateStatus={handleUpdateStatus}
+            />
+          ))
+        ) : (
+          <p>Nenhuma tarefa encontrada</p>
+        )}
       </div>
+
     </div>
   );
 }

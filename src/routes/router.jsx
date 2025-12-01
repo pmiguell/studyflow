@@ -18,7 +18,7 @@ const router = createBrowserRouter([
 
   {
     path: "/",
-    element: <ProtectedRoute />, // protege todas as rotas abaixo
+    // element: <ProtectedRoute />, // protege todas as rotas abaixo
     children: [
       {
         element: <AppLayout />,
