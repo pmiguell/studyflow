@@ -3,4 +3,17 @@
 
   --color-hover: #6E38AD;
   --color-active: #52257F;
+  
+  /* Texto */
+  --color-text-header: #2B2138;
+  --color-text-default: #5B5B5B;
+
+  --color-primary-text: #FFFFFF;
+
+  /* Box shadow */
+  --color-hover-soft: #d9d9d9;
+
+  /* Background */
+  --color-background-secondary: #FFF;
+  --color-background-secondary-hover: #f5f5f5;
 }

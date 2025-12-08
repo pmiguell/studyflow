@@ -16,7 +16,7 @@
 .formGroup input {
     background-color: #F5F5F5;
     border: none;
-    box-shadow: 0px 0px 5px #D9D9D9;
+    box-shadow: 0px 0px 5px var(--color-hover-soft);
     height: 40px;
     border-radius: 20px;
     padding-left: 0.5rem;

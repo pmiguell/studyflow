@@ -1,7 +1,8 @@
+@import "../../styles/colors.css";
 .filterContainer {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.25rem;
 }
 
 .customSelect {
@@ -14,15 +15,15 @@
     height: 2.5rem;
     border-radius: 10px;
     border: none;
-    box-shadow: 1px 1px 5px #d9d9d9;
-    background-color: #fefefe;
+    box-shadow: 1px 1px 2px var(--color-hover-soft);
+    background-color: var(--color-background-secondary);
     padding: 0 0.8rem;
     cursor: pointer;
     text-align: left;
     outline: none;
     position: relative;
-    font-size: 0.85rem; 
-    color: #666;
+    font-size: 0.75rem; 
+    color: var(--color-text-default);
 }
 
 .selectButton::after {
@@ -43,8 +44,8 @@
     position: absolute;
     top: 3rem;
     width: 100%;
-    background: #fff;
-    box-shadow: 1px 1px 5px #d9d9d9;
+    background: var(--color-background-secondary);
+    box-shadow: 1px 1px 2px var(--color-hover-soft);
     border-radius: 10px;
     list-style: none;
     padding: 0;
@@ -54,8 +55,8 @@
     opacity: 0;
     transform: translateY(-10px);
     transition: all 0.25s ease;
-    font-size: 0.85rem; 
-    color: #666;
+    font-size: 0.75rem; 
+    color: var(--color-text-default);
 }
 
 .optionsList.open {
@@ -70,5 +71,17 @@
 }
 
 .optionsList li:hover {
-    background: #f5f5f5;
+    background: var(--color-background-secondary-hover);
+}
+
+.filterContainer p{
+    color: var(--color-text-default);
+    font-size: 0.9rem;
+}
+
+.filterIcon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-primary);
+    opacity: 0.9;
 }

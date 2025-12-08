@@ -1,5 +1,6 @@
 import { useState } from "react";
 import style from "./FilterContainer.module.css";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 
 export default function FilterContainer({ subjects, selectedSubject, onFilterChange }) {
   const [open, setOpen] = useState(false);
@@ -11,7 +12,7 @@ export default function FilterContainer({ subjects, selectedSubject, onFilterCha
 
   return (
     <div className={style.filterContainer}>
-      <p>Filtrar por Matéria</p>
+      <Bars3Icon className={style.filterIcon} />
 
       <div className={style.customSelect}>
         <button

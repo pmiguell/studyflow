@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.4rem;
-    color: #FFF;
+    color: var(--color-primary-text);
     font-size: 0.9rem;
     cursor: pointer;
     font-weight: 600;

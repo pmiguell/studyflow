@@ -18,7 +18,7 @@
 
 .top h1 {
   font-size: 1rem;
-  color: #fff;
+  color: var(--color-primary-text);
   text-align: center;
   margin: 0;
 }
@@ -30,7 +30,7 @@
 }
 
 .navigation a {
-  color: #fff;
+  color: var(--color-primary-text);
   font-size: 1.5rem;
   padding: 0.5rem;
   border-radius: 8px;
@@ -55,13 +55,13 @@
 .bottom button {
   background: none;
   border: none;
-  color: #fff;
+  color: var(--color-primary-text);
   font-size: 1.5rem;
   cursor: pointer;
 }
 
 .bottom a {
-  color: #fff;
+  color: var(--color-primary-text);
   font-size: 1.5rem;
   padding: 0.5rem;
   border-radius: 8px;
