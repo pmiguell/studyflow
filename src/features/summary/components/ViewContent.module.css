@@ -1,3 +1,4 @@
+@import "../../../styles/colors.css";
 .overlay {
   position: fixed;
   top: 0;
@@ -40,7 +41,7 @@
 
 .actions button {
   padding: 8px 16px;
-  background-color: #966CF7; /* azul */
+  background-color: var(--color-primary); /* azul */
   color: #fff;
   border: none;
   border-radius: 8px;

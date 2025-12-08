@@ -1,3 +1,4 @@
+@import "../../../../styles/colors.css";
 .form {
     width: 100%;
     display: flex;
@@ -27,7 +28,7 @@
 }
 
 .submitButton {
-    background-color: #966CF7;
+    background-color: var(--color-primary);
     color: white;
     border: none;
     border-radius: 20px;

@@ -1,3 +1,4 @@
+@import "../../../../styles/colors.css";
 .loginPage {
     display: flex;
     flex-direction: column;
@@ -9,7 +10,7 @@
 }
 
 .loginPage h1 {
-    color: #966CF7;
+    color: var(--color-primary);
     font-size: 2.5rem;
     margin-bottom: 2rem;
 }
@@ -36,5 +37,5 @@
 
 .linkToLogin {
     text-decoration: none;
-    color: #966CF7;
+    color: var(--color-primary);
 }

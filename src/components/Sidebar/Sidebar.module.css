@@ -1,5 +1,6 @@
+@import "../../styles/colors.css";
 .sidebar {
-  background-color: #966cf7;
+  background-color: var(--color-primary);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,7 +43,7 @@
 }
 
 .navigation a:hover {
-  background-color: #7957D0;
+  background-color: var(--color-hover);
 }
 
 .bottom {
@@ -73,5 +74,5 @@
 }
 
 .bottom a:hover {
-  background-color: #7957D0;
+  background-color: var(--color-hover);
 }

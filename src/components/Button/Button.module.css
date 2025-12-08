@@ -1,5 +1,6 @@
+@import "../../styles/colors.css";
 .button {
-    background-color: #966CF7;
+    background-color: var(--color-primary);
     width: 12rem;
     height: 2.5rem;
     border-radius: 10px;
@@ -16,9 +17,9 @@
 }
 
 .button:hover {
-    background-color: #7957D0;
+    background-color: var(--color-hover);
 }
 
 .button:active {
-    background-color: #6343B8;
+    background-color: var(--color-active);
 }
