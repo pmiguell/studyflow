@@ -7,13 +7,18 @@
   /* Texto */
   --color-text-header: #2B2138;
   --color-text-default: #5B5B5B;
-
+  --color-text-alert: #FF4D4D;
   --color-primary-text: #FFFFFF;
-
+  
   /* Box shadow */
   --color-hover-soft: #d9d9d9;
-
+  --color-cancel-border-hover: #F0CACA;
+  --color-border-modal: #e3d6fa;
+  --color-border-neutral: #CCC;
+  --color-cancel-background-hover: #FDEEEE;
+  
   /* Background */
+  --color-app-background: #FAFAF5;
   --color-background-secondary: #FFF;
   --color-background-secondary-hover: #f5f5f5;
 }

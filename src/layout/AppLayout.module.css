@@ -1,7 +1,8 @@
+@import "../styles/colors.css";
 .app {
   display: flex;
   min-height: 100vh;
-  background-color: #eceff4;
+  background-color: var(color-app-background);
 }
 
 .main {
