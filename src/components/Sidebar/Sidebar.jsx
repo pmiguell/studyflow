@@ -35,7 +35,7 @@ export default function Sidebar() {
           <NavLink to="/pomodoro">
             <Clock />
           </NavLink>
-          <NavLink to="/tarefas">
+          <NavLink to="/perfil">
             <Settings />
           </NavLink>
         </nav>
