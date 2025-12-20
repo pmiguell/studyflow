@@ -1,5 +1,6 @@
+@import "../../styles/colors.css";
 .sidebar {
-  background-color: #966cf7;
+  background-color: var(--color-primary);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,7 +18,7 @@
 
 .top h1 {
   font-size: 1rem;
-  color: #fff;
+  color: var(--color-primary-text);
   text-align: center;
   margin: 0;
 }
@@ -25,12 +26,24 @@
 .navigation {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .navigation a {
-  color: #fff;
+  color: var(--color-primary-text);
   font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+}
+
+.navigation a:hover {
+  background-color: var(--color-hover);
 }
 
 .bottom {
@@ -42,12 +55,24 @@
 .bottom button {
   background: none;
   border: none;
-  color: #fff;
+  color: var(--color-primary-text);
   font-size: 1.5rem;
   cursor: pointer;
 }
 
 .bottom a {
-  color: #fff;
+  color: var(--color-primary-text);
   font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+}
+
+.bottom a:hover {
+  background-color: var(--color-hover);
 }

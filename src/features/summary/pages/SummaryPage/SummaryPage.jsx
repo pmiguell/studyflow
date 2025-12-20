@@ -2,6 +2,8 @@ import style from "./SummaryPage.module.css";
 import ActionsContainer from "../../components/ActionsContainer/ActionsContainer";
 import SummaryCard from "../../components/SummaryCard/SummaryCard";
 import SummaryModal from "../../components/SummaryModal/SummaryModal";
+import Header from "../../../../components/Header/Header";
+import FilterContainer from '../../../../components/FilterContainer/FilterContainer';
 import { useEffect, useState } from "react";
 import * as summaryService from "../../services/summaryService";
 import ViewContent from "../../components/ViewContent";
@@ -19,7 +21,6 @@ export default function SummaryPage() {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [viewingSummary, setViewingSummary] = useState(null);
 
-  // 🔹 carregar resumos e matérias
   useEffect(() => {
     async function loadData() {
       try {
@@ -38,7 +39,6 @@ export default function SummaryPage() {
     loadData();
   }, []);
 
-  // 🔹 aplicar filtro sempre que summaries ou selectedSubject mudarem
   useEffect(() => {
     if (!selectedSubject) {
       setFilteredSummaries(summaries);
@@ -88,14 +88,20 @@ export default function SummaryPage() {
 
   return (
     <div className={style.summaryPage}>
-      <ActionsContainer
-        subjects={subjects}
-        onFilterChange={handleFilterChange}
-        onNewSummary={() => {
-          setEditingSummary(null);
-          setModalOpen(true);
-        }}
-      />
+      <div className={style.topBar}>
+        <Header 
+          pageName="Seus Resumos" 
+          pageDescription="Gerencie e organize seus materiais de estudo." 
+        />
+        <ActionsContainer
+          onNewSummary={() => {
+            setEditingSummary(null);
+            setModalOpen(true);
+          }}
+        />
+      </div>
+      
+      <FilterContainer subjects={subjects} onFilterChange={handleFilterChange} />
 
       <div className={style.summaryContainer}>
         {loading ? (

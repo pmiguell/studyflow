@@ -1,3 +1,4 @@
+@import "../../../../styles/colors.css";
 .verifyUserPage {
     display: flex;
     flex-direction: column;
@@ -9,7 +10,7 @@
 }
 
 .verifyUserPage h1 {
-    color: #966CF7;
+    color: var(--color-primary);
     font-size: 2.5rem;
     margin-bottom: 2rem;
 }
@@ -24,7 +25,7 @@
 
 .verifyUserContainer {
     background-color: #FFFFFF;
-    box-shadow: 0px 0px 5px #D9D9D9;
+    box-shadow: 0px 0px 5px var(--color-hover-soft);
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -36,5 +37,5 @@
 
 .linkToLogin {
     text-decoration: none;
-    color: #966CF7;
+    color: var(--color-primary);
 }

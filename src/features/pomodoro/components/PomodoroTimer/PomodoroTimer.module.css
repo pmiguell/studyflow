@@ -1,3 +1,4 @@
+@import "../../../../styles/colors.css";
 .timerContainer {
   display: flex;
   flex-direction: column;
@@ -62,12 +63,12 @@
 }
 
 .actionButtons button:first-child {
-  background-color: #966CF7;
+  background-color: var(--color-primary);
   color: #ffffff;
 }
 
 .actionButtons button:first-child:hover {
-  background-color: #966CF7;
+  background-color: var(--color-primary);
 }
 
 .actionButtons button:last-child {

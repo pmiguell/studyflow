@@ -1,7 +1,87 @@
-.selectSubject {
-  width: 10rem;
-  height: 2.5rem;
-  border-radius: 20px;
-  border: none;
-  box-shadow: 1px 1px 5px #d9d9d9;
+@import "../../styles/colors.css";
+.filterContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.customSelect {
+    position: relative;
+    width: 12rem;
+}
+
+.selectButton {
+    width: 100%;
+    height: 2.5rem;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 1px 1px 2px var(--color-hover-soft);
+    background-color: var(--color-background-secondary);
+    padding: 0 0.8rem;
+    cursor: pointer;
+    text-align: left;
+    outline: none;
+    position: relative;
+    font-size: 0.75rem; 
+    color: var(--color-text-default);
+}
+
+.selectButton::after {
+    content: "";
+    position: absolute;
+    right: 0.7rem;
+    top: 50%;
+    width: 1rem;
+    height: 1rem;
+    transform: translateY(-50%);
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%234c4c4c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+
+.optionsList {
+    position: absolute;
+    top: 3rem;
+    width: 100%;
+    background: var(--color-background-secondary);
+    box-shadow: 1px 1px 2px var(--color-hover-soft);
+    border-radius: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.25s ease;
+    font-size: 0.75rem; 
+    color: var(--color-text-default);
+}
+
+.optionsList.open {
+    max-height: 300px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.optionsList li {
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+}
+
+.optionsList li:hover {
+    background: var(--color-background-secondary-hover);
+}
+
+.filterContainer p{
+    color: var(--color-text-default);
+    font-size: 0.9rem;
+}
+
+.filterIcon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-primary);
+    opacity: 0.9;
 }

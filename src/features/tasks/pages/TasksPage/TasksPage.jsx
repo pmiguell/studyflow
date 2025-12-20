@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import style from "./TasksPage.module.css";
 import ActionsContainer from "../../components/ActionsContainer/ActionsContainer.jsx";
+import Header from "../../../../components/Header/Header";
+import FilterContainer from '../../../../components/FilterContainer/FilterContainer';
 import TaskCard from "../../components/TaskCard/TaskCard.jsx";
 import TaskModal from "../../components/TaskModal/TaskModal.jsx";
 import TaskStatusModal from "../../components/TaskStatusModal/TaskStatusModal.jsx";
@@ -18,6 +20,7 @@ export default function TasksPage() {
   const [tasks, setTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [subjects, setSubjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Agora guardamos só o ID da matéria para filtro
   const [selectedSubjectId, setSelectedSubjectId] = useState(subjectFromNav?.id || "");
@@ -35,6 +38,8 @@ export default function TasksPage() {
       setFilteredTasks(data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,16 +121,21 @@ export default function TasksPage() {
 
   return (
     <div className={style.tasksPage}>
-      <ActionsContainer
-        subjects={subjects}
-        selectedSubject={selectedSubjectId}
-        onFilterChange={setSelectedSubjectId}
-        onNewTask={() => {
-          setEditingTask(null);
-          setSelectedSubjectId(""); // resetar filtro
-          setModalOpen(true);
-        }}
-      />
+      <div className={style.topBar}>
+        <Header
+          pageName="Suas Tarefas"
+          pageDescription="Gerencie e organize seus materiais de estudo."
+        />
+        <ActionsContainer
+          onNewTask={() => {
+            setEditingTask(null);
+            setSelectedSubjectId("");
+            setModalOpen(true);
+          }}
+        />
+      </div>
+
+      <FilterContainer subjects={subjects} selectedSubject={selectedSubjectId} onFilterChange={setSelectedSubjectId} />
 
       <TaskModal
         open={modalOpen}
@@ -144,17 +154,24 @@ export default function TasksPage() {
       )}
 
       <div className={style.tasksContainer}>
-        {(filteredTasks || []).map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            onEditTask={handleEditTask}
-            onDeleteTask={handleDeleteTask}
-            onOpenStatusModal={openStatusModal}
-            onUpdateStatus={handleUpdateStatus}
-          />
-        ))}
+        {loading ? (
+          <p>Carregando tarefas...</p>
+        ) : filteredTasks.length > 0 ? (
+          filteredTasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              onEditTask={handleEditTask}
+              onDeleteTask={handleDeleteTask}
+              onOpenStatusModal={openStatusModal}
+              onUpdateStatus={handleUpdateStatus}
+            />
+          ))
+        ) : (
+          <p>Nenhuma tarefa encontrada</p>
+        )}
       </div>
+
     </div>
   );
 }

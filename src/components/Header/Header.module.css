@@ -1,12 +1,13 @@
+@import "../../styles/colors.css";
 .header {
     display: flex;
     justify-content: space-between;
     gap: 2rem;
-    margin-top: 1rem;
+    margin-top: 3rem;
 }
 
 .header p {
-    color: #5B5B5B;
+    color: var(--color-text-default);
     margin: 0;
     font-size: 0.95rem;
 }
@@ -19,6 +20,7 @@
 .header h2 {
     margin: 0;
     font-size: 1.75rem;
+    color: var(--color-text-header);
 }
 
 .headerLeft {
@@ -29,12 +31,12 @@
 }
 
 .userIcon {
-    background-color: #966CF7;
+    background-color: var(--color-primary);
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    color: var(--color-primary-text);
 }

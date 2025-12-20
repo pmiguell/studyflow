@@ -1,6 +1,7 @@
 .app {
   display: flex;
   min-height: 100vh;
+  background-color: #eceff4;
 }
 
 .main {

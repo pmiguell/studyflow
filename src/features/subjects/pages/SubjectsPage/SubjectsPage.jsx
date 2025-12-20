@@ -1,5 +1,7 @@
 import style from "./SubjectsPage.module.css";
 import ActionsContainer from "../../components/ActionsContainer/ActionsContainer.jsx";
+import FilterContainer from "../../../../components/FilterContainer/FilterContainer";
+import Header from "../../../../components/Header/Header";
 import SubjectCard from "../../components/SubjectCard/SubjectCard.jsx";
 import { useState, useEffect } from "react";
 import SubjectModal from "../../components/SubjectModal/SubjectModal.jsx";
@@ -16,6 +18,7 @@ export default function SubjectsPage() {
   const [subjects, setSubjects] = useState([]);
   const [filteredSubjects, setFilteredSubjects] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("");
+  const [loading, setLoading] = useState(true);
 
   // 🔹 Carregar matérias da API
   useEffect(() => {
@@ -32,6 +35,8 @@ export default function SubjectsPage() {
       console.error("Erro ao carregar matérias:", error);
       setSubjects([]);
       setFilteredSubjects([]);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -87,15 +92,24 @@ export default function SubjectsPage() {
 
   return (
     <div className={style.subjectsPage}>
-      <ActionsContainer
+      <div className={style.topBar}>
+        <Header
+          pageName="Suas Matérias"
+          pageDescription="Gerencie e organize seus materiais de estudo."
+        />
+        <ActionsContainer
+          onNewSubject={() => {
+            setEditingSubject(null);
+            setSelectedFilter("");
+            setModalOpen(true);
+          }}
+        />
+      </div>
+
+      <FilterContainer
         subjects={subjects}
-        selectedFilter={selectedFilter}
+        selectedSubject={selectedFilter}
         onFilterChange={handleFilterChange}
-        onNewSubject={() => {
-          setEditingSubject(null);
-          setSelectedFilter("");
-          setModalOpen(true);
-        }}
       />
 
       <SubjectModal
@@ -106,11 +120,16 @@ export default function SubjectsPage() {
       />
 
       <div className={style.subjectsContainer}>
-        {Array.isArray(filteredSubjects) &&
+        {loading ? (
+          <p>Carregando matérias...</p>
+        ) : filteredSubjects.length === 0 ? (
+          <p>Nenhuma matéria encontrada</p>
+        ) : (
           filteredSubjects.map((subject) => {
             const tasksArray = Array.isArray(subject.tasks) ? subject.tasks : [];
             const completed = tasksArray.filter((t) => t.status === "CONCLUIDO").length;
             const total = tasksArray.length;
+
             const progressPercent = total > 0 ? (completed / total) * 100 : 0;
             const progressText = `${completed} de ${total} tarefas concluídas`;
 
@@ -125,7 +144,8 @@ export default function SubjectsPage() {
                 onDeleteSubject={handleDeleteSubject}
               />
             );
-          })}
+          })
+        )}
       </div>
     </div>
   );
