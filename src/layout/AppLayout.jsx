@@ -7,6 +7,7 @@ export default function AppLayout() {
   const location = useLocation();
 
   const pageConfig = {
+    "/home": { name: "Dashboard", description: "Visão geral das suas atividades de estudo" },
     "/materias": { name: "Matérias", description: "Gerencie aqui suas matérias de estudo" },
     "/tarefas": { name: "Tarefas", description: "Gerencie aqui suas tarefas por matéria" },
     "/resumos": { name: "Resumos", description: "Gerencie aqui seus resumos por matéria" },

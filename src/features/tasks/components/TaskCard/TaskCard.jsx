@@ -3,7 +3,13 @@ import { Calendar, Book } from "lucide-react";
 import TaskSpan from "../TaskSpan/TaskSpan.jsx";
 import TaskDropdown from "../TaskDropdown/TaskDropdown.jsx";
 
-export default function TaskCard({ task, onEditTask, onDeleteTask, onOpenStatusModal, onUpdateStatus }) {
+export default function TaskCard({
+  task,
+  onEditTask,
+  onDeleteTask,
+  onOpenStatusModal,
+  onUpdateStatus,
+}) {
   const { id, title, description, subject, status, deadline } = task;
 
   const friendlyStatusMap = {
@@ -12,7 +18,9 @@ export default function TaskCard({ task, onEditTask, onDeleteTask, onOpenStatusM
     CONCLUIDO: "Concluído",
   };
 
-  const formattedDate = deadline ? deadline.split("-").reverse().join("/") : "Sem data";
+  const formattedDate = deadline
+    ? deadline.split("-").reverse().join("/")
+    : "Sem data";
 
   const handleCheckboxChange = () => {
     const newStatus = status === "CONCLUIDO" ? "NAO_INICIADO" : "CONCLUIDO";
@@ -34,7 +42,9 @@ export default function TaskCard({ task, onEditTask, onDeleteTask, onOpenStatusM
             />
             <label
               htmlFor={`task-checkbox-${id}`}
-              className={`${style.taskCardTitle} ${status === "CONCLUIDO" ? style.checkedTitle : ""}`}
+              className={`${style.taskCardTitle} ${
+                status === "CONCLUIDO" ? style.checkedTitle : ""
+              }`}
             >
               {title}
             </label>
@@ -43,11 +53,10 @@ export default function TaskCard({ task, onEditTask, onDeleteTask, onOpenStatusM
         </div>
 
         <TaskDropdown
-  onEdit={() => onEditTask(task)}       // envia objeto completo
-  onChangeStatus={() => onOpenStatusModal(task)} // envia objeto completo
-  onDelete={() => onDeleteTask(task.id)}
-/>
-
+          onEdit={() => onEditTask(task)} // envia objeto completo
+          onChangeStatus={() => onOpenStatusModal(task)} // envia objeto completo
+          onDelete={() => onDeleteTask(task.id)}
+        />
       </div>
 
       <div className={style.taskCardBottom}>
@@ -58,7 +67,7 @@ export default function TaskCard({ task, onEditTask, onDeleteTask, onOpenStatusM
           </span>
           <span className={style.taskSubject}>
             <Book className={style.bookIcon} />
-            {subject?.title || ""}
+            {subject?.title ?? ""}
           </span>
         </div>
         <TaskSpan content={friendlyStatusMap[status]} />

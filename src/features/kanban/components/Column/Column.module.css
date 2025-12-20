@@ -6,11 +6,11 @@
 
 .columnTitleContainer {
   background-color: rgba(255, 0, 0, 0.281);
-  border-radius: 20px;
+  border-radius: 10px;
   text-align: center;
 }
 
-.columnTitleContainer .columnTitle {
-  padding: 4px;
+.columnTitleContainer h3 {
   font-size: 16px;
+  padding: 4px;
 }
