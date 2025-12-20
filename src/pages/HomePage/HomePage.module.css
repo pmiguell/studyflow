@@ -10,9 +10,6 @@
 }
 
 .dashboard {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
   min-height: 100vh;
   animation: fadeIn 0.5s ease-in;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   BookOpen,
@@ -11,6 +11,7 @@ import {
 import { getTasks } from "../../features/tasks/services/taskService";
 import { getSubjects } from "../../features/subjects/services/subjectsService";
 import { getSummaries } from "../../features/summary/services/summaryService";
+import Header from "../../components/Header/Header";
 import styles from "./HomePage.module.css";
 
 export default function HomePage() {
@@ -102,6 +103,10 @@ export default function HomePage() {
 
   return (
     <div className={styles.dashboard}>
+      <Header
+        pageName="Dashboard"
+        pageDescription="Visão geral das suas atividades de estudo."
+      />
       <div className={styles.statsGrid}>
         <StatCard
           title="Total de Matérias"
