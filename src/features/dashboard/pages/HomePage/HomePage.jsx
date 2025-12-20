@@ -8,10 +8,10 @@ import {
   TrendingUp,
   Calendar,
 } from "lucide-react";
-import { getTasks } from "../../features/tasks/services/taskService";
-import { getSubjects } from "../../features/subjects/services/subjectsService";
-import { getSummaries } from "../../features/summary/services/summaryService";
-import Header from "../../components/Header/Header";
+import { getTasks } from "../../../tasks/services/taskService";
+import { getSubjects } from "../../../subjects/services/subjectsService";
+import { getSummaries } from "../../../summary/services/summaryService";
+import Header from "../../../../components/Header/Header";
 import styles from "./HomePage.module.css";
 
 export default function HomePage() {
