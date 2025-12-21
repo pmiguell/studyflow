@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import HomePage from "../features/dashboard/pages/HomePage/HomePage";
 import RegisterPage from "../features/auth/pages/RegisterPage/RegisterPage";
 import LoginPage from "../features/auth/pages/LoginPage/LoginPage";
@@ -19,11 +19,12 @@ const router = createBrowserRouter([
 
   {
     path: "/",
-    // element: <ProtectedRoute />, // protege todas as rotas abaixo
+    element: <ProtectedRoute />, // protege todas as rotas abaixo
     children: [
       {
         element: <AppLayout />,
         children: [
+          { index: true, element: <Navigate to="/home" replace /> },
           { path: "home", element: <HomePage /> },
           { path: "materias", element: <SubjectsPage /> },
           { path: "tarefas", element: <TasksPage /> },
