@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import style from "./KanbanPage.module.css";
+import Header from "../../../../components/Header/Header";
 
 import {
   DndContext,
@@ -129,27 +130,33 @@ export default function KanbanPage() {
   }
 
   return (
-    <div className={style.kanbanContainer}>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        {Object.entries(columns).map(([columnId, column]) => (
-          <SortableContext
-            key={columnId}
-            items={column.items.map((_, i) => `${columnId}-${i}`)}
-            strategy={verticalListSortingStrategy}
-          >
-            <Column
-              title={column.label}
-              color={column.color}
-              items={column.items}
-              columnId={columnId}
-            />
-          </SortableContext>
-        ))}
-      </DndContext>
+    <div className={style.kanbanPage}>
+      <Header
+        pageName="Kanban"
+        pageDescription="Organize suas tarefas com o quadro Kanban."
+      />
+      <div className={style.kanbanContainer}>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          {Object.entries(columns).map(([columnId, column]) => (
+            <SortableContext
+              key={columnId}
+              items={column.items.map((_, i) => `${columnId}-${i}`)}
+              strategy={verticalListSortingStrategy}
+            >
+              <Column
+                title={column.label}
+                color={column.color}
+                items={column.items}
+                columnId={columnId}
+              />
+            </SortableContext>
+          ))}
+        </DndContext>
+      </div>
     </div>
   );
 }

@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import style from "./AccountPage.module.css";
 import Button from "../../../components/Button/Button";
-import { updateAccount, deleteAccount, getAccountData } from "../service/accountService";
+import {
+  updateAccount,
+  deleteAccount,
+  getAccountData,
+} from "../service/accountService";
 import { getToken } from "../../auth/services/authService"; // 🔹 importa o getToken
+import Header from "../../../components/Header/Header";
 
 export default function AccountPage() {
   const [username, setUsername] = useState("");
@@ -53,42 +58,55 @@ export default function AccountPage() {
 
   return (
     <div className={style.accountPage}>
-      <div className={style.settings}>
-        <form>
-          <div className={style.inputsContainer}>
-            <div className={style.inputContainer}>
-              <label>Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+      <Header
+        pageName="Sua conta"
+        pageDescription="Gerencie suas informações de conta."
+      />
+      <div className={style.container}>
+        <div className={style.settings}>
+          <form>
+            <div className={style.inputsContainer}>
+              <div className={style.inputContainer}>
+                <label>Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className={style.inputContainer}>
+                <label>Senha</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
             </div>
-            <div className={style.inputContainer}>
-              <label>Senha</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+          </form>
+
+          <div className={style.deleteAccount}>
+            <button
+              type="button"
+              className={style.button}
+              onClick={handleDelete}
+            >
+              Deletar conta
+            </button>
+            <p>Você receberá um e-mail de confirmação de deletação.</p>
+            <p>
+              Ao deletar sua conta, perderá todas as suas matérias, atividades e
+              resumos.
+            </p>
           </div>
-        </form>
-
-        <div className={style.deleteAccount}>
-          <button type="button" className={style.button} onClick={handleDelete}>
-            Deletar conta
-          </button>
-          <p>Você receberá um e-mail de confirmação de deletação.</p>
-          <p>Ao deletar sua conta, perderá todas as suas matérias, atividades e resumos.</p>
         </div>
-      </div>
 
-      <div className={style.buttonsContainer}>
-        <Button onClick={handleSave}>Salvar</Button>
-        <button type="button" className={style.button}>
-          Cancelar
-        </button>
+        <div className={style.buttonsContainer}>
+          <Button onClick={handleSave}>Salvar</Button>
+          <button type="button" className={style.button}>
+            Cancelar
+          </button>
+        </div>
       </div>
     </div>
   );

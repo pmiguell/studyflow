@@ -1,4 +1,8 @@
-.accountPage{
+.accountPage {
+    
+}
+
+.container{
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -20,7 +24,7 @@
     align-items: center;
 }
 
-.accountPage form {
+.container form {
     display: flex;
     justify-content: center;
     width: 70%;
@@ -39,12 +43,12 @@
     box-sizing: border-box;
 }
 
-.accountPage label{
+.container label{
     font-size: 14px;
     padding-bottom: 5px;
 }
 
-.accountPage input{
+.container input{
     width: 100%;
     height: 2rem;
     outline: none;
