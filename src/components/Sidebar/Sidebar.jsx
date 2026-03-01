@@ -7,7 +7,8 @@ import {
   Settings,
   LogOut,
   Home,
-  SquareKanban
+  SquareKanban,
+  Calendar
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -19,6 +20,9 @@ export default function Sidebar() {
         <nav className={style.navigation}>
           <NavLink to="/home">
             <Home />
+          </NavLink>
+          <NavLink to="/calendario">
+            <Calendar />
           </NavLink>
           <NavLink to="/materias">
             <BookOpen />

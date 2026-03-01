@@ -1,0 +1,165 @@
+@import "../../../../styles/colors.css";
+.calendarWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.monthHeader {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.monthHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-header, #2B2138);
+}
+
+.gridContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid var(--color-hover-soft, #d9d9d9);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--color-background-secondary, #ffffff);
+}
+
+.headerRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: var(--color-background-secondary-hover, #f5f5f5);
+  border-bottom: 1px solid var(--color-hover-soft, #d9d9d9);
+}
+
+.headerCell {
+  padding: 12px 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--color-text-default, #5B5B5B);
+  border-right: 1px solid var(--color-hover-soft, #d9d9d9);
+}
+
+.headerCell:last-child {
+  border-right: none;
+}
+
+.daysGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.dayCell {
+  min-height: 120px;
+  padding: 10px;
+  border-right: 1px solid var(--color-hover-soft, #d9d9d9);
+  border-bottom: 1px solid var(--color-hover-soft, #d9d9d9);
+  position: relative;
+}
+
+.dayCell:nth-child(7n) {
+  border-right: none;
+}
+
+.emptyCell {
+  background-color: var(--color-background-secondary-hover, #f5f5f5);
+}
+
+.dayNumberWrapper {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.dayNumber {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-header, #2B2138);
+}
+
+.dayNumberWrapper.holidayCell {
+  background-color: var(--color-primary); 
+}
+
+.dayNumber.holidayDayNumber {
+  color: var(--color-primary-text); 
+}
+
+.eventsContainer {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  max-height: calc(100% - 36px);
+  padding-right: 4px;
+}
+
+.eventCard {
+  color: #ffffff; 
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 2rem;
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  gap: 4px;
+  white-space: nowrap; 
+  overflow: hidden; 
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.eventCard:hover {
+  transform: scale(1.03);
+  opacity: 0.9;
+}
+
+.eventTitle {
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  flex-grow: 1;
+}
+
+.deleteButton {
+  background: none; 
+  border: none; 
+  padding: 0; 
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  
+  opacity: 0; 
+  visibility: hidden; 
+  
+  transition: opacity 0.2s ease, visibility 0.2s ease; 
+}
+
+.eventCard:hover .deleteButton {
+  opacity: 1; 
+  visibility: visible; 
+}
+
+.trashIcon {
+  color: rgba(255, 255, 255, 0.8);
+  transition: color 0.2s ease; 
+}
+
+.deleteButton:hover .trashIcon {
+  color: #ffffff;
+}

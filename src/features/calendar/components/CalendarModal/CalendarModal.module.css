@@ -1,0 +1,152 @@
+@import "../../../../styles/colors.css";
+
+.overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2.5rem;
+  min-width: 360px;
+  box-shadow: 1px 1px 5px #aaaaaa;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  text-align: center;
+}
+
+.modal h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.headerIcon {
+  color: var(--color-primary);
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 0.7rem;
+  border: 1px solid var(--color-hover-soft, #e3d6fa);
+  margin-bottom: 0.7rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+  color: var(--color-text-header, #2B2138);
+}
+
+.modal input:focus,
+.modal textarea:focus,
+.modal select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.inputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-default, #aaaaaa);
+  z-index: 1;
+}
+
+.inputWrapper input {
+  padding-left: 2.8rem;
+}
+
+.colorPickerContainer {
+  margin-top: 0.5rem;
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+.colorPickerContainer h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-header, #2B2138);
+  margin: 0 0 0.8rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.colorIcon {
+  color: var(--color-text-default);
+}
+
+.colorOptionsGrid {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.colorOption {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.colorOption:hover {
+  transform: scale(1.1);
+}
+
+.colorOption.selectedColor {
+  border-color: var(--color-primary);
+  transform: scale(1.1);
+}
+
+.actions {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.actions button {
+  padding: 0.7rem 1.5rem;
+  border-radius: 0.7rem;
+  border: none;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.actions button:hover {
+  background-color: var(--color-hover);
+}
+
+.actions button[type="button"] {
+  background: var(--color-background-secondary-hover, #e3d6fa);
+  color: var(--color-primary);
+}
+
+.actions button[type="button"]:hover {
+  background-color: var(--color-hover-soft);
+}

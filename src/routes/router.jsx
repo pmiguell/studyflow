@@ -11,6 +11,7 @@ import SummaryPage from "../features/summary/pages/SummaryPage/SummaryPage";
 import AccountPage from "../features/account/pages/AccountPage";
 import KanbanPage from "../features/kanban/pages/KanbanPage/KanbanPage"
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
+import CalendarPage from "../features/calendar/pages/CalendarPage/CalendarPage";
 
 const router = createBrowserRouter([
   { path: "/cadastro", element: <RegisterPage /> },
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
           { path: "pomodoro", element: <PomodoroPage /> },
           { path: "perfil", element: <AccountPage /> },
           { path: "kanban", element: <KanbanPage /> },
+          { path: "calendario", element: <CalendarPage /> },
         ],
       },
     ],
