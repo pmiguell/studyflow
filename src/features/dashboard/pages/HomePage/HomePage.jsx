@@ -1,201 +1,207 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import {
+  Home,
+  Calendar,
+  Book,
   BookOpen,
   CheckSquare,
   FileText,
+  Clock,
+  Settings,
+  LogOut,
+  ArrowUpRight,
+  CheckCircle2,
   AlertTriangle,
-  TrendingUp,
-  Calendar,
+  Loader,
+  Eye
 } from "lucide-react";
-import { getTasks } from "../../../tasks/services/taskService";
-import { getSubjects } from "../../../subjects/services/subjectsService";
-import { getSummaries } from "../../../summary/services/summaryService";
-import Header from "../../../../components/Header/Header";
 import styles from "./HomePage.module.css";
 
 export default function HomePage() {
-  const navigate = useNavigate();
+  const [showOverdueOnly, setShowOverdueOnly] = useState(false);
 
-  const [stats, setStats] = useState({
-    subjects: 0,
-    summaries: 0,
-    tasks: {
-      notStarted: 0,
-      pending: 0,
-      completed: 0,
-      overdue: 0,
-      progress: 0,
-    },
-    nextTask: null,
-    mostDemandingSubject: null,
-  });
+  // --- Dados Fictícios (Mock Data) ---
+  const mockTasks = [
+    { id: 1, name: "Estudar Aleatoriedade", subject: "Auditoria", date: "15/02/26", status: "Atrasado" },
+    { id: 2, name: "Estudar Pseudo Alea...", subject: "Auditoria", date: "15/02/26", status: "Atrasado" },
+    { id: 3, name: "Fazer Trabalho", subject: "POO", date: "13/03/26", status: "Pendente" },
+    { id: 4, name: "Estudar Integrais", subject: "Cálculo 1", date: "15/02/26", status: "Pendente" },
+    { id: 5, name: "Fazer Lista de Ativid...", subject: "Cálculo 1", date: "15/02/26", status: "Pendente" },
+    { id: 6, name: "Estudar Pseudo Alea...", subject: "Estatística", date: "15/02/26", status: "Pendente" },
+  ];
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const filteredTasks = showOverdueOnly 
+    ? mockTasks.filter(t => t.status === "Atrasado") 
+    : mockTasks;
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [tasks, subjects, summaries] = await Promise.all([
-          getTasks(),
-          getSubjects(),
-          getSummaries(),
-        ]);
+  const subjectColors = {
+    "Auditoria": styles.badgeBlue,
+    "POO": styles.badgePink,
+    "Cálculo 1": styles.badgePurple,
+    "Estatística": styles.badgeGreen,
+  };
 
-        const notStarted = tasks.filter(
-          (t) => t.status === "NAO_INICIADO"
-        ).length;
-        const pending = tasks.filter((t) => t.status === "EM_ANDAMENTO").length;
-        const completed = tasks.filter((t) => t.status === "CONCLUIDO").length;
-
-        const today = new Date();
-        const overdue = tasks.filter(
-          (t) =>
-            t.deadline &&
-            new Date(t.deadline) < today &&
-            t.status !== "CONCLUIDO"
-        ).length;
-
-        const progress =
-          tasks.length === 0 ? 0 : Math.round((completed / tasks.length) * 100);
-
-        const nextTask = tasks
-          .filter((t) => t.deadline && t.status !== "CONCLUIDO")
-          .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))[0];
-
-        const subjectCount = {};
-        tasks.forEach((t) => {
-          const name = t.subject?.title;
-          if (name) subjectCount[name] = (subjectCount[name] || 0) + 1;
-        });
-
-        const mostDemandingSubject = Object.entries(subjectCount).sort(
-          (a, b) => b[1] - a[1]
-        )[0];
-
-        setStats({
-          subjects: subjects.length,
-          summaries: summaries.length,
-          tasks: {
-            notStarted,
-            pending,
-            completed,
-            overdue,
-            progress,
-          },
-          nextTask,
-          mostDemandingSubject,
-        });
-      } catch (err) {
-        console.error(err);
-        setError("Erro ao carregar o dashboard");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  if (loading) return <div className={styles.loading}>Carregando...</div>;
-  if (error) return <div className={styles.error}>{error}</div>;
+  const statusColors = {
+    "Atrasado": styles.statusRed,
+    "Pendente": styles.statusYellow,
+  };
 
   return (
-    <div className={styles.dashboard}>
-      <Header
-        pageName="Dashboard"
-        pageDescription="Visão geral das suas atividades de estudo."
-      />
-      <div className={styles.statsGrid}>
-        <StatCard
-          title="Total de Matérias"
-          value={stats.subjects}
-          icon={<BookOpen />}
-        />
-        <StatCard
-          title="Não iniciadas"
-          value={stats.tasks.notStarted}
-          icon={<AlertTriangle />}
-        />
-        <StatCard
-          title="Em andamento"
-          value={stats.tasks.pending}
-          icon={<TrendingUp />}
-        />
-        <StatCard
-          title="Concluídas"
-          value={stats.tasks.completed}
-          icon={<CheckSquare />}
-        />
-        <StatCard
-          title="Resumos criados"
-          value={stats.summaries}
-          icon={<FileText />}
-        />
-        <StatCard
-          title="Tarefas atrasadas"
-          value={stats.tasks.overdue}
-          danger
-          icon={<Calendar />}
-        />
-      </div>
+    <div className={styles.layout}>
+      {/* 🟣 SIDEBAR */}
+      <aside className={styles.sidebar}>
+        <div className={styles.sidebarTop}>
+          <h1 className={styles.logo}>
+            Study<br />Flow
+          </h1>
+          <nav className={styles.navMenu}>
+            <button className={`${styles.navItem} ${styles.active}`}><Home size={24} /></button>
+            <button className={styles.navItem}><Calendar size={24} /></button>
+            <button className={styles.navItem}><Book size={24} /></button>
+            <button className={styles.navItem}><BookOpen size={24} /></button>
+            <button className={styles.navItem}><CheckSquare size={24} /></button>
+            <button className={styles.navItem}><FileText size={24} /></button>
+            <button className={styles.navItem}><Clock size={24} /></button>
+            <button className={styles.navItem}><Settings size={24} /></button>
+          </nav>
+        </div>
+        <button className={styles.logoutBtn}>
+          <LogOut size={24} />
+        </button>
+      </aside>
 
-      <div className={styles.infoGrid}>
-        <div className={styles.infoCard}>
-          <h3>📊 Progresso geral</h3>
-          <div className={styles.progressBar}>
-            <div
-              className={styles.progressFill}
-              style={{ width: `${stats.tasks.progress}%` }}
-            />
+      {/* 🧾 MAIN CONTENT */}
+      <main className={styles.mainContent}>
+        
+        {/* 👋 HEADER */}
+        <header className={styles.header}>
+          <div>
+            <h2 className={styles.greeting}>Olá, Pedro!</h2>
+            <p className={styles.subtitle}>Seja bem-vindo ao StudyFlow</p>
           </div>
-          <p>{stats.tasks.progress}% concluído</p>
+          <div className={styles.avatar}>P</div>
+        </header>
+
+        {/* 📊 TÍTULO DA PÁGINA */}
+        <div className={styles.pageTitle}>
+          <h1>Dashboard</h1>
+          <p>Acompanhe seu progresso de estudos</p>
         </div>
 
-        <div className={styles.infoCard}>
-          <h3>⏭ Próxima tarefa</h3>
-          {stats.nextTask ? (
-            <>
-              <strong>{stats.nextTask.title}</strong>
-              <p>{stats.nextTask.subject?.title}</p>
-              <p>
-                {stats.nextTask.deadline
-                  ? stats.nextTask.deadline.split("-").reverse().join("/")
-                  : "Sem data"}
-              </p>
-            </>
-          ) : (
-            <p>Nenhuma tarefa pendente 🎉</p>
-          )}
+        {/* 📦 CARDS DE MÉTRICAS */}
+        <div className={styles.statsGrid}>
+          <div className={`${styles.statCard} ${styles.highlightCard}`}>
+            <div>
+              <p className={styles.statLabel}>Matérias Cadastradas</p>
+              <h3 className={styles.statValue}>6</h3>
+            </div>
+            <div className={styles.iconWrapperWhite}>
+              <ArrowUpRight size={20} />
+            </div>
+          </div>
+
+          <div className={styles.statCard}>
+            <div>
+              <p className={styles.statLabelDark}>Tarefas Concluídas</p>
+              <h3 className={styles.statValueDark}>25</h3>
+            </div>
+            <div className={styles.iconWrapperGreen}>
+              <CheckCircle2 size={32} />
+            </div>
+          </div>
+
+          <div className={styles.statCard}>
+            <div>
+              <p className={styles.statLabelDark}>Tarefas Pendentes</p>
+              <h3 className={styles.statValueDark}>10</h3>
+            </div>
+            <div className={styles.iconWrapperOrange}>
+              <Loader size={32} />
+            </div>
+          </div>
+
+          <div className={styles.statCard}>
+            <div>
+              <p className={styles.statLabelDark}>Tarefas Atrasadas</p>
+              <h3 className={styles.statValueDark}>2</h3>
+            </div>
+            <div className={styles.iconWrapperRed}>
+              <AlertTriangle size={32} />
+            </div>
+          </div>
         </div>
 
-        <div className={styles.infoCard}>
-          <h3>📚 Matéria com mais tarefas</h3>
-          {stats.mostDemandingSubject ? (
-            <p>
-              {stats.mostDemandingSubject[0]} ({stats.mostDemandingSubject[1]}{" "}
-              tarefas)
-            </p>
-          ) : (
-            <p>—</p>
-          )}
+        {/* 📈 SEÇÃO INFERIOR */}
+        <div className={styles.bottomGrid}>
+          
+          {/* 🥧 GRÁFICO DE PIZZA */}
+          <div className={styles.chartCard}>
+            <h3 className={styles.cardTitle}>Matérias com pendências</h3>
+            <div className={styles.pieChartContainer}>
+              <div className={styles.pieChart}></div>
+            </div>
+            <div className={styles.chartLegend}>
+              <div className={styles.legendItem}>
+                <span className={styles.dotBlue}></span> Auditoria (39%) <br/><span className={styles.taskCount}>- 5 tarefas</span>
+              </div>
+              <div className={styles.legendItem}>
+                <span className={styles.dotPurple}></span> Cálculo 1 (31%) <br/><span className={styles.taskCount}>- 4 tarefas</span>
+              </div>
+              <div className={styles.legendItem}>
+                <span className={styles.dotPink}></span> POO (18%) <br/><span className={styles.taskCount}>- 2 tarefas</span>
+              </div>
+              <div className={styles.legendItem}>
+                <span className={styles.dotGreen}></span> Estatística (12%) <br/><span className={styles.taskCount}>- 1 tarefa</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 📋 PRÓXIMAS TAREFAS */}
+          <div className={styles.tasksCard}>
+            <div className={styles.tasksHeader}>
+              <h3 className={styles.cardTitle}>Próximas Tarefas</h3>
+              <button 
+                className={styles.filterBtn}
+                onClick={() => setShowOverdueOnly(!showOverdueOnly)}
+              >
+                <Eye size={16} /> Mostrar atrasadas
+              </button>
+            </div>
+            
+            <div className={styles.tableContainer}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Matéria</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredTasks.map((task) => (
+                    <tr key={task.id}>
+                      <td className={styles.taskName}>{task.name}</td>
+                      <td>
+                        <span className={`${styles.badge} ${subjectColors[task.subject]}`}>
+                          {task.subject}
+                        </span>
+                      </td>
+                      <td className={styles.taskDate}>{task.date}</td>
+                      <td>
+                        <span className={`${styles.statusBadge} ${statusColors[task.status]}`}>
+                          {task.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
-      </div>
-
-      <button className={styles.ctaButton} onClick={() => navigate("/kanban")}>
-        Ir para o Kanban →
-      </button>
-    </div>
-  );
-}
-
-function StatCard({ title, value, danger, icon }) {
-  return (
-    <div className={`${styles.statCard} ${danger ? styles.dangerCard : ""}`}>
-      <div className={styles.icon}>{icon}</div>
-      <h3>{title}</h3>
-      <p className={styles.statNumber}>{value}</p>
+      </main>
     </div>
   );
 }
