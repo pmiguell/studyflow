@@ -1,5 +1,16 @@
-/* 🎨 VARIÁVEIS DE SISTEMA */
-.layout {
+/* 🎨 ANIMAÇÕES E VARIÁVEIS */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard {
   --primary: #7F5AF0;
   --secondary: #5F3DC4;
   --green: #22C55E;
@@ -10,95 +21,13 @@
   --text-main: #111827;
   --text-sec: #6B7280;
   
-  display: flex;
-  min-height: 100vh;
-  background-color: var(--bg-color);
-  font-family: 'Inter', system-ui, sans-serif;
-}
-
-/* 🟣 SIDEBAR */
-.sidebar {
-  width: 80px;
-  min-height: 100vh;
-  background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 32px 0;
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 10;
-}
-
-.sidebarTop {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.logo {
-  color: var(--white);
-  font-size: 16px;
-  font-weight: 600;
-  text-align: center;
-  line-height: 1.2;
-  margin-bottom: 40px;
-}
-
-.navMenu {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
-  align-items: center;
-}
-
-.navItem {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.8);
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.navItem:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--white);
-}
-
-.navItem.active {
-  background: rgba(255, 255, 255, 0.2);
-  color: var(--white);
-}
-
-.logoutBtn {
-  background: transparent;
-  border: none;
-  color: var(--white);
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.2s;
-}
-
-.logoutBtn:hover {
-  opacity: 1;
-}
-
-/* 🧾 MAIN CONTENT */
-.mainContent {
-  flex: 1;
-  margin-left: 80px; /* Compensa a sidebar fixa */
+  /* Ajuste de padding, assumindo que seu layout pai gerencia a largura total */
   padding: 32px;
   max-width: 1400px;
+  background-color: var(--bg-color);
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+  animation: fadeIn 0.5s ease-in;
 }
 
 /* 👋 HEADER */
@@ -256,7 +185,6 @@
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  /* Conic gradient simulando o gráfico com as cores e porcentagens exatas */
   background: conic-gradient(
     #7DD3FC 0% 39%,     /* Auditoria: 39% */
     #A78BFA 39% 70%,    /* Cálculo 1: 31% */
@@ -414,11 +342,7 @@
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    width: 60px;
-  }
-  .mainContent {
-    margin-left: 60px;
+  .dashboard {
     padding: 20px;
   }
   .statsGrid {
@@ -431,8 +355,5 @@
   .chartLegend {
     flex-direction: column;
     align-items: flex-start;
-  }
-  .logo {
-    font-size: 12px;
   }
 }
