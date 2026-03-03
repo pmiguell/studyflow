@@ -30,57 +30,10 @@
   animation: fadeIn 0.5s ease-in;
 }
 
-/* 👋 HEADER */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 48px;
-}
+/* 👋 HEADER - Removido: usando Header padronizado */
+/* Estilos anteriores comment mantidos para referência */
 
-.greeting {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text-main);
-  margin: 0;
-}
-
-.subtitle {
-  font-size: 14px;
-  color: var(--text-sec);
-  margin: 4px 0 0 0;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--primary);
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 18px;
-}
-
-/* 📊 TÍTULO PÁGINA */
-.pageTitle {
-  margin-bottom: 24px;
-}
-
-.pageTitle h1 {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--text-main);
-  margin: 0;
-}
-
-.pageTitle p {
-  font-size: 14px;
-  color: var(--text-sec);
-  margin: 4px 0 0 0;
-}
+/* 📊 TÍTULO PÁGINA - Removido: usando Header padronizado */
 
 /* 📦 CARDS MÉTRICAS */
 .statsGrid {
@@ -227,109 +180,35 @@
 
 
 /* 📋 PRÓXIMAS TAREFAS */
-.tasksHeader {
+.tasksContainer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.filterBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: #A78BFA;
-  color: white;
-  border: none;
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.filterBtn:hover {
-  background-color: #8B5CF6;
-}
-
-.tableContainer {
-  height: 300px;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 600px;
   overflow-y: auto;
   padding-right: 8px;
 }
 
-/* Custom Scrollbar para a tabela */
-.tableContainer::-webkit-scrollbar {
+/* Custom Scrollbar para o container de tarefas */
+.tasksContainer::-webkit-scrollbar {
   width: 6px;
 }
-.tableContainer::-webkit-scrollbar-track {
+.tasksContainer::-webkit-scrollbar-track {
   background: #F3F4F6;
   border-radius: 10px;
 }
-.tableContainer::-webkit-scrollbar-thumb {
+.tasksContainer::-webkit-scrollbar-thumb {
   background: #D1D5DB;
   border-radius: 10px;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-.table th {
-  color: var(--text-sec);
-  font-weight: 500;
-  font-size: 14px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #E5E7EB;
-}
-
-.table td {
-  padding: 16px 0;
-  font-size: 14px;
-  color: var(--text-main);
-  border-bottom: 1px solid #F3F4F6;
-}
-
-.table tr:hover td {
-  background-color: #F9FAFB;
-}
-
-.taskName {
-  font-weight: 500;
-}
-
-.taskDate {
-  color: var(--text-sec);
-}
-
-/* 🏷 BADGES (Pills) */
-.badge {
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.badgeBlue { background-color: #E0F2FE; color: #0284C7; }
-.badgePink { background-color: #FFE4E6; color: #E11D48; }
-.badgePurple { background-color: #EDE9FE; color: #7C3AED; }
-.badgeGreen { background-color: #DCFCE7; color: #16A34A; }
-
-.statusBadge {
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 500;
-  display: inline-block;
-  min-width: 80px;
+.loadingText,
+.emptyText {
   text-align: center;
+  color: var(--text-sec);
+  padding: 24px 0;
+  font-size: 14px;
 }
-
-.statusRed { background-color: #FEE2E2; color: #EF4444; }
-.statusYellow { background-color: #FEF3C7; color: #F59E0B; }
 
 /* 📱 RESPONSIVIDADE */
 @media (max-width: 1024px) {

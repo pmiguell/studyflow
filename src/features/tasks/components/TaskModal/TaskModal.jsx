@@ -14,7 +14,7 @@ export default function TaskModal({ open, onClose, onSubmit, task, subjects }) {
     if (task) {
       setFormData({
         ...task,
-        subjectId: task.subject.id // 🔹 pegar ID da matéria
+        subjectId: task.subject?.id || "" // 🔹 pegar ID da matéria com verificação segura
       });
     } else {
       setFormData({
