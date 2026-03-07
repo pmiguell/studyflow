@@ -10,9 +10,17 @@ import {
   SquareKanban,
   Calendar
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { removeToken } from "../../features/auth/services/tokenService";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    removeToken();
+    navigate("/login");
+  };
   return (
     <aside className={style.sidebar}>
       <div className={style.top}>
@@ -46,9 +54,9 @@ export default function Sidebar() {
       </div>
 
       <div className={style.bottom}>
-        <NavLink to="/login">
+        <a href="/login" onClick={handleLogout}>
           <LogOut />
-        </NavLink>
+        </a>
       </div>
     </aside>
   );

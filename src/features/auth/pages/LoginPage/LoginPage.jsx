@@ -1,8 +1,14 @@
 import style from "./LoginPage.module.css";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import LoginForm from "../../components/LoginForm/LoginForm";
+import { removeToken } from "../../services/tokenService";
 
 export default function Login() {
+  useEffect(() => {
+    removeToken();
+  }, []);
+
   return (
     <div className={style.loginPage}>
       <h1>StudyFlow</h1>
