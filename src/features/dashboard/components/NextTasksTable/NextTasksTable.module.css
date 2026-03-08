@@ -25,9 +25,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #A78BFA;
+  background-color: #5E2B97;
   color: white;
   border: none;
+
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 13px;
