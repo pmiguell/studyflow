@@ -12,6 +12,10 @@ import TaskStatusModal from "../../../tasks/components/TaskStatusModal/TaskStatu
 import NextTasksTable from "../../components/NextTasksTable/NextTasksTable";
 import { getTasks, editTask, deleteTask } from "../../../tasks/services/taskService";
 import { getSubjects } from "../../../subjects/services/subjectsService";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend as ChartLegend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
+
+ChartJS.register(ArcElement, Tooltip, ChartLegend);
 
 export default function HomePage() {
   const [tasks, setTasks] = useState([]);
@@ -32,7 +36,7 @@ export default function HomePage() {
         getSubjects(),
       ]);
       setSubjects(subjectsData || []);
-      
+
       // Enrichir tasks com dados completos dos subjects
       const enrichedTasks = (tasksData || []).map(task => {
         const subject = (subjectsData || []).find(s => s.id === task.subjectId);
@@ -41,7 +45,7 @@ export default function HomePage() {
           subject: subject || task.subject
         };
       });
-      
+
       setTasks(enrichedTasks || []);
     } catch (err) {
       console.error("Erro ao carregar dados:", err);
@@ -130,12 +134,55 @@ export default function HomePage() {
     .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
     .slice(0, 5);
 
+  const pendingTasksList = tasks.filter(t => getTaskStatus(t) !== "CONCLUIDO");
+
+  const tasksPerSubject = pendingTasksList.reduce((acc, task) => {
+    const subjectName = task.subject?.title || task.subject?.name || "Sem Matéria";
+    const subjectColor = task.subject?.color || '#9ca3af';
+
+    if (!acc[subjectName]) {
+      acc[subjectName] = { count: 0, color: subjectColor };
+    }
+    acc[subjectName].count += 1;
+    return acc;
+  }, {});
+
+  const pieData = {
+    labels: Object.keys(tasksPerSubject),
+    datasets: [
+      {
+        data: Object.values(tasksPerSubject).map(item => item.count),
+        backgroundColor: Object.values(tasksPerSubject).map(item => item.color),
+        borderWidth: 0,
+        hoverOffset: 4
+      },
+    ],
+  };
+
+  const pieOptions = {
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const label = context.label || '';
+            const value = context.raw;
+            const total = context.chart._metasets[context.datasetIndex].total;
+            const percentage = Math.round((value / total) * 100);
+            return `${label}: ${value} tarefa(s) (${percentage}%)`;
+          }
+        }
+      }
+    },
+    maintainAspectRatio: false,
+  };
+
   return (
     <div className={styles.dashboard}>
-      
+
       {/* 📊 HEADER PADRONIZADO */}
-      <Header 
-        pageName="Dashboard" 
+      <Header
+        pageName="Dashboard"
         pageDescription="Acompanhe seu progresso de estudos"
       />
 
@@ -201,27 +248,41 @@ export default function HomePage() {
 
       {/* 📈 SEÇÃO INFERIOR */}
       <div className={styles.bottomGrid}>
-        
+
         {/* 🥧 GRÁFICO DE PIZZA */}
-        <div className={styles.chartCard}>
+        <div className={styles.chartCard} style={{ display: 'flex', flexDirection: 'column' }}>
           <h3 className={styles.cardTitle}>Matérias com pendências</h3>
-          <div className={styles.pieChartContainer}>
-            <div className={styles.pieChart}></div>
+          <div className={styles.pieChartContainer} style={{ flexGrow: 1, position: 'relative', minHeight: '220px' }}>
+            {Object.keys(tasksPerSubject).length > 0 ? (
+              <Pie data={pieData} options={pieOptions} />
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: '#888' }}>
+                <p>Nenhuma pendência, parabéns!</p>
+              </div>
+            )}
           </div>
-          <div className={styles.chartLegend}>
-            <div className={styles.legendItem}>
-              <span className={styles.dotBlue}></span> Auditoria (39%) <br/><span className={styles.taskCount}>- 5 tarefas</span>
+          {Object.keys(tasksPerSubject).length > 0 && (
+            <div className={styles.chartLegend}>
+              {Object.entries(tasksPerSubject).map(([subject, info]) => {
+                const total = pendingTasksList.length;
+                const percentage = Math.round((info.count / total) * 100);
+
+                return (
+                  <div key={subject} className={styles.legendItem}>
+                    <span style={{
+                      display: 'inline-block',
+                      width: '10px',
+                      height: '10px',
+                      borderRadius: '2px',
+                      backgroundColor: info.color,
+                      marginRight: '4px'
+                    }}></span>
+                    {subject} ({percentage}%) <br /><span className={styles.taskCount}>- {info.count} tarefa{info.count > 1 ? 's' : ''}</span>
+                  </div>
+                );
+              })}
             </div>
-            <div className={styles.legendItem}>
-              <span className={styles.dotPurple}></span> Cálculo 1 (31%) <br/><span className={styles.taskCount}>- 4 tarefas</span>
-            </div>
-            <div className={styles.legendItem}>
-              <span className={styles.dotPink}></span> POO (18%) <br/><span className={styles.taskCount}>- 2 tarefas</span>
-            </div>
-            <div className={styles.legendItem}>
-              <span className={styles.dotGreen}></span> Estatística (12%) <br/><span className={styles.taskCount}>- 1 tarefa</span>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* 📋 PRÓXIMAS TAREFAS */}
