@@ -2,6 +2,8 @@ import style from "./RecoverPasswordPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Snackbar, Alert } from "@mui/material";
+import PasswordRequirements from "../../components/PasswordRequirements/PasswordRequirements";
+import { isPasswordValid } from "../../utils/passwordValidator";
 import { forgotPassword, resetPassword } from "../../services/authService";
 import logoDark from "../../../../assets/logo-dark.png";
 
@@ -31,6 +33,17 @@ export default function RecoverPasswordPage() {
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
+
+    // Validar requisitos de senha
+    if (!isPasswordValid(newPassword)) {
+      setSnackbar({
+        open: true,
+        message: "A senha não atende aos requisitos mínimos.",
+        severity: "error",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -108,7 +121,8 @@ export default function RecoverPasswordPage() {
                   required
                 />
               </div>
-              <button type="submit" className={style.submitButton} disabled={loading}>
+              {newPassword && <PasswordRequirements password={newPassword} />}
+              <button type="submit" className={style.submitButton} disabled={loading || !isPasswordValid(newPassword)}>
                 {loading ? "Redefinindo..." : "Redefinir Senha"}
               </button>
             </form>

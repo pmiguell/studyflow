@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import style from "./AccountPage.module.css";
 import { Snackbar, Alert } from "@mui/material";
 import Button from "../../../components/Button/Button";
+import PasswordRequirements from "../../auth/components/PasswordRequirements/PasswordRequirements";
+import { isPasswordValid } from "../../auth/utils/passwordValidator";
 import {
   updateAccount,
   deleteAccount,
@@ -39,6 +41,16 @@ export default function AccountPage() {
   }, [token]);
 
   const handleSave = async () => {
+    // Se a senha foi preenchida, validar os requisitos
+    if (password && !isPasswordValid(password)) {
+      setSnackbar({
+        open: true,
+        message: "A nova senha não atende aos requisitos mínimos.",
+        severity: "error",
+      });
+      return;
+    }
+
     try {
       await updateAccount({ username, email, password }, token);
       setPassword("");
@@ -91,6 +103,7 @@ export default function AccountPage() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
+              {password && <PasswordRequirements password={password} />}
             </div>
           </form>
 
@@ -111,7 +124,7 @@ export default function AccountPage() {
         </div>
 
         <div className={style.buttonsContainer}>
-          <Button onClick={handleSave}>Salvar</Button>
+          <Button onClick={handleSave} disabled={password && !isPasswordValid(password)}>Salvar</Button>
           <button type="button" className={style.button}>
             Cancelar
           </button>
