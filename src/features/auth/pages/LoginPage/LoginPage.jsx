@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import { removeToken } from "../../services/tokenService";
 import { Snackbar, Alert } from "@mui/material";
+import logoDark from "../../../../assets/logo-dark.png";
 
 export default function Login() {
   const location = useLocation();
@@ -39,7 +40,7 @@ export default function Login() {
 
   return (
     <div className={style.loginPage}>
-      <h1>StudyFlow</h1>
+      <img src={logoDark} alt="StudyFlow Logo" className={style.logo} />
       <div className={style.loginContainer}>
         <h2>Login</h2>
         <p>Entre com seu e-mail e senha para acessar sua conta</p>

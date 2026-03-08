@@ -2,6 +2,7 @@ import style from "./RecoverPasswordPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { forgotPassword, resetPassword } from "../../services/authService";
+import logoDark from "../../../../assets/logo-dark.png";
 
 export default function RecoverPasswordPage() {
   const [step, setStep] = useState(1); // 1 = request email, 2 = reset password
@@ -49,7 +50,7 @@ export default function RecoverPasswordPage() {
 
   return (
     <div className={style.recoverPage}>
-      <h1>StudyFlow</h1>
+      <img src={logoDark} alt="StudyFlow Logo" className={style.logo} />
       <div className={style.recoverContainer}>
         <h2>Recuperação de Senha</h2>
 
@@ -79,7 +80,7 @@ export default function RecoverPasswordPage() {
           <>
             <p className={style.subtitle}>Insira o código enviado pro seu e-mail e sua nova senha.</p>
             <form onSubmit={handleResetPassword} className={style.form}>
-               <div className={style.formGroup}>
+              <div className={style.formGroup}>
                 <label>E-mail</label>
                 <input
                   type="email"
@@ -115,7 +116,7 @@ export default function RecoverPasswordPage() {
             </form>
           </>
         )}
-        
+
         <p className={style.backText}>Lembrou a senha? <Link to={"/login"} className={style.link}>Voltar ao Login</Link></p>
       </div>
     </div>

@@ -9,10 +9,11 @@
     padding: 2rem;
 }
 
-.registerPage h1 {
-    color: var(--color-primary);
-    font-size: 2.5rem;
+.logo {
+    width: 320px;
+    height: auto;
     margin-bottom: 2rem;
+    border-radius: 12px;
 }
 
 .registerPage h2 {

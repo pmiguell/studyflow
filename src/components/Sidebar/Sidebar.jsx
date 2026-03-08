@@ -8,13 +8,19 @@ import {
   LogOut,
   Home,
   SquareKanban,
-  Calendar
+  Calendar,
+  Pin,
+  PinOff
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { removeToken } from "../../features/auth/services/tokenService";
+import logoWhite from "../../assets/logo-white.png";
+import iconWhite from "../../assets/icon-white.png";
 
 export default function Sidebar() {
   const navigate = useNavigate();
+  const [isPinned, setIsPinned] = useState(false);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -22,11 +28,16 @@ export default function Sidebar() {
     navigate("/login", { state: { logout: true } });
   };
 
+  const togglePin = () => {
+    setIsPinned(!isPinned);
+  };
+
   return (
-    <aside className={style.sidebar}>
+    <aside className={`${style.sidebar} ${isPinned ? style.pinned : ""}`}>
       <div className={style.top}>
         <div className={style.logoContainer}>
-          <h1 className={style.logo}>Study <br /> Flow</h1>
+          <img src={iconWhite} alt="StudyFlow Icon" className={style.iconImg} />
+          <img src={logoWhite} alt="StudyFlow Logo" className={style.logoImg} />
         </div>
         <nav className={style.navigation}>
           <NavLink to="/home" className={({ isActive }) => isActive ? style.active : ""}>
@@ -69,6 +80,10 @@ export default function Sidebar() {
           <LogOut size={24} />
           <span className={style.label}>Sair</span>
         </a>
+        <button onClick={togglePin} className={style.pinButton} title={isPinned ? "Desafixar" : "Fixar"}>
+          {isPinned ? <PinOff size={24} /> : <Pin size={24} />}
+          <span className={style.label}>{isPinned ? "Desafixar" : "Fixar Menu"}</span>
+        </button>
       </div>
     </aside>
   );
