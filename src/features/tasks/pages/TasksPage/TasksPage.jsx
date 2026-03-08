@@ -27,28 +27,35 @@ export default function TasksPage() {
 
   // Busca tasks e subjects
   useEffect(() => {
-    fetchTasks();
-    fetchSubjects();
+    fetchData();
   }, []);
 
-  const fetchTasks = async () => {
+  const fetchData = async () => {
     try {
-      const data = await getTasks();
-      setTasks(data);
-      setFilteredTasks(data);
+      const [tasksData, subjectsData] = await Promise.all([
+        getTasks(),
+        getSubjects()
+      ]);
+      
+      setSubjects(Array.isArray(subjectsData) ? subjectsData : []);
+      
+      // Enrichir tasks com dados completos dos subjects
+      const enrichedTasks = tasksData.map(task => {
+        const subject = Array.isArray(subjectsData) 
+          ? subjectsData.find(s => s.id === task.subjectId)
+          : null;
+        return {
+          ...task,
+          subject: subject || task.subject // usa o subject enrichido ou mantém o original
+        };
+      });
+      
+      setTasks(enrichedTasks);
+      setFilteredTasks(enrichedTasks);
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchSubjects = async () => {
-    try {
-      const data = await getSubjects();
-      setSubjects(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error(err);
     }
   };
 
@@ -74,6 +81,9 @@ export default function TasksPage() {
     if (!updatedTask?.id) return;
     try {
       const updated = await editTask(updatedTask);
+      // Enrichir o task atualizado com dados do subject
+      const subject = subjects.find(s => s.id === updated.subjectId);
+      updated.subject = subject || updated.subject;
       setTasks(tasks.map((t) => (t.id === updated.id ? updated : t)));
     } catch (err) {
       console.error(err);
@@ -101,15 +111,17 @@ export default function TasksPage() {
       let updatedTask;
       if (taskData.id) {
         updatedTask = await editTask(taskData);
+        // Enrichir o task atualizado com dados do subject
+        const subject = subjects.find(s => s.id === updatedTask.subjectId);
+        updatedTask = { ...updatedTask, subject: subject || updatedTask.subject };
         setTasks(tasks.map((t) => (t.id === updatedTask.id ? updatedTask : t)));
       } else {
         updatedTask = await createTask(taskData);
+        // Enrichir o novo task com dados do subject
+        const subject = subjects.find(s => s.id === updatedTask.subjectId);
+        updatedTask = { ...updatedTask, subject: subject || updatedTask.subject };
         setTasks([...tasks, updatedTask]);
       }
-
-      // Recarrega matérias completas
-      const subjectsData = await getSubjects();
-      setSubjects(Array.isArray(subjectsData) ? subjectsData : []);
 
       setModalOpen(false);
       setEditingTask(null);

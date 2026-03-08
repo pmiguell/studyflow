@@ -14,7 +14,7 @@ export default function TaskModal({ open, onClose, onSubmit, task, subjects }) {
     if (task) {
       setFormData({
         ...task,
-        subjectId: task.subject.id // 🔹 pegar ID da matéria
+        subjectId: task.subject?.id || "" // 🔹 pegar ID da matéria com verificação segura
       });
     } else {
       setFormData({
@@ -33,22 +33,27 @@ export default function TaskModal({ open, onClose, onSubmit, task, subjects }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = (e) => {
-  e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  // Se task existe, é edição
-  if (task) {
-    if (!task?.id) {
-      console.error("Task id undefined");
-      return;
+    const payload = { ...formData };
+    if (payload.subjectId === "") {
+      payload.subjectId = null;
     }
-    onSubmit({ ...task, ...formData }); // envia task completa para edição
-  } else {
-    // Se task não existe, é criação
-    onSubmit({ ...formData }); // envia apenas formData para criação
-  }
 
-      setFormData({
+    // Se task existe, é edição
+    if (task) {
+      if (!task?.id) {
+        console.error("Task id undefined");
+        return;
+      }
+      onSubmit({ ...task, ...payload });
+    } else {
+      // Se task não existe, é criação
+      onSubmit({ ...payload });
+    }
+
+    setFormData({
       title: "",
       description: "",
       subjectId: "",
@@ -56,8 +61,8 @@ const handleSubmit = (e) => {
       status: "NAO_INICIADO"
     });
 
-  onClose();
-};
+    onClose();
+  };
 
 
   return (
@@ -83,11 +88,10 @@ const handleSubmit = (e) => {
             name="subjectId"
             value={formData.subjectId}
             onChange={handleChange}
-            required
           >
-            <option value="">Selecione a Matéria</option>
+            <option value="">Sem matéria (Evento solto)</option>
             {subjects.map((s) => (
-              <option value={s.id}>{s.title}</option>
+              <option key={s.id} value={s.id}>{s.title}</option>
             ))}
           </select>
           <input

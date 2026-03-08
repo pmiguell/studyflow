@@ -7,10 +7,12 @@ import { useState } from "react";
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (ev) => {
     ev.preventDefault();
+    setErrorMsg("");
 
     try {
       const data = await loginUser({ email, password });
@@ -18,11 +20,13 @@ export default function LoginForm() {
       navigate("/materias");
     } catch (error) {
       console.error("Erro no login:", error);
+      setErrorMsg(error.response?.data || "E-mail ou senha incorretos.");
     }
   };
 
   return (
     <form onSubmit={handleLogin} className={style.form}>
+      {errorMsg && <p className={style.errorMessage}>{errorMsg}</p>}
       <div className={style.formGroup}>
         <label htmlFor="email">E-mail</label>
         <input

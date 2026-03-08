@@ -138,6 +138,7 @@ export default function SubjectsPage() {
                 key={subject.id}
                 id={subject.id}
                 title={subject.title}
+                color={subject.color}
                 progress={progressPercent}
                 progressText={progressText}
                 onEditSubject={handleEditSubject}
