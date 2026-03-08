@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import style from "./AccountPage.module.css";
 import { Snackbar, Alert } from "@mui/material";
 import Button from "../../../components/Button/Button";
+import PasswordInput from "../../auth/components/PasswordInput/PasswordInput";
 import PasswordRequirements from "../../auth/components/PasswordRequirements/PasswordRequirements";
 import { isPasswordValid } from "../../auth/utils/passwordValidator";
 import {
@@ -51,13 +52,20 @@ export default function AccountPage() {
       return;
     }
 
+    // Se houver uma senha, ela must ser válida
+    const dataToUpdate = {
+      username,
+      email,
+      ...(password ? { password } : {}), // Só envia password se foi preenchida
+    };
+
     try {
-      await updateAccount({ username, email, password }, token);
+      await updateAccount(dataToUpdate, token);
       setPassword("");
-      setSnackbar({ open: true, message: "Senha alterada com sucesso!", severity: "success" });
+      setSnackbar({ open: true, message: "Dados alterados com sucesso!", severity: "success" });
     } catch (err) {
       console.error(err);
-      setSnackbar({ open: true, message: "Erro ao alterar a senha.", severity: "error" });
+      setSnackbar({ open: true, message: "Erro ao salvar alterações.", severity: "error" });
     }
   };
 
@@ -97,10 +105,10 @@ export default function AccountPage() {
               </div>
               <div className={style.inputContainer}>
                 <label>Senha</label>
-                <input
-                  type="password"
+                <PasswordInput
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="•••••••"
                 />
               </div>
               {password && <PasswordRequirements password={password} />}

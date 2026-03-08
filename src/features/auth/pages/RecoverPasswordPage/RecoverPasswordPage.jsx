@@ -2,6 +2,7 @@ import style from "./RecoverPasswordPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Snackbar, Alert } from "@mui/material";
+import PasswordInput from "../../components/PasswordInput/PasswordInput";
 import PasswordRequirements from "../../components/PasswordRequirements/PasswordRequirements";
 import { isPasswordValid } from "../../utils/passwordValidator";
 import { forgotPassword, resetPassword } from "../../services/authService";
@@ -112,12 +113,11 @@ export default function RecoverPasswordPage() {
               </div>
               <div className={style.formGroup}>
                 <label>Nova Senha</label>
-                <input
-                  type="password"
+                <PasswordInput
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="********"
-                  minLength="6"
+                  placeholder="•••••••"
+                  minLength="8"
                   required
                 />
               </div>

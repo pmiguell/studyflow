@@ -3,6 +3,7 @@ import { registerUser } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { LinearProgress, Snackbar, Alert } from "@mui/material";
+import PasswordInput from "../PasswordInput/PasswordInput";
 import PasswordRequirements from "../PasswordRequirements/PasswordRequirements";
 import { isPasswordValid } from "../../utils/passwordValidator";
 
@@ -91,13 +92,10 @@ export default function RegisterForm() {
       </div>
       <div className={style.formGroup}>
         <label htmlFor="password">Senha</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="********"
+        <PasswordInput
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder="•••••••"
           required
         />
       </div>
