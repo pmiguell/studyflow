@@ -21,13 +21,15 @@
   --text-main: #111827;
   --text-sec: #6B7280;
   
-  /* Ajuste de padding, assumindo que seu layout pai gerencia a largura total */
-  padding: 32px;
+  padding: 24px;
+  width: 100%;
   max-width: 1400px;
+  margin: 0 auto;
   background-color: var(--bg-color);
   font-family: 'Inter', system-ui, sans-serif;
   min-height: 100vh;
   animation: fadeIn 0.5s ease-in;
+  overflow-x: hidden; /* Prevent horizontal scroll on the main container */
 }
 
 /* 👋 HEADER - Removido: usando Header padronizado */
@@ -38,7 +40,7 @@
 /* 📦 CARDS MÉTRICAS */
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
   margin-bottom: 32px;
 }
@@ -108,9 +110,19 @@
 
 /* 📈 SEÇÃO INFERIOR */
 .bottomGrid {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: 24px;
+}
+
+.chartCard {
+  flex: 1;
+  min-width: 320px;
+}
+
+.tasksCard {
+  flex: 1.5;
+  min-width: 320px;
 }
 
 .chartCard, .tasksCard {
@@ -148,16 +160,17 @@
 
 .chartLegend {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 16px;
+  margin-top: 16px;
 }
 
 .legendItem {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-sec);
   text-align: center;
-  flex: 1;
+  min-width: 100px;
 }
 
 .taskCount {
@@ -211,28 +224,26 @@
 }
 
 /* 📱 RESPONSIVIDADE */
-@media (max-width: 1024px) {
-  .statsGrid {
-    grid-template-columns: repeat(2, 1fr);
+/* 📱 RESPONSIVIDADE ADICIONAL */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 16px;
   }
-  .bottomGrid {
-    grid-template-columns: 1fr;
+  .statCard {
+    height: auto;
+    padding: 16px;
+  }
+  .statValue, .statValueDark {
+    font-size: 28px;
   }
 }
 
-@media (max-width: 768px) {
-  .dashboard {
-    padding: 20px;
-  }
-  .statsGrid {
-    grid-template-columns: 1fr;
+@media (max-width: 480px) {
+  .chartCard, .tasksCard {
+    min-width: 100%;
   }
   .pieChart {
-    width: 180px;
-    height: 180px;
-  }
-  .chartLegend {
-    flex-direction: column;
-    align-items: flex-start;
+    width: 200px;
+    height: 200px;
   }
 }

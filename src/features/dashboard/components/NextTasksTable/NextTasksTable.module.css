@@ -50,6 +50,7 @@
 .tableContainer {
   flex: 1;
   overflow-y: auto;
+  overflow-x: auto; /* Allow horizontal scroll for tables on small screens */
   padding-right: 8px;
   min-height: 300px;
 }
