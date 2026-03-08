@@ -17,6 +17,35 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--color-text-header, #2B2138);
+  min-width: 200px;
+  text-align: center;
+}
+
+.monthNavigation {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-header, #2B2138);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.navButton:hover {
+  background-color: var(--color-hover-soft, #f0f0f0);
+}
+
+.navButton:active {
+  transform: scale(0.95);
 }
 
 .gridContainer {

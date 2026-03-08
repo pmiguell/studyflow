@@ -1,15 +1,23 @@
 import { useState, useEffect } from "react";
 import style from "./CalendarGrid.module.css";
-import { Trash2 } from "lucide-react";
+import { Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function CalendarGrid({ events = [], onDeleteEvent }) { 
-  const [holidays, setHolidays] = useState([]);
+  const [holidays, setHolidays] = useState({});
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
 
-  const monthString = today.toLocaleString('pt-BR', { month: 'long' });
+  const handlePrevMonth = () => {
+    setCurrentDate(new Date(year, month - 1, 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(new Date(year, month + 1, 1));
+  };
+
+  const monthString = currentDate.toLocaleString('pt-BR', { month: 'long' });
   const formattedMonthYear = `${monthString.charAt(0).toUpperCase() + monthString.slice(1)} de ${year}`;
 
   useEffect(() => {
@@ -19,8 +27,11 @@ export default function CalendarGrid({ events = [], onDeleteEvent }) {
         if (!response.ok) throw new Error("Erro ao buscar feriados");
         
         const data = await response.json();
-        const holidayDates = data.map(feriado => feriado.date);
-        setHolidays(holidayDates);
+        const holidaysMap = {};
+        data.forEach(feriado => {
+          holidaysMap[feriado.date] = feriado.name;
+        });
+        setHolidays(holidaysMap);
       } catch (error) {
         console.error("Falha ao carregar os feriados:", error);
       }
@@ -53,7 +64,15 @@ export default function CalendarGrid({ events = [], onDeleteEvent }) {
   return (
     <div className={style.calendarWrapper}>
       <div className={style.monthHeader}>
-        <h2>{formattedMonthYear}</h2>
+        <div className={style.monthNavigation}>
+          <button onClick={handlePrevMonth} className={style.navButton} title="Mês anterior">
+            <ChevronLeft size={24} />
+          </button>
+          <h2>{formattedMonthYear}</h2>
+          <button onClick={handleNextMonth} className={style.navButton} title="Próximo mês">
+            <ChevronRight size={24} />
+          </button>
+        </div>
       </div>
 
       <div className={style.gridContainer}>
@@ -72,12 +91,17 @@ export default function CalendarGrid({ events = [], onDeleteEvent }) {
             }
 
             const currentDayFormatted = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const isHoliday = holidays.includes(currentDayFormatted);
+            const isHoliday = !!holidays[currentDayFormatted];
+            const holidayName = holidays[currentDayFormatted];
             const dayEvents = events.filter((ev) => ev.date === currentDayFormatted);
 
             return (
               <div key={index} className={style.dayCell}>
-                <div className={`${style.dayNumberWrapper} ${isHoliday ? style.holidayCell : ''}`}>
+                <div 
+                  className={`${style.dayNumberWrapper} ${isHoliday ? style.holidayCell : ''}`}
+                  title={holidayName ? `Feriado Nacional: ${holidayName}` : ''}
+                  style={isHoliday ? { cursor: 'help' } : {}}
+                >
                   <span className={`${style.dayNumber} ${isHoliday ? style.holidayDayNumber : ''}`}>
                     {day}
                   </span>
