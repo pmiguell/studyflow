@@ -1,78 +1,221 @@
 @import "../../styles/colors.css";
+
 .sidebar {
   background-color: var(--color-primary);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 64px;
+  align-items: flex-start;
+  width: 72px;
   justify-content: space-between;
-  padding: 1rem 0;
+  padding: 1.5rem 0; /* Padding lateral movido para os links */
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+.sidebar:hover {
+  width: 200px;
 }
 
 .top {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 2rem;
+  width: 100%;
 }
 
-.top h1 {
-  font-size: 1rem;
+.logoContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+  min-height: 48px;
+}
+
+.logo {
+  font-size: 0.85rem;
   color: var(--color-primary-text);
-  text-align: center;
+  line-height: 1.2;
   margin: 0;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+/* No estado recolhido, o logo fica empilhado e centralizado */
+.sidebar:not(:hover) .logo {
+  font-size: 0.7rem;
+}
+
+.sidebar:hover .logo br {
+  display: none;
 }
 
 .navigation {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  width: 100%;
+  padding: 0 0.75rem;
 }
 
-.navigation a {
+.navigation a, .logoutLink {
   color: var(--color-primary-text);
-  font-size: 1.5rem;
-  padding: 0.5rem;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
+  text-decoration: none;
+  padding: 0.75rem;
+  border-radius: 12px;
+  transition: all 0.2s ease;
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 48px;
-  height: 48px;
+  width: 100%;
+  white-space: nowrap;
+  gap: 1.5rem;
 }
 
-.navigation a:hover {
+.navigation a svg, .logoutLink svg {
+  flex-shrink: 0;
+  color: var(--color-primary-text); /* Garante visibilidade */
+  display: block;
+}
+
+/* No estado recolhido, centraliza os ícones no espaço disponível */
+.sidebar:not(:hover) .navigation a, 
+.sidebar:not(:hover) .logoutLink {
+  justify-content: flex-start;
+}
+
+
+.navigation a:hover, .logoutLink:hover {
   background-color: var(--color-hover);
+  transform: translateX(4px);
+}
+
+.active {
+  background-color: var(--color-hover);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.sidebar:hover .label {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
 }
 
 .bottom {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 0.75rem;
 }
 
-.bottom button {
-  background: none;
-  border: none;
-  color: var(--color-primary-text);
-  font-size: 1.5rem;
-  cursor: pointer;
+/* 📱 RESPONSIVIDADE PARA DISPOSITIVOS MÓVEIS */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100% !important;
+    height: 70px;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    padding: 0 10px;
+    align-items: center;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .sidebar:hover {
+    width: 100% !important;
+  }
+
+  .top {
+    flex-direction: row;
+    gap: 0;
+    height: 100%;
+    align-items: center;
+    flex: 1;
+  }
+
+  .logoContainer {
+    display: none; /* Esconde logo no mobile para dar espaço aos ícones */
+  }
+
+  .navigation {
+    flex-direction: row;
+    padding: 0;
+    height: 100%;
+    justify-content: space-around;
+    gap: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .navigation::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navigation a, .logoutLink {
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px;
+    width: auto;
+    justify-content: center;
+    border-radius: 8px;
+  }
+
+  .navigation a:hover, .logoutLink:hover {
+    transform: none;
+  }
+
+  .label {
+    font-size: 10px;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    display: block;
+    font-weight: 400;
+  }
+
+  .bottom {
+    width: auto;
+    border: none;
+    padding: 0;
+    margin-left: auto;
+  }
+
+  .logoutLink {
+    padding: 8px;
+  }
 }
 
-.bottom a {
-  color: var(--color-primary-text);
-  font-size: 1.5rem;
-  padding: 0.5rem;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 48px;
-  height: 48px;
-}
-
-.bottom a:hover {
-  background-color: var(--color-hover);
+@media (max-width: 480px) {
+  /* No mobile muito pequeno, mostramos apenas os mais importantes ou scroll */
+  .label {
+    display: none; /* Esconde texto se for muito pequeno */
+  }
 }
