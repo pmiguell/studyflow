@@ -14,6 +14,7 @@ import { getTasks, editTask, deleteTask } from "../../../tasks/services/taskServ
 import { getSubjects } from "../../../subjects/services/subjectsService";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend as ChartLegend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
+import { LinearProgress } from "@mui/material";
 
 ChartJS.register(ArcElement, Tooltip, ChartLegend);
 
@@ -179,6 +180,20 @@ export default function HomePage() {
 
   return (
     <div className={styles.dashboard}>
+      {loading && (
+        <LinearProgress
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
+            height: 4,
+            backgroundColor: '#a26dff30',
+            '& .MuiLinearProgress-bar': { backgroundColor: '#a26dff' }
+          }}
+        />
+      )}
 
       {/* 📊 HEADER PADRONIZADO */}
       <Header
