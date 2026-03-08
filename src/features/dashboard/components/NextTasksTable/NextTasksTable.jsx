@@ -94,7 +94,14 @@ const NextTasksTable = ({ tasks = [], subjects = [] }) => {
                   <tr key={task.id} className={isOverdue(task) ? styles.overdueRow : ""}>
                     <td className={styles.taskName}>{getTaskName(task)}</td>
                     <td>
-                      <span className={`${styles.badge} ${styles.badgeDefault}`}>
+                      <span 
+                        className={styles.badge}
+                        style={{ 
+                          backgroundColor: `${task.subject?.color || '#9ca3af'}20`, 
+                          color: task.subject?.color || '#9ca3af',
+                          border: `1px solid ${task.subject?.color || '#9ca3af'}40`
+                        }}
+                      >
                         {getSubjectName(task).substring(0, 15)}
                         {getSubjectName(task).length > 15 ? '...' : ''}
                       </span>
@@ -121,12 +128,16 @@ const NextTasksTable = ({ tasks = [], subjects = [] }) => {
                     <span className={styles.mobileDate}><Calendar size={14} /> {formatDate(task.deadline)}</span>
                   </div>
                   <h4 className={styles.mobileTaskTitle}>{getTaskName(task)}</h4>
-                  <div className={styles.mobileSubject}>
+                  <div 
+                    className={styles.mobileSubject}
+                    style={{ color: task.subject?.color || '#4B5563' }}
+                  >
                     <BookOpen size={14} /> {getSubjectName(task)}
                   </div>
                 </div>
               ))}
             </div>
+
           </>
         ) : (
           <p className={styles.emptyText}>Nenhuma tarefa para mostrar</p>

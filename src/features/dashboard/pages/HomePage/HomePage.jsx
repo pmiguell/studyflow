@@ -284,18 +284,23 @@ export default function HomePage() {
 
                 return (
                   <div key={subject} className={styles.legendItem}>
-                    <span style={{
-                      display: 'inline-block',
-                      width: '10px',
-                      height: '10px',
-                      borderRadius: '2px',
-                      backgroundColor: info.color,
-                      marginRight: '4px'
-                    }}></span>
-                    {subject} ({percentage}%) <br /><span className={styles.taskCount}>- {info.count} tarefa{info.count > 1 ? 's' : ''}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span style={{
+                        display: 'inline-block',
+                        width: '10px',
+                        height: '10px',
+                        borderRadius: '2px',
+                        backgroundColor: info.color,
+                      }}></span>
+                      <span style={{ color: info.color, fontWeight: '700' }}>{subject}</span> ({percentage}%)
+                    </div>
+                    <span className={styles.taskCount} style={{ marginLeft: '14px' }}>
+                      - {info.count} tarefa{info.count > 1 ? 's' : ''}
+                    </span>
                   </div>
                 );
               })}
+
             </div>
           )}
         </div>
