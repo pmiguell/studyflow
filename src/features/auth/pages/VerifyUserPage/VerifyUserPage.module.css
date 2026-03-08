@@ -9,11 +9,10 @@
     padding: 2rem;
 }
 
-.logo {
-    width: 320px;
-    height: auto;
+.verifyUserPage h1 {
+    color: var(--color-primary);
+    font-size: 2.5rem;
     margin-bottom: 2rem;
-    border-radius: 12px;
 }
 
 .verifyUserPage h2 {

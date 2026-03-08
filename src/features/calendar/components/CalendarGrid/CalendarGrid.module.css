@@ -17,64 +17,32 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--color-text-header, #2B2138);
-  min-width: 200px;
-  text-align: center;
-}
-
-.monthNavigation {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.navButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text-header, #2B2138);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  border-radius: 50%;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.navButton:hover {
-  background-color: var(--color-hover-soft, #f0f0f0);
-}
-
-.navButton:active {
-  transform: scale(0.95);
 }
 
 .gridContainer {
   display: flex;
   flex-direction: column;
   width: 100%;
-  border: 1px solid var(--color-hover-soft, #e2e8f0);
-  border-radius: 12px;
+  border: 1px solid var(--color-hover-soft, #d9d9d9);
+  border-radius: 8px;
   overflow: hidden;
   background-color: var(--color-background-secondary, #ffffff);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .headerRow {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  background-color: #f8fafc;
-  border-bottom: 1px solid var(--color-hover-soft, #e2e8f0);
+  background-color: var(--color-background-secondary-hover, #f5f5f5);
+  border-bottom: 1px solid var(--color-hover-soft, #d9d9d9);
 }
 
 .headerCell {
-  padding: 16px 10px;
+  padding: 12px 10px;
   text-align: center;
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: #64748b;
-  border-right: 1px solid var(--color-hover-soft, #e2e8f0);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--color-text-default, #5B5B5B);
+  border-right: 1px solid var(--color-hover-soft, #d9d9d9);
 }
 
 .headerCell:last-child {
@@ -87,16 +55,11 @@
 }
 
 .dayCell {
-  min-height: 140px;
-  padding: 8px;
-  border-right: 1px solid var(--color-hover-soft, #e2e8f0);
-  border-bottom: 1px solid var(--color-hover-soft, #e2e8f0);
+  min-height: 120px;
+  padding: 10px;
+  border-right: 1px solid var(--color-hover-soft, #d9d9d9);
+  border-bottom: 1px solid var(--color-hover-soft, #d9d9d9);
   position: relative;
-  transition: background-color 0.2s;
-}
-
-.dayCell:hover {
-  background-color: #f8fafc;
 }
 
 .dayCell:nth-child(7n) {
@@ -104,12 +67,13 @@
 }
 
 .emptyCell {
-  background-color: #f1f5f9;
+  background-color: var(--color-background-secondary-hover, #f5f5f5);
 }
 
 .dayNumberWrapper {
-  position: relative;
-  margin-bottom: 8px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -120,23 +84,24 @@
 }
 
 .dayNumber {
-  font-weight: 500;
-  font-size: 0.95rem;
-  color: #334155;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-header, #2B2138);
 }
 
 .dayNumberWrapper.holidayCell {
-  background-color: #fca5a5; 
+  background-color: var(--color-primary); 
 }
 
 .dayNumber.holidayDayNumber {
-  color: white; 
+  color: var(--color-primary-text); 
 }
 
 .eventsContainer {
+  margin-top: 36px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   overflow-y: auto;
   max-height: calc(100% - 36px);
   padding-right: 4px;
@@ -144,26 +109,24 @@
 
 .eventCard {
   color: #ffffff; 
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: 6px 12px;
-  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 2rem;
   display: flex; 
   align-items: center; 
   justify-content: space-between; 
-  gap: 6px;
+  gap: 4px;
   white-space: nowrap; 
   overflow: hidden; 
   cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  border-left: 4px solid rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
 
 .eventCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  opacity: 0.95;
+  transform: scale(1.03);
+  opacity: 0.9;
 }
 
 .eventTitle {
@@ -200,66 +163,3 @@
 .deleteButton:hover .trashIcon {
   color: #ffffff;
 }
-
-.eventCard.completedEvent {
-  text-decoration: line-through;
-  opacity: 0.6;
-}
-
-.shortDayName {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .monthHeader h2 {
-    font-size: 1.2rem;
-    min-width: 150px;
-  }
-
-  .gridContainer {
-    overflow-x: auto; /* Permite scroll se as células ficarem muito pequenas */
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .headerCell {
-    padding: 10px 5px;
-    font-size: 0.8rem;
-  }
-
-  .fullDayName {
-    display: none;
-  }
-
-  .shortDayName {
-    display: inline;
-  }
-
-  .dayCell {
-    min-height: 80px; /* Reduz altura no mobile */
-    padding: 4px;
-  }
-
-  .dayNumberWrapper {
-    width: 22px;
-    height: 22px;
-  }
-
-  .dayNumber {
-    font-size: 0.8rem;
-  }
-
-  .eventCard {
-    padding: 2px 4px;
-    font-size: 0.65rem;
-  }
-
-  .deleteButton {
-    display: none !important; /* Esconde lixeira no mobile para evitar cliques acidentais */
-  }
-}
-
-@media (max-width: 480px) {
-  .headerRow, .daysGrid {
-    min-width: 400px; /* Garante que o calendário não esprema demais os eventos */
-  }
-}

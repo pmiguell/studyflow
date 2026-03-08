@@ -8,7 +8,6 @@ import {
   closestCenter,
   useSensor,
   useSensors,
-  TouchSensor,
 } from "@dnd-kit/core";
 
 import {
@@ -34,23 +33,13 @@ const COLUMN_STATUS_MAP = {
 
 export default function KanbanPage() {
   const [columns, setColumns] = useState({
-    todo: { label: "Não iniciada", color: "#ff00001a", items: [] },
-    doing: { label: "Em andamento", color: "#0004ff1a", items: [] },
-    done: { label: "Concluído", color: "#2ecc701a", items: [] },
+    todo: { label: "Não iniciada", color: "#ff00003a", items: [] },
+    doing: { label: "Em andamento", color: "#0004ff3f", items: [] },
+    done: { label: "Concluído", color: "#2ecc7042", items: [] },
   });
 
-  const [activeTab, setActiveTab] = useState("todo");
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 5 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
   // 🔹 Buscar tarefas (COM JWT)
@@ -76,7 +65,6 @@ export default function KanbanPage() {
             subject: task.subject, // 👈 objeto
             subjectId: task.subject?.id, // 👈 ID
             status: task.status,
-            description: task.description,
           });
         });
 
@@ -94,31 +82,15 @@ export default function KanbanPage() {
     const { active, over } = event;
     if (!over) return;
 
-    // IDs formatados como: column-index
-    const activeId = String(active.id);
-    const overId = String(over.id);
-
-    // No mobile, IDs dropáveis podem ser só o columnId
-    const [fromCol, fromIndexStr] = activeId.split("-");
-    const fromIndex = parseInt(fromIndexStr, 10);
-    
-    // O 'over' pode ser uma coluna inteira ou um card específico
-    let toCol, toIndex;
-    if (overId.includes("-")) {
-      const parts = overId.split("-");
-      toCol = parts[0];
-      toIndex = parseInt(parts[1], 10);
-    } else {
-      toCol = overId;
-      toIndex = columns[toCol].items.length;
-    }
+    const [fromCol, fromIndex] = active.id.split("-");
+    const [toCol, toIndex] = over.id.split("-");
 
     const fromItems = [...columns[fromCol].items];
     const toItems = [...columns[toCol].items];
 
     // 🔁 Reordenação na mesma coluna
     if (fromCol === toCol) {
-      const reordered = arrayMove(fromItems, fromIndex, toIndex);
+      const reordered = arrayMove(fromItems, +fromIndex, +toIndex);
       setColumns((prev) => ({
         ...prev,
         [fromCol]: { ...prev[fromCol], items: reordered },
@@ -127,7 +99,7 @@ export default function KanbanPage() {
     }
 
     // 🔀 Mudança de coluna
-    const [moved] = fromItems.splice(fromIndex, 1);
+    const [moved] = fromItems.splice(+fromIndex, 1);
     const newStatus = COLUMN_STATUS_MAP[toCol];
 
     const updatedTask = {
@@ -135,7 +107,7 @@ export default function KanbanPage() {
       status: newStatus,
     };
 
-    toItems.splice(toIndex, 0, updatedTask);
+    toItems.splice(+toIndex, 0, updatedTask);
 
     setColumns((prev) => ({
       ...prev,
@@ -160,25 +132,9 @@ export default function KanbanPage() {
   return (
     <div className={style.kanbanPage}>
       <Header
-        pageName="Quadro Kanban"
-        pageDescription="Organize suas tarefas movendo-as entre as etapas de progresso."
+        pageName="Kanban"
+        pageDescription="Organize suas tarefas com o quadro Kanban."
       />
-
-      {isMobile && (
-        <div className={style.tabs}>
-          {Object.entries(columns).map(([id, col]) => (
-            <button
-              key={id}
-              className={`${style.tab} ${activeTab === id ? style.activeTab : ""}`}
-              onClick={() => setActiveTab(id)}
-            >
-              <span className={style.labelTitle}>{col.label}</span>
-              <span className={style.count}>{col.items.length}</span>
-            </button>
-          ))}
-        </div>
-      )}
-
       <div className={style.kanbanContainer}>
         <DndContext
           sensors={sensors}
@@ -186,22 +142,18 @@ export default function KanbanPage() {
           onDragEnd={handleDragEnd}
         >
           {Object.entries(columns).map(([columnId, column]) => (
-             <div 
-              key={columnId} 
-              className={`${style.columnWrapper} ${activeTab === columnId ? style.activeColumn : ""}`}
+            <SortableContext
+              key={columnId}
+              items={column.items.map((_, i) => `${columnId}-${i}`)}
+              strategy={verticalListSortingStrategy}
             >
-              <SortableContext
-                items={column.items.map((_, i) => `${columnId}-${i}`)}
-                strategy={verticalListSortingStrategy}
-              >
-                <Column
-                  title={column.label}
-                  color={column.color}
-                  items={column.items}
-                  columnId={columnId}
-                />
-              </SortableContext>
-            </div>
+              <Column
+                title={column.label}
+                color={column.color}
+                items={column.items}
+                columnId={columnId}
+              />
+            </SortableContext>
           ))}
         </DndContext>
       </div>

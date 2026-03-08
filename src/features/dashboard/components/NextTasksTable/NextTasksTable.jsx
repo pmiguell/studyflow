@@ -1,16 +1,26 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Calendar, BookOpen } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import styles from "./NextTasksTable.module.css";
 
 const NextTasksTable = ({ tasks = [], subjects = [] }) => {
   const [showOverdueOnly, setShowOverdueOnly] = useState(false);
 
+  // Mapeamento de cores para matérias
+  const subjectColors = {
+    "Auditoria": styles.badgeBlue,
+    "Cálculo 1": styles.badgePurple,
+    "POO": styles.badgePink,
+    "Estatística": styles.badgeGreen,
+  };
+
+  // Mapeamento de cores para status
   const statusColors = {
     "NAO_INICIADO": styles.statusRed,
     "EM_ANDAMENTO": styles.statusYellow,
     "CONCLUIDO": styles.statusGreen,
   };
 
+  // Formatar data
   const formatDate = (dateString) => {
     if (!dateString) return "Sem data";
     try {
@@ -22,6 +32,7 @@ const NextTasksTable = ({ tasks = [], subjects = [] }) => {
     }
   };
 
+  // Obter rótulo do status com segurança
   const getStatusLabel = (status) => {
     const statusValue = typeof status === "string" ? status : String(status || "").trim();
     const statusLabels = {
@@ -32,6 +43,7 @@ const NextTasksTable = ({ tasks = [], subjects = [] }) => {
     return statusLabels[statusValue] || statusValue;
   };
 
+  // Obter status com segurança
   const getTaskStatus = (task) => {
     if (typeof task.status === "object") {
       return task.status?.name || task.status?.key || "NAO_INICIADO";
@@ -39,6 +51,7 @@ const NextTasksTable = ({ tasks = [], subjects = [] }) => {
     return task.status || "NAO_INICIADO";
   };
 
+  // Verificar se tarefa está atrasada
   const isOverdue = (task) => {
     if (!task.deadline) return false;
     const deadline = new Date(task.deadline);
@@ -46,22 +59,51 @@ const NextTasksTable = ({ tasks = [], subjects = [] }) => {
     return deadline < new Date() && status !== "CONCLUIDO";
   };
 
+  // Filtrar tarefas
   let filteredTasks = tasks.filter(t => getTaskStatus(t) !== "CONCLUIDO");
   if (showOverdueOnly) {
     filteredTasks = filteredTasks.filter(isOverdue);
   }
 
+  // Obter nome da matéria com validação
   const getSubjectName = (task) => {
-    if (task.subject?.title) return task.subject.title;
-    if (task.subject?.name) return task.subject.name;
-    return "Sem matéria";
+    try {
+      if (task.subject) {
+        // Tentar obter title primeiro (nova estrutura)
+        if (task.subject.title) {
+          return String(task.subject.title).trim();
+        }
+        // Fallback para name
+        if (task.subject.name) {
+          return String(task.subject.name).trim();
+        }
+      }
+      return "Sem matéria";
+    } catch (err) {
+      console.error("Erro ao obter nome da matéria:", err, task);
+      return "Sem matéria";
+    }
   };
 
+  // Obter nome da tarefa com validação robusta
   const getTaskName = (task) => {
-    if (task.title) return task.title;
-    if (task.name?.title) return task.name.title;
-    if (task.name) return String(task.name);
-    return "Sem título";
+    try {
+      // Tentar obter title primeiro (nova estrutura)
+      if (task.title) {
+        return String(task.title).trim();
+      }
+      // Fallback para name
+      if (task.name) {
+        if (typeof task.name === "object" && task.name?.title) {
+          return String(task.name.title).trim();
+        }
+        return String(task.name).trim();
+      }
+      return "Sem título";
+    } catch (err) {
+      console.error("Erro ao obter nome da tarefa:", err, task);
+      return "Sem título";
+    }
   };
 
   return (
@@ -71,76 +113,72 @@ const NextTasksTable = ({ tasks = [], subjects = [] }) => {
         <button
           className={styles.filterBtn}
           onClick={() => setShowOverdueOnly(!showOverdueOnly)}
+          title={showOverdueOnly ? "Mostrar todas" : "Mostrar apenas atrasadas"}
         >
-          {showOverdueOnly ? <><Eye size={16} /> Ver todas</> : <><EyeOff size={16} /> Ver atrasadas</>}
+          {showOverdueOnly ? (
+            <>
+              <Eye size={16} /> Mostrar todas
+            </>
+          ) : (
+            <>
+              <EyeOff size={16} /> Mostrar atrasadas
+            </>
+          )}
         </button>
       </div>
 
       <div className={styles.tableContainer}>
         {filteredTasks.length > 0 ? (
-          <>
-            {/* TABLE VIEW (Desktop) */}
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>Matéria</th>
-                  <th>Data</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredTasks.map((task) => (
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Matéria</th>
+                <th>Data</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTasks.map((task) => {
+                // Validação extra: garantir que task.id é válido
+                if (!task || !task.id) {
+                  console.warn("Tarefa sem ID válido:", task);
+                  return null;
+                }
+                
+                return (
                   <tr key={task.id} className={isOverdue(task) ? styles.overdueRow : ""}>
                     <td className={styles.taskName}>{getTaskName(task)}</td>
                     <td>
-                      <span 
-                        className={styles.badge}
-                        style={{ 
-                          backgroundColor: `${task.subject?.color || '#9ca3af'}20`, 
-                          color: task.subject?.color || '#9ca3af',
-                          border: `1px solid ${task.subject?.color || '#9ca3af'}40`
-                        }}
+                      <span
+                        className={`${styles.badge} ${
+                          subjectColors[getSubjectName(task)] || styles.badgeDefault
+                        }`}
                       >
-                        {getSubjectName(task).substring(0, 15)}
-                        {getSubjectName(task).length > 15 ? '...' : ''}
+                        {getSubjectName(task)}
                       </span>
                     </td>
                     <td className={styles.taskDate}>{formatDate(task.deadline)}</td>
                     <td>
-                      <span className={`${styles.statusBadge} ${statusColors[getTaskStatus(task)] || styles.statusDefault}`}>
+                      <span
+                        className={`${styles.statusBadge} ${
+                          statusColors[getTaskStatus(task)] || styles.statusDefault
+                        }`}
+                      >
                         {getStatusLabel(getTaskStatus(task))}
                       </span>
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {/* CARD VIEW (Mobile) via CSS display */}
-            <div className={styles.mobileList}>
-              {filteredTasks.map((task) => (
-                <div key={task.id} className={`${styles.mobileTaskCard} ${isOverdue(task) ? styles.overdueCard : ""}`}>
-                  <div className={styles.mobileCardHeader}>
-                    <span className={`${styles.statusBadge} ${statusColors[getTaskStatus(task)] || styles.statusDefault}`}>
-                      {getStatusLabel(getTaskStatus(task))}
-                    </span>
-                    <span className={styles.mobileDate}><Calendar size={14} /> {formatDate(task.deadline)}</span>
-                  </div>
-                  <h4 className={styles.mobileTaskTitle}>{getTaskName(task)}</h4>
-                  <div 
-                    className={styles.mobileSubject}
-                    style={{ color: task.subject?.color || '#4B5563' }}
-                  >
-                    <BookOpen size={14} /> {getSubjectName(task)}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-          </>
+                );
+              })}
+            </tbody>
+          </table>
         ) : (
-          <p className={styles.emptyText}>Nenhuma tarefa para mostrar</p>
+          <p className={styles.emptyText}>
+            {showOverdueOnly
+              ? "Nenhuma tarefa atrasada"
+              : "Nenhuma tarefa pendente"}
+          </p>
         )}
       </div>
     </div>

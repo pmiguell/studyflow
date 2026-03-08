@@ -33,27 +33,22 @@ export default function TaskModal({ open, onClose, onSubmit, task, subjects }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = (e) => {
+  e.preventDefault();
 
-    const payload = { ...formData };
-    if (payload.subjectId === "") {
-      payload.subjectId = null;
+  // Se task existe, é edição
+  if (task) {
+    if (!task?.id) {
+      console.error("Task id undefined");
+      return;
     }
+    onSubmit({ ...task, ...formData }); // envia task completa para edição
+  } else {
+    // Se task não existe, é criação
+    onSubmit({ ...formData }); // envia apenas formData para criação
+  }
 
-    // Se task existe, é edição
-    if (task) {
-      if (!task?.id) {
-        console.error("Task id undefined");
-        return;
-      }
-      onSubmit({ ...task, ...payload });
-    } else {
-      // Se task não existe, é criação
-      onSubmit({ ...payload });
-    }
-
-    setFormData({
+      setFormData({
       title: "",
       description: "",
       subjectId: "",
@@ -61,8 +56,8 @@ export default function TaskModal({ open, onClose, onSubmit, task, subjects }) {
       status: "NAO_INICIADO"
     });
 
-    onClose();
-  };
+  onClose();
+};
 
 
   return (
@@ -88,10 +83,11 @@ export default function TaskModal({ open, onClose, onSubmit, task, subjects }) {
             name="subjectId"
             value={formData.subjectId}
             onChange={handleChange}
+            required
           >
-            <option value="">Sem matéria (Evento solto)</option>
+            <option value="">Selecione a Matéria</option>
             {subjects.map((s) => (
-              <option key={s.id} value={s.id}>{s.title}</option>
+              <option value={s.id}>{s.title}</option>
             ))}
           </select>
           <input
