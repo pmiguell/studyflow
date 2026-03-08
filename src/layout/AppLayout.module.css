@@ -1,7 +1,7 @@
 .app {
   display: flex;
   min-height: 100vh;
-  background-color: #f5f6fa; /* Corrigido de #eceff4 para bater com o dashboard */
+  background-color: #f5f6fa;
 }
 
 .main {
@@ -10,6 +10,13 @@
   flex-direction: column;
   padding: 0 2rem;
   min-height: 100vh;
+  transition: padding 0.3s ease;
+}
+
+@media (max-width: 1024px) {
+  .main {
+    padding: 0 1.5rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -18,7 +25,8 @@
   }
 
   .main {
-    padding: 0 1rem;
-    margin-bottom: 75px; /* Espaço para a barra inferior no mobile */
+    padding: 1.5rem 1rem;
+    margin-top: 60px; /* Espaço para o botão sanduíche que fica fixo */
+    margin-bottom: 0; /* Remove margem inferior da barra antiga */
   }
 }

@@ -205,3 +205,61 @@
   text-decoration: line-through;
   opacity: 0.6;
 }
+
+.shortDayName {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .monthHeader h2 {
+    font-size: 1.2rem;
+    min-width: 150px;
+  }
+
+  .gridContainer {
+    overflow-x: auto; /* Permite scroll se as células ficarem muito pequenas */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .headerCell {
+    padding: 10px 5px;
+    font-size: 0.8rem;
+  }
+
+  .fullDayName {
+    display: none;
+  }
+
+  .shortDayName {
+    display: inline;
+  }
+
+  .dayCell {
+    min-height: 80px; /* Reduz altura no mobile */
+    padding: 4px;
+  }
+
+  .dayNumberWrapper {
+    width: 22px;
+    height: 22px;
+  }
+
+  .dayNumber {
+    font-size: 0.8rem;
+  }
+
+  .eventCard {
+    padding: 2px 4px;
+    font-size: 0.65rem;
+  }
+
+  .deleteButton {
+    display: none !important; /* Esconde lixeira no mobile para evitar cliques acidentais */
+  }
+}
+
+@media (max-width: 480px) {
+  .headerRow, .daysGrid {
+    min-width: 400px; /* Garante que o calendário não esprema demais os eventos */
+  }
+}

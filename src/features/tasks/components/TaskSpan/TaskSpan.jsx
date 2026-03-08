@@ -2,9 +2,9 @@ import style from "./TaskSpan.module.css";
 
 export default function TaskSpan({ content }) {
   const statusColors = {
-    "Não iniciado": "#ff2c2c93",
-    "Em andamento": "#fff1339c",
-    "Concluído": "#4CAF50aa",
+    "Não iniciado": "#ef4444",
+    "Em andamento": "#f59e0b",
+    "Concluído": "#22c55e",
   };
 
   return (

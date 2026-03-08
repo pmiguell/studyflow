@@ -60,6 +60,7 @@ export default function CalendarGrid({ events = [], onDeleteEvent, onEditEvent }
   }
 
   const weekDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+  const weekDaysShort = ["D", "S", "T", "Q", "Q", "S", "S"];
 
   return (
     <div className={style.calendarWrapper}>
@@ -77,9 +78,10 @@ export default function CalendarGrid({ events = [], onDeleteEvent, onEditEvent }
 
       <div className={style.gridContainer}>
         <div className={style.headerRow}>
-          {weekDays.map((day) => (
-            <div key={day} className={style.headerCell}>
-              {day}
+          {weekDays.map((day, i) => (
+            <div key={i} className={style.headerCell}>
+              <span className={style.fullDayName}>{day}</span>
+              <span className={style.shortDayName}>{weekDaysShort[i]}</span>
             </div>
           ))}
         </div>
