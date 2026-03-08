@@ -2,17 +2,32 @@ import style from "./RegisterForm.module.css";
 import { registerUser } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { LinearProgress } from "@mui/material";
+import { LinearProgress, Snackbar, Alert } from "@mui/material";
+import PasswordInput from "../PasswordInput/PasswordInput";
+import PasswordRequirements from "../PasswordRequirements/PasswordRequirements";
+import { isPasswordValid } from "../../utils/passwordValidator";
 
 export default function RegisterForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "error" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (event) => {
     event.preventDefault();
+
+    // Validar requisitos de senha
+    if (!isPasswordValid(password)) {
+      setSnackbar({
+        open: true,
+        message: "A senha não atende aos requisitos mínimos.",
+        severity: "error",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -20,8 +35,18 @@ export default function RegisterForm() {
       navigate("/verificacao");
     } catch (error) {
       console.error("Erro no cadastro:", error);
+      setSnackbar({
+        open: true,
+        message: error.response?.data || "Erro ao criar conta. Tente novamente.",
+        severity: "error",
+      });
       setLoading(false);
     }
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -67,20 +92,29 @@ export default function RegisterForm() {
       </div>
       <div className={style.formGroup}>
         <label htmlFor="password">Senha</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="********"
+        <PasswordInput
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder="•••••••"
           required
         />
       </div>
-      <button type="submit" className={style.submitButton} disabled={loading}>
+      {password && <PasswordRequirements password={password} />}
+      <button type="submit" className={style.submitButton} disabled={loading || !isPasswordValid(password)}>
         {loading ? "Criando..." : "Criar conta"}
       </button>
     </form>
+
+    <Snackbar
+      open={snackbar.open}
+      autoHideDuration={4000}
+      onClose={handleCloseSnackbar}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+    >
+      <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%', fontSize: '1rem', alignItems: 'center' }}>
+        {snackbar.message}
+      </Alert>
+    </Snackbar>
     </>
   );
 }

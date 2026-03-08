@@ -16,10 +16,16 @@
     transition: background-color 0.2s ease;
 }
 
-.button:hover {
+.button:hover:not(:disabled) {
     background-color: var(--color-hover);
 }
 
-.button:active {
+.button:active:not(:disabled) {
     background-color: var(--color-active);
+}
+
+.button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
 }
