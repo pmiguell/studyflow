@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import style from "./CalendarGrid.module.css";
 import { Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function CalendarGrid({ events = [], onDeleteEvent }) { 
+export default function CalendarGrid({ events = [], onDeleteEvent, onEditEvent }) {
   const [holidays, setHolidays] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -25,7 +25,7 @@ export default function CalendarGrid({ events = [], onDeleteEvent }) {
       try {
         const response = await fetch(`https://brasilapi.com.br/api/feriados/v1/${year}`);
         if (!response.ok) throw new Error("Erro ao buscar feriados");
-        
+
         const data = await response.json();
         const holidaysMap = {};
         data.forEach(feriado => {
@@ -44,15 +44,15 @@ export default function CalendarGrid({ events = [], onDeleteEvent }) {
   const firstDayOfMonth = new Date(year, month, 1).getDay();
 
   const days = [];
-  
+
   for (let i = 0; i < firstDayOfMonth; i++) {
     days.push(null);
   }
-  
+
   for (let i = 1; i <= daysInMonth; i++) {
     days.push(i);
   }
-  
+
   const totalCells = Math.ceil(days.length / 7) * 7;
   const remainingCells = totalCells - days.length;
   for (let i = 0; i < remainingCells; i++) {
@@ -93,13 +93,18 @@ export default function CalendarGrid({ events = [], onDeleteEvent }) {
             const currentDayFormatted = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const isHoliday = !!holidays[currentDayFormatted];
             const holidayName = holidays[currentDayFormatted];
-            const dayEvents = events.filter((ev) => ev.date === currentDayFormatted);
+
+            const dayEvents = events.filter((ev) => {
+              if (!ev.deadline) return false;
+              const taskDateStr = ev.deadline.substring(0, 10);
+              return taskDateStr === currentDayFormatted;
+            });
 
             return (
               <div key={index} className={style.dayCell}>
-                <div 
+                <div
                   className={`${style.dayNumberWrapper} ${isHoliday ? style.holidayCell : ''}`}
-                  title={holidayName ? `Feriado Nacional: ${holidayName}` : ''}
+                  title={holidayName ? `Feriado: ${holidayName}` : ''}
                   style={isHoliday ? { cursor: 'help' } : {}}
                 >
                   <span className={`${style.dayNumber} ${isHoliday ? style.holidayDayNumber : ''}`}>
@@ -108,24 +113,46 @@ export default function CalendarGrid({ events = [], onDeleteEvent }) {
                 </div>
 
                 <div className={style.eventsContainer}>
-                  {dayEvents.map((ev) => (
-                    <div 
-                      key={ev.id} 
-                      className={style.eventCard} 
-                      style={{ backgroundColor: ev.color }} 
-                      title={ev.title}
-                    >
-                      <span className={style.eventTitle}>{ev.title}</span> 
-                      
-                      <button 
-                        className={style.deleteButton} 
-                        onClick={() => onDeleteEvent(ev.id)}
-                        title="Excluir evento"
+                  {dayEvents.map((ev) => {
+                    const subjectName = ev.subject?.title || ev.subject?.name || "Sem matéria";
+                    const bgColor = ev.subject?.color || '#9ca3af';
+
+                    // Tratando tanto novo modelo (title) quanto legado (name) das tarefas
+                    let taskTitle = "Sem título";
+                    if (ev.title) taskTitle = ev.title;
+                    else if (ev.name?.title) taskTitle = ev.name.title;
+                    else if (ev.name) taskTitle = String(ev.name);
+
+                    // Descrição
+                    let taskDesc = ev.description ? `\n\nDescrição: ${ev.description}` : "";
+
+                    // Verifica status para riscar a tarefa
+                    const statusVal = ev.status?.name || ev.status || "NAO_INICIADO";
+                    const isCompleted = statusVal === "CONCLUIDO";
+
+                    return (
+                      <div
+                        key={ev.id}
+                        className={`${style.eventCard} ${isCompleted ? style.completedEvent : ''}`}
+                        style={{ backgroundColor: bgColor, cursor: "pointer" }}
+                        title={`${taskTitle} (${subjectName})${taskDesc}`}
+                        onClick={() => onEditEvent && onEditEvent(ev)}
                       >
-                        <Trash2 size={14} className={style.trashIcon} />
-                      </button>
-                    </div>
-                  ))}
+                        <span className={style.eventTitle}>{taskTitle}</span>
+
+                        <button
+                          className={style.deleteButton}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDeleteEvent(ev.id);
+                          }}
+                          title="Excluir tarefa"
+                        >
+                          <Trash2 size={14} className={style.trashIcon} />
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             );
