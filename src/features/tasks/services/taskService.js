@@ -23,9 +23,10 @@ export const getTasks = async () => {
 
 export const createTask = async (task) => {
   const config = getAxiosConfig();
+  const { subjectId, ...taskData } = task;
   const res = await axios.post(
-    `${API_URL}/tasks`,
-    task,
+    `${API_URL}/tasks/subject/${subjectId}`,
+    taskData,
     config
   );
   return res.data;

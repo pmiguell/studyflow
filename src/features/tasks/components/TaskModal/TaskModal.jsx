@@ -7,6 +7,7 @@ export default function TaskModal({ open, onClose, onSubmit, task, subjects }) {
     description: "",
     subjectId: "", // 🔹 agora é ID
     deadline: "",
+    completed: false,
     status: "NAO_INICIADO"
   });
 
@@ -22,6 +23,7 @@ export default function TaskModal({ open, onClose, onSubmit, task, subjects }) {
         description: "",
         subjectId: "",
         deadline: "",
+        completed: false,
         status: "NAO_INICIADO"
       });
     }
@@ -58,6 +60,7 @@ export default function TaskModal({ open, onClose, onSubmit, task, subjects }) {
       description: "",
       subjectId: "",
       deadline: "",
+      completed: false,
       status: "NAO_INICIADO"
     });
 
