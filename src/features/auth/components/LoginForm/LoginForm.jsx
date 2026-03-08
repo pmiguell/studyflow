@@ -3,12 +3,13 @@ import { loginUser } from "../../services/authService";
 import { saveToken } from "../../services/tokenService";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { LinearProgress } from "@mui/material";
+import { LinearProgress, Snackbar, Alert } from "@mui/material";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "error" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -23,9 +24,16 @@ export default function LoginForm() {
       navigate("/materias");
     } catch (error) {
       console.error("Erro no login:", error);
-      setErrorMsg(error.response?.data || "E-mail ou senha incorretos.");
+      const errorMessage = error.response?.data || "E-mail ou senha incorretos.";
+      setErrorMsg(errorMessage);
+      setSnackbar({ open: true, message: errorMessage, severity: "error" });
       setLoading(false);
     }
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -45,7 +53,6 @@ export default function LoginForm() {
         />
       )}
       <form onSubmit={handleLogin} className={style.form}>
-      {errorMsg && <p className={style.errorMessage}>{errorMsg}</p>}
       <div className={style.formGroup}>
         <label htmlFor="email">E-mail</label>
         <input
@@ -74,6 +81,17 @@ export default function LoginForm() {
         {loading ? "Entrando..." : "Entrar"}
       </button>
     </form>
+
+    <Snackbar
+      open={snackbar.open}
+      autoHideDuration={4000}
+      onClose={handleCloseSnackbar}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+    >
+      <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%', fontSize: '1rem', alignItems: 'center' }}>
+        {snackbar.message}
+      </Alert>
+    </Snackbar>
     </>
   );
 }

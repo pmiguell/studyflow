@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import style from "./AccountPage.module.css";
+import { Snackbar, Alert } from "@mui/material";
 import Button from "../../../components/Button/Button";
 import {
   updateAccount,
@@ -13,6 +14,7 @@ export default function AccountPage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
   const token = getToken(); // 🔹 busca token do localStorage
 
@@ -40,9 +42,16 @@ export default function AccountPage() {
     try {
       await updateAccount({ username, email, password }, token);
       setPassword("");
+      setSnackbar({ open: true, message: "Senha alterada com sucesso!", severity: "success" });
     } catch (err) {
       console.error(err);
+      setSnackbar({ open: true, message: "Erro ao alterar a senha.", severity: "error" });
     }
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setSnackbar({ ...snackbar, open: false });
   };
 
   const handleDelete = async () => {
@@ -108,6 +117,17 @@ export default function AccountPage() {
           </button>
         </div>
       </div>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%', fontSize: '1rem', alignItems: 'center' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
