@@ -1,23 +1,20 @@
 .subjectCard {
     background-color: #FFF;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 2px 2px 2px var(--color-hover-soft);
+    height: 10rem;
     border-radius: 20px;
-    padding: 1.5rem;
+    padding: 1rem 1rem 1rem 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 100%;
-    box-sizing: border-box;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    min-height: 220px;
+    width: 45%;
 }
-
-.subjectCard:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+.colorLine {
+  width: 100%;
+  height: 6px; /* altura da linha */
+  border-top-left-radius: 20px; /* combinar com o border-radius do card */
+  border-top-right-radius: 20px;
 }
-
-
 
 
 .subjectCardTop {
@@ -34,12 +31,10 @@
 }
 
 .subjectCardTitle {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #1e293b;
-    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #000;
 }
-
 
 .subjectCardMiddle {
     font-size: 1.5rem;
@@ -69,31 +64,19 @@
     width: 100%;
 }
 
+.progressBarRoot {
+    height: 8px !important;
+    border-radius: 5px !important;
+    background-color: #e0e0e0 !important;
+}
 
+.progressBarBar {
+    background-color: #a26dff !important;
+}
 
-.viewTasks {
+.viewTasks{
     cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--color-primary);
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(0,0,0,0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    transition: all 0.2s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
-
-
-.viewTasks:hover {
-    color: var(--color-hover);
-    text-decoration: underline;
-}
-
 
 @keyframes fadeIn {
     from {

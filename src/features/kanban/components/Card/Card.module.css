@@ -1,77 +1,39 @@
 .card {
-  padding: 16px;
+  padding: 0 12px 12px 12px;
   background-color: #fff;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  min-height: 100px;
-  width: 100%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border-radius: 6px;
+  margin-bottom: 16px;
+  min-height: 120px;
+  width: 220px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   cursor: grab;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid #f1f5f9;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-  user-select: none;
-  touch-action: none; /* Crucial for dnd-kit on touch devices */
 }
 
-.card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.cardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.card h4 {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin: 0;
-  line-height: 1.4;
-  word-break: break-word;
+.card h1 {
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .taskInfoArea {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  color: #64748b;
-  font-size: 0.8rem;
+    font-size: 12px;
 }
 
-.taskInfoArea > div {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.taskInfoArea p {
+    margin: 4px 0;
+    max-width: 75%;
 }
 
-.mobileHint {
-  margin-top: 12px;
-  font-size: 0.7rem;
-  color: #94a3b8;
-  font-style: italic;
-  text-align: right;
-  display: none;
+.taskInfoArea .taskDeadline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-@media (max-width: 768px) {
-  .card {
-    padding: 14px;
-    min-height: auto;
-  }
-
-  .mobileHint {
-    display: block;
-  }
-
-  .mobileIndicator {
-    color: var(--color-primary);
-    opacity: 0.5;
-  }
+.taskInfoArea .taskSubject {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }

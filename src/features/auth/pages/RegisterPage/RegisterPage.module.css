@@ -5,53 +5,34 @@
     align-items: center;
     justify-content: center;
     background-color: #F5F5F5;
-    min-height: 100vh;
-    padding: 2rem 1rem;
-    box-sizing: border-box;
+    height: 100vh;
+    padding: 2rem;
 }
 
-.logo {
-    width: 100%;
-    max-width: 320px;
-    height: auto;
+.registerPage h1 {
+    color: var(--color-primary);
+    font-size: 2.5rem;
     margin-bottom: 2rem;
-    border-radius: 12px;
 }
 
 .registerPage h2 {
-    line-height: 1.2;
-    margin-top: 1rem;
+    line-height: 0;
 }
 
 .registerPage p {
     color: #5B5B5B;
-    text-align: center;
 }
 
 .registerContainer {
     background-color: #FFFFFF;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 0px 5px var(--color-hover-soft);
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2.5rem 4rem;
-    width: 100%;
-    max-width: 500px;
-    box-sizing: border-box;
+    padding: 1.5rem 10rem;
 }
-
-@media (max-width: 768px) {
-    .registerContainer {
-        padding: 2rem 1.5rem;
-    }
-    
-    .logo {
-        max-width: 240px;
-    }
-}
-
 
 .linkToLogin {
     text-decoration: none;

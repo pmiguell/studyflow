@@ -49,8 +49,6 @@ export default function CalendarModal({ open, onClose, onSave }) {
             name="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            min="2000-01-01"
-            max="2100-12-31"
             required
           />
 

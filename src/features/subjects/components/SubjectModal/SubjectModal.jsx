@@ -45,7 +45,7 @@ export default function SubjectModal({ open, onClose, onSubmit, subject }) {
             required
           />
 
-          <div className={style.colorPickerWrapper}>
+          {/* <div className={style.colorPickerWrapper}>
             <span className={style.colorPickerText}>Cor da matéria:</span>
             <label className={style.colorBox} style={{ backgroundColor: formData.color }}>
               <input
@@ -56,7 +56,7 @@ export default function SubjectModal({ open, onClose, onSubmit, subject }) {
                 className={style.colorInput}
               />
             </label>
-          </div>
+          </div> */}
 
 
           <div className={style.actions}>

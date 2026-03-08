@@ -4,7 +4,6 @@
     opacity: 0;
     transform: translateY(20px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -21,24 +20,15 @@
   --white: #FFFFFF;
   --text-main: #111827;
   --text-sec: #6B7280;
-
+  
+  /* Ajuste de padding, assumindo que seu layout pai gerencia a largura total */
   padding: 32px;
   max-width: 1400px;
-  width: 100%;
   background-color: var(--bg-color);
   font-family: 'Inter', system-ui, sans-serif;
   min-height: 100vh;
   animation: fadeIn 0.5s ease-in;
-  overflow-x: hidden;
-  box-sizing: border-box;
 }
-
-@media (max-width: 768px) {
-  .dashboard {
-    padding: 16px 8px; /* Reduzi bastante o padding para o celular */
-  }
-}
-
 
 /* 👋 HEADER - Removido: usando Header padronizado */
 /* Estilos anteriores comment mantidos para referência */
@@ -71,10 +61,9 @@
 }
 
 .highlightCard {
-  background: linear-gradient(135deg, #7c4dc4 0%, #5E2B97 100%);
+  background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
   color: var(--white);
 }
-
 
 .statLabel {
   font-size: 14px;
@@ -105,36 +94,17 @@
 
 .iconWrapperWhite {
   background: rgba(255, 255, 255, 0.2);
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-@media (max-width: 600px) {
-
-  .iconWrapperWhite,
-  .iconWrapperGreen,
-  .iconWrapperOrange,
-  .iconWrapperRed {
-    width: 24px;
-    height: 24px;
-  }
-}
-
-.iconWrapperGreen {
-  color: var(--green);
-}
-
-.iconWrapperOrange {
-  color: var(--orange);
-}
-
-.iconWrapperRed {
-  color: var(--red);
-}
+.iconWrapperGreen { color: var(--green); }
+.iconWrapperOrange { color: var(--orange); }
+.iconWrapperRed { color: var(--red); }
 
 /* 📈 SEÇÃO INFERIOR */
 .bottomGrid {
@@ -143,45 +113,7 @@
   gap: 24px;
 }
 
-@media (max-width: 768px) {
-  .bottomGrid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .chartCard,
-  .tasksCard {
-    padding: 16px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .pieChart {
-    width: 100% !important;
-    max-width: 200px;
-    margin: 0 auto;
-    height: 180px !important;
-  }
-
-  .chartLegend {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    margin-top: 1rem;
-  }
-
-  .legendItem {
-    font-size: 11px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-
-.chartCard,
-.tasksCard {
+.chartCard, .tasksCard {
   background-color: var(--white);
   border-radius: 16px;
   padding: 24px;
@@ -206,15 +138,12 @@
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  background: conic-gradient(#7DD3FC 0% 39%,
-      /* Auditoria: 39% */
-      #A78BFA 39% 70%,
-      /* Cálculo 1: 31% */
-      #FCA5A5 70% 88%,
-      /* POO: 18% */
-      #86EFAC 88% 100%
-      /* Estatística: 12% */
-    );
+  background: conic-gradient(
+    #7DD3FC 0% 39%,     /* Auditoria: 39% */
+    #A78BFA 39% 70%,    /* Cálculo 1: 31% */
+    #FCA5A5 70% 88%,    /* POO: 18% */
+    #86EFAC 88% 100%    /* Estatística: 12% */
+  );
 }
 
 .chartLegend {
@@ -236,10 +165,7 @@
   opacity: 0.7;
 }
 
-.dotBlue,
-.dotPurple,
-.dotPink,
-.dotGreen {
+.dotBlue, .dotPurple, .dotPink, .dotGreen {
   display: inline-block;
   width: 10px;
   height: 10px;
@@ -247,21 +173,10 @@
   margin-right: 4px;
 }
 
-.dotBlue {
-  background-color: #7DD3FC;
-}
-
-.dotPurple {
-  background-color: #A78BFA;
-}
-
-.dotPink {
-  background-color: #FCA5A5;
-}
-
-.dotGreen {
-  background-color: #86EFAC;
-}
+.dotBlue { background-color: #7DD3FC; }
+.dotPurple { background-color: #A78BFA; }
+.dotPink { background-color: #FCA5A5; }
+.dotGreen { background-color: #86EFAC; }
 
 
 /* 📋 PRÓXIMAS TAREFAS */
@@ -269,27 +184,19 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 400px;
+  max-height: 600px;
   overflow-y: auto;
   padding-right: 8px;
-}
-
-@media (max-width: 600px) {
-  .tasksContainer {
-    max-height: 300px;
-  }
 }
 
 /* Custom Scrollbar para o container de tarefas */
 .tasksContainer::-webkit-scrollbar {
   width: 6px;
 }
-
 .tasksContainer::-webkit-scrollbar-track {
   background: #F3F4F6;
   border-radius: 10px;
 }
-
 .tasksContainer::-webkit-scrollbar-thumb {
   background: #D1D5DB;
   border-radius: 10px;
@@ -303,9 +210,29 @@
   font-size: 14px;
 }
 
-/* 📱 RESPONSIVIDADE FINAL */
+/* 📱 RESPONSIVIDADE */
 @media (max-width: 1024px) {
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .bottomGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 20px;
+  }
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  .pieChart {
+    width: 180px;
+    height: 180px;
+  }
+  .chartLegend {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
