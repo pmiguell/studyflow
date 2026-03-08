@@ -1,6 +1,7 @@
 import style from "./RecoverPasswordPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Snackbar, Alert } from "@mui/material";
 import { forgotPassword, resetPassword } from "../../services/authService";
 import logoDark from "../../../../assets/logo-dark.png";
 
@@ -9,23 +10,20 @@ export default function RecoverPasswordPage() {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRequestRecovery = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
-    setError("");
 
     try {
       await forgotPassword(email);
-      setMessage("Se este e-mail estiver cadastrado, um código de recuperação foi enviado.");
+      setSnackbar({ open: true, message: "Se este e-mail estiver cadastrado, um código de recuperação foi enviado.", severity: "success" });
       setStep(2);
     } catch (err) {
-      setError("Erro ao solicitar recuperação de senha.");
+      setSnackbar({ open: true, message: "Erro ao solicitar recuperação de senha.", severity: "error" });
     } finally {
       setLoading(false);
     }
@@ -34,18 +32,21 @@ export default function RecoverPasswordPage() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
-    setError("");
 
     try {
       await resetPassword(email, code, newPassword);
-      setMessage("Senha redefinida com sucesso!");
+      setSnackbar({ open: true, message: "Senha redefinida com sucesso!", severity: "success" });
       setTimeout(() => navigate("/login"), 3000);
     } catch (err) {
-      setError(err?.response?.data || "Código inválido, expirado ou erro no servidor.");
+      setSnackbar({ open: true, message: err?.response?.data || "Código inválido, expirado ou erro no servidor.", severity: "error" });
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -53,9 +54,6 @@ export default function RecoverPasswordPage() {
       <img src={logoDark} alt="StudyFlow Logo" className={style.logo} />
       <div className={style.recoverContainer}>
         <h2>Recuperação de Senha</h2>
-
-        {message && <p className={style.successMessage}>{message}</p>}
-        {error && <p className={style.errorMessage}>{error}</p>}
 
         {step === 1 ? (
           <>
@@ -119,6 +117,17 @@ export default function RecoverPasswordPage() {
 
         <p className={style.backText}>Lembrou a senha? <Link to={"/login"} className={style.link}>Voltar ao Login</Link></p>
       </div>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%', fontSize: '1rem', alignItems: 'center' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
