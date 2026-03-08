@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import style from "./SubjectCard.module.css";
 import { LinearProgress, Box } from "@mui/material";
-import { BookMarked } from "lucide-react";
+import { BookMarked, ArrowRight } from "lucide-react";
 import SubjectDropdown from "../SubjectDropdown/SubjectDropdown.jsx";
 
 export default function SubjectCard({
@@ -60,9 +60,9 @@ export default function SubjectCard({
         </Box>
       </div>
 
-      <p className={style.viewTasks} onClick={handleViewTasks}>
-        Ver tarefas
-      </p>
+      <div className={style.viewTasks} onClick={handleViewTasks}>
+        Ver tarefas <ArrowRight size={16} />
+      </div>
     </div>
   );
 }

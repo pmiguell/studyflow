@@ -1,16 +1,48 @@
+@import "../../../../styles/colors.css";
+
 .columnContainer {
-  background: "#f3f3f3";
-  padding: 10px;
-  border-radius: 8px;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  flex: 1;
+  min-width: 0; /* Permite que o flex-shrink funcione */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100vh - 250px);
+  overflow-y: auto;
 }
 
 .columnTitleContainer {
-  background-color: rgba(255, 0, 0, 0.281);
-  border-radius: 10px;
-  text-align: center;
+  border-radius: 8px;
+  text-align: left;
+  padding: 10px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  margin-bottom: 4px;
 }
 
 .columnTitleContainer h3 {
-  font-size: 16px;
-  padding: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+  .columnContainer {
+    width: 100%;
+    max-height: none;
+    padding: 8px;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .columnTitleContainer {
+    display: none; /* No mobile, o título já está na Aba/Tab */
+  }
 }

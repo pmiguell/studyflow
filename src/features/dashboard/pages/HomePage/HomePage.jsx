@@ -14,6 +14,7 @@ import { getTasks, editTask, deleteTask } from "../../../tasks/services/taskServ
 import { getSubjects } from "../../../subjects/services/subjectsService";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend as ChartLegend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
+import { LinearProgress } from "@mui/material";
 
 ChartJS.register(ArcElement, Tooltip, ChartLegend);
 
@@ -179,6 +180,20 @@ export default function HomePage() {
 
   return (
     <div className={styles.dashboard}>
+      {loading && (
+        <LinearProgress
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
+            height: 4,
+            backgroundColor: '#a26dff30',
+            '& .MuiLinearProgress-bar': { backgroundColor: '#a26dff' }
+          }}
+        />
+      )}
 
       {/* 📊 HEADER PADRONIZADO */}
       <Header
@@ -269,18 +284,23 @@ export default function HomePage() {
 
                 return (
                   <div key={subject} className={styles.legendItem}>
-                    <span style={{
-                      display: 'inline-block',
-                      width: '10px',
-                      height: '10px',
-                      borderRadius: '2px',
-                      backgroundColor: info.color,
-                      marginRight: '4px'
-                    }}></span>
-                    {subject} ({percentage}%) <br /><span className={styles.taskCount}>- {info.count} tarefa{info.count > 1 ? 's' : ''}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span style={{
+                        display: 'inline-block',
+                        width: '10px',
+                        height: '10px',
+                        borderRadius: '2px',
+                        backgroundColor: info.color,
+                      }}></span>
+                      <span style={{ color: info.color, fontWeight: '700' }}>{subject}</span> ({percentage}%)
+                    </div>
+                    <span className={styles.taskCount} style={{ marginLeft: '14px' }}>
+                      - {info.count} tarefa{info.count > 1 ? 's' : ''}
+                    </span>
                   </div>
                 );
               })}
+
             </div>
           )}
         </div>
