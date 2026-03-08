@@ -19,7 +19,7 @@ export default function Sidebar() {
   const handleLogout = (e) => {
     e.preventDefault();
     removeToken();
-    navigate("/login");
+    navigate("/login", { state: { logout: true } });
   };
   return (
     <aside className={style.sidebar}>
