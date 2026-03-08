@@ -21,11 +21,10 @@ export const getTasks = async () => {
   return res.data;
 };
 
-// Criar tarefa vinculada a uma matéria
 export const createTask = async (task) => {
   const config = getAxiosConfig();
   const res = await axios.post(
-    `${API_URL}/tasks/subject/${task.subjectId}`,
+    `${API_URL}/tasks`,
     task,
     config
   );
