@@ -1,4 +1,5 @@
 import style from "./SubjectsPage.module.css";
+import { LinearProgress } from "@mui/material";
 import ActionsContainer from "../../components/ActionsContainer/ActionsContainer.jsx";
 import FilterContainer from "../../../../components/FilterContainer/FilterContainer";
 import Header from "../../../../components/Header/Header";
@@ -92,6 +93,20 @@ export default function SubjectsPage() {
 
   return (
     <div className={style.subjectsPage}>
+      {loading && (
+        <LinearProgress
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
+            height: 4,
+            backgroundColor: '#a26dff30',
+            '& .MuiLinearProgress-bar': { backgroundColor: '#a26dff' }
+          }}
+        />
+      )}
       <div className={style.topBar}>
         <Header
           pageName="Suas Matérias"
@@ -120,9 +135,7 @@ export default function SubjectsPage() {
       />
 
       <div className={style.subjectsContainer}>
-        {loading ? (
-          <p>Carregando matérias...</p>
-        ) : filteredSubjects.length === 0 ? (
+        {loading ? null : filteredSubjects.length === 0 ? (
           <p>Nenhuma matéria encontrada</p>
         ) : (
           filteredSubjects.map((subject) => {
@@ -138,6 +151,7 @@ export default function SubjectsPage() {
                 key={subject.id}
                 id={subject.id}
                 title={subject.title}
+                color={subject.color}
                 progress={progressPercent}
                 progressText={progressText}
                 onEditSubject={handleEditSubject}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import style from "./TasksPage.module.css";
+import { LinearProgress } from "@mui/material";
 import ActionsContainer from "../../components/ActionsContainer/ActionsContainer.jsx";
 import Header from "../../../../components/Header/Header";
 import FilterContainer from '../../../../components/FilterContainer/FilterContainer';
@@ -133,6 +134,20 @@ export default function TasksPage() {
 
   return (
     <div className={style.tasksPage}>
+      {loading && (
+        <LinearProgress
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
+            height: 4,
+            backgroundColor: '#a26dff30',
+            '& .MuiLinearProgress-bar': { backgroundColor: '#a26dff' }
+          }}
+        />
+      )}
       <div className={style.topBar}>
         <Header
           pageName="Suas Tarefas"
@@ -166,9 +181,7 @@ export default function TasksPage() {
       )}
 
       <div className={style.tasksContainer}>
-        {loading ? (
-          <p>Carregando tarefas...</p>
-        ) : filteredTasks.length > 0 ? (
+        {loading ? null : filteredTasks.length > 0 ? (
           filteredTasks.map((task) => (
             <TaskCard
               key={task.id}

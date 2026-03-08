@@ -2,25 +2,45 @@ import style from "./RegisterForm.module.css";
 import { registerUser } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { LinearProgress } from "@mui/material";
 
 export default function RegisterForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
- const handleRegister = (event) => {
-  event.preventDefault();
-  navigate("/verificacao");
+  const handleRegister = async (event) => {
+    event.preventDefault();
+    setLoading(true);
 
-  registerUser({ username, email, password })
-    .catch((error) => {
+    try {
+      await registerUser({ username, email, password });
+      navigate("/verificacao");
+    } catch (error) {
       console.error("Erro no cadastro:", error);
-    });
-};
+      setLoading(false);
+    }
+  };
 
   return (
-    <form onSubmit={handleRegister} className={style.form}>
+    <>
+      {loading && (
+        <LinearProgress
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
+            height: 4,
+            backgroundColor: '#a26dff30',
+            '& .MuiLinearProgress-bar': { backgroundColor: '#a26dff' }
+          }}
+        />
+      )}
+      <form onSubmit={handleRegister} className={style.form}>
       <div className={style.formGroup}>
         <label htmlFor="name">Username</label>
         <input
@@ -57,9 +77,10 @@ export default function RegisterForm() {
           required
         />
       </div>
-      <button type="submit" className={style.submitButton}>
-        Criar conta
+      <button type="submit" className={style.submitButton} disabled={loading}>
+        {loading ? "Criando..." : "Criar conta"}
       </button>
     </form>
+    </>
   );
 }

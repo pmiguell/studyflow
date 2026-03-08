@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import style from "./SubjectCard.module.css";
 import { LinearProgress, Box } from "@mui/material";
+import { BookMarked, ArrowRight } from "lucide-react";
 import SubjectDropdown from "../SubjectDropdown/SubjectDropdown.jsx";
 
 export default function SubjectCard({
@@ -19,11 +20,13 @@ export default function SubjectCard({
   };
 
   return (
-    <div className={style.subjectCard}>
-      <div className={style.colorLine} style={{ backgroundColor: color }} />
+    <div className={style.subjectCard} style={{ backgroundColor: `${color || '#a26dff'}0A`, border: `1px solid ${color || '#a26dff'}30` }}>
 
       <div className={style.subjectCardTop}>
-        <div className={style.subjectCardHeader}>
+        <div className={style.subjectCardHeader} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ backgroundColor: `${color || '#a26dff'}20`, color: color || '#a26dff', padding: '10px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <BookMarked size={24} />
+          </div>
           <h1 className={style.subjectCardTitle}>{title}</h1>
         </div>
 
@@ -42,9 +45,13 @@ export default function SubjectCard({
           <LinearProgress
             variant="determinate"
             value={progress}
-            classes={{
-              root: style.progressBarRoot,
-              bar: style.progressBarBar
+            sx={{
+              height: 8,
+              borderRadius: 5,
+              backgroundColor: `${color || '#a26dff'}30`,
+              "& .MuiLinearProgress-bar": {
+                backgroundColor: color || '#a26dff',
+              },
             }}
           />
           <p className={style.percentText}>
@@ -53,9 +60,9 @@ export default function SubjectCard({
         </Box>
       </div>
 
-      <p className={style.viewTasks} onClick={handleViewTasks}>
-        Ver tarefas
-      </p>
+      <div className={style.viewTasks} onClick={handleViewTasks}>
+        Ver tarefas <ArrowRight size={16} />
+      </div>
     </div>
   );
 }

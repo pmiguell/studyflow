@@ -1,4 +1,5 @@
 import style from "./SummaryPage.module.css";
+import { LinearProgress } from "@mui/material";
 import ActionsContainer from "../../components/ActionsContainer/ActionsContainer";
 import SummaryCard from "../../components/SummaryCard/SummaryCard";
 import SummaryModal from "../../components/SummaryModal/SummaryModal";
@@ -88,6 +89,20 @@ export default function SummaryPage() {
 
   return (
     <div className={style.summaryPage}>
+      {loading && (
+        <LinearProgress
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
+            height: 4,
+            backgroundColor: '#a26dff30',
+            '& .MuiLinearProgress-bar': { backgroundColor: '#a26dff' }
+          }}
+        />
+      )}
       <div className={style.topBar}>
         <Header 
           pageName="Seus Resumos" 
@@ -104,9 +119,7 @@ export default function SummaryPage() {
       <FilterContainer subjects={subjects} onFilterChange={handleFilterChange} />
 
       <div className={style.summaryContainer}>
-        {loading ? (
-          <p>Carregando resumos...</p>
-        ) : filteredSummaries.length > 0 ? (
+        {loading ? null : filteredSummaries.length > 0 ? (
           filteredSummaries.map((summary) => (
             <SummaryCard
               key={summary.id}

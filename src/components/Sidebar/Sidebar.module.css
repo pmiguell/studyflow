@@ -1,78 +1,239 @@
 @import "../../styles/colors.css";
+
 .sidebar {
   background-color: var(--color-primary);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 64px;
+  align-items: flex-start;
+  width: 72px;
   justify-content: space-between;
-  padding: 1rem 0;
+  padding: 1.5rem 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+.sidebar:hover,
+.sidebar.pinned {
+  width: 200px;
 }
 
 .top {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 2rem;
+  width: 100%;
 }
 
-.top h1 {
-  font-size: 1rem;
-  color: var(--color-primary-text);
-  text-align: center;
+.logoContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+  min-height: 48px;
+}
+
+.iconImg {
+  width: 48px;
+  height: 48px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.logoImg {
+  width: 0;
+  height: auto;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.sidebar:hover .iconImg,
+.sidebar.pinned .iconImg {
+  width: 0;
+  opacity: 0;
   margin: 0;
+}
+
+.sidebar:hover .logoImg,
+.sidebar.pinned .logoImg {
+  width: 160px;
+  opacity: 1;
 }
 
 .navigation {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  width: 100%;
+  padding: 0 0.75rem;
 }
 
-.navigation a {
+.navigation a,
+.logoutLink,
+.pinButton {
   color: var(--color-primary-text);
-  font-size: 1.5rem;
-  padding: 0.5rem;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
+  text-decoration: none;
+  padding: 0.75rem;
+  border-radius: 12px;
+  transition: all 0.2s ease;
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 48px;
-  height: 48px;
+  width: 100%;
+  white-space: nowrap;
+  gap: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
 }
 
-.navigation a:hover {
+.navigation a svg,
+.logoutLink svg,
+.pinButton svg {
+  flex-shrink: 0;
+  color: var(--color-primary-text);
+  display: block;
+}
+
+/* No estado recolhido, centraliza os ícones */
+.sidebar:not(.pinned):not(:hover) .navigation a,
+.sidebar:not(.pinned):not(:hover) .logoutLink,
+.sidebar:not(.pinned):not(:hover) .pinButton {
+  justify-content: flex-start;
+}
+
+.navigation a:hover,
+.logoutLink:hover,
+.pinButton:hover {
   background-color: var(--color-hover);
+  transform: translateX(4px);
+}
+
+.active {
+  background-color: var(--color-hover);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.sidebar:hover .label,
+.sidebar.pinned .label {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
 }
 
 .bottom {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 0.75rem;
 }
 
-.bottom button {
-  background: none;
+/* MOBILE TOGGLE BUTTON (MANTIDO OCULTO NO DESKTOP) */
+.mobileToggle {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background-color: var(--color-primary);
+  color: white;
   border: none;
-  color: var(--color-primary-text);
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.bottom a {
-  color: var(--color-primary-text);
-  font-size: 1.5rem;
-  padding: 0.5rem;
   border-radius: 8px;
-  transition: background-color 0.2s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 48px;
-  height: 48px;
+  padding: 8px;
+  z-index: 1100;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-.bottom a:hover {
-  background-color: var(--color-hover);
+.mobileOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+}
+
+/* 📱 RESPONSIVIDADE PARA DISPOSITIVOS MÓVEIS (SANDUÍCHE) */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 250px !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    z-index: 1050;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100vh;
+    padding-top: 4rem; /* Espaço para o botão sanduíche se necessário */
+  }
+
+  .sidebar.mobileOpen {
+    transform: translateX(0);
+  }
+
+  .sidebar.mobileOpen .label {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    pointer-events: auto !important;
+  }
+
+  .sidebar.mobileOpen .logoImg {
+    width: 140px !important;
+    opacity: 1 !important;
+  }
+
+  .sidebar.mobileOpen .iconImg {
+    width: 0 !important;
+    opacity: 0 !important;
+    margin: 0 !important;
+  }
+
+  .mobileToggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mobileOverlay {
+    display: block;
+  }
+
+  /* Esconde o botão de fixar no mobile pois não faz sentido em Drawer */
+  .pinButton {
+    display: none;
+  }
+
+  .navigation a,
+  .logoutLink {
+    padding: 1rem;
+    gap: 1.5rem;
+    border-radius: 0; /* Estilo Drawer fica mais bonito quadrado */
+  }
 }
