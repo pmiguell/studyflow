@@ -12,6 +12,7 @@ import {
   editSubject,
   deleteSubject,
 } from "../../services/subjectsService.js";
+import { getTasks } from "../../../tasks/services/taskService.js"
 
 export default function SubjectsPage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -20,6 +21,7 @@ export default function SubjectsPage() {
   const [filteredSubjects, setFilteredSubjects] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("");
   const [loading, setLoading] = useState(true);
+  const [tasks, setTasks] = useState([]);
 
   // 🔹 Carregar matérias da API
   useEffect(() => {
@@ -28,16 +30,20 @@ export default function SubjectsPage() {
 
   const fetchSubjects = async () => {
     try {
-      const data = await getSubjects();
-      const arrayData = Array.isArray(data) ? data : [];
+      const [subjectData, tasksData] = await Promise.all([
+        getSubjects(),
+        getTasks(),
+      ]);
+      const arrayData = Array.isArray(subjectData) ? subjectData : [];
       setSubjects(arrayData);
       setFilteredSubjects(arrayData);
+      setTasks(Array.isArray(tasksData) ? tasksData : []);
     } catch (error) {
       console.error("Erro ao carregar matérias:", error);
       setSubjects([]);
       setFilteredSubjects([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -67,8 +73,8 @@ export default function SubjectsPage() {
       if (editingSubject) {
         setSubjects(
           subjects.map((s) =>
-            s.id === editingSubject.id ? { ...s, ...formData } : s
-          )
+            s.id === editingSubject.id ? { ...s, ...formData } : s,
+          ),
         );
         await editSubject({ id: editingSubject.id, ...formData });
       } else {
@@ -96,14 +102,14 @@ export default function SubjectsPage() {
       {loading && (
         <LinearProgress
           sx={{
-            position: 'fixed',
+            position: "fixed",
             top: 0,
             left: 0,
             right: 0,
             zIndex: 9999,
             height: 4,
-            backgroundColor: '#a26dff30',
-            '& .MuiLinearProgress-bar': { backgroundColor: '#a26dff' }
+            backgroundColor: "#a26dff30",
+            "& .MuiLinearProgress-bar": { backgroundColor: "#a26dff" },
           }}
         />
       )}
@@ -139,8 +145,10 @@ export default function SubjectsPage() {
           <p>Nenhuma matéria encontrada</p>
         ) : (
           filteredSubjects.map((subject) => {
-            const tasksArray = Array.isArray(subject.tasks) ? subject.tasks : [];
-            const completed = tasksArray.filter((t) => t.status === "CONCLUIDO").length;
+            const tasksArray = tasks.filter((t) => t.subjectId === subject.id);
+            const completed = tasksArray.filter(
+              (t) => t.status === "CONCLUIDO",
+            ).length;
             const total = tasksArray.length;
 
             const progressPercent = total > 0 ? (completed / total) * 100 : 0;
