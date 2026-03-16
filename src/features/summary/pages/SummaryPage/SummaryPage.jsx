@@ -4,7 +4,7 @@ import ActionsContainer from "../../components/ActionsContainer/ActionsContainer
 import SummaryCard from "../../components/SummaryCard/SummaryCard";
 import SummaryModal from "../../components/SummaryModal/SummaryModal";
 import Header from "../../../../components/Header/Header";
-import FilterContainer from '../../../../components/FilterContainer/FilterContainer';
+import FilterContainer from "../../../../components/FilterContainer/FilterContainer";
 import { useEffect, useState } from "react";
 import * as summaryService from "../../services/summaryService";
 import ViewContent from "../../components/ViewContent";
@@ -45,7 +45,7 @@ export default function SummaryPage() {
       setFilteredSummaries(summaries);
     } else {
       setFilteredSummaries(
-        summaries.filter((s) => s.subject?.id === parseInt(selectedSubject))
+        summaries.filter((s) => s.subject?.id === parseInt(selectedSubject)),
       );
     }
   }, [summaries, selectedSubject]);
@@ -62,12 +62,12 @@ export default function SummaryPage() {
           ...formData,
         });
         setSummaries((prev) =>
-          prev.map((s) => (s.id === updated.id ? updated : s))
+          prev.map((s) => (s.id === updated.id ? updated : s)),
         );
       } else {
         const created = await summaryService.createSummary(
           formData.subjectId,
-          formData
+          formData,
         );
         setSummaries((prev) => [...prev, created]);
       }
@@ -92,21 +92,21 @@ export default function SummaryPage() {
       {loading && (
         <LinearProgress
           sx={{
-            position: 'fixed',
+            position: "fixed",
             top: 0,
             left: 0,
             right: 0,
             zIndex: 9999,
             height: 4,
-            backgroundColor: '#a26dff30',
-            '& .MuiLinearProgress-bar': { backgroundColor: '#a26dff' }
+            backgroundColor: "#a26dff30",
+            "& .MuiLinearProgress-bar": { backgroundColor: "#a26dff" },
           }}
         />
       )}
       <div className={style.topBar}>
-        <Header 
-          pageName="Seus Resumos" 
-          pageDescription="Gerencie e organize seus materiais de estudo." 
+        <Header
+          pageName="Seus Resumos"
+          pageDescription="Gerencie e organize seus materiais de estudo."
         />
         <ActionsContainer
           onNewSummary={() => {
@@ -115,8 +115,11 @@ export default function SummaryPage() {
           }}
         />
       </div>
-      
-      <FilterContainer subjects={subjects} onFilterChange={handleFilterChange} />
+
+      <FilterContainer
+        subjects={subjects}
+        onFilterChange={handleFilterChange}
+      />
 
       <div className={style.summaryContainer}>
         {loading ? null : filteredSummaries.length > 0 ? (
@@ -126,7 +129,10 @@ export default function SummaryPage() {
               id={summary.id}
               title={summary.title}
               content={summary.content}
-              subject={summary.subject?.title}
+              subject={
+                subjects.find((s) => s.id === summary.subjectId)?.title ||
+                "Sem matéria"
+              }
               onEdit={() => {
                 setEditingSummary(summary);
                 setModalOpen(true);
@@ -153,6 +159,10 @@ export default function SummaryPage() {
         open={!!viewingSummary}
         onClose={() => setViewingSummary(null)}
         summary={viewingSummary}
+        subjectTitle={
+          subjects.find((s) => s.id === viewingSummary?.subjectId)?.title ||
+          "Sem matéria"
+        }
       />
     </div>
   );
