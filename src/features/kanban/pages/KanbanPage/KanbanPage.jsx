@@ -19,6 +19,7 @@ import {
 
 import Column from "../../components/Column/Column";
 import { getTasks, editTask } from "../../../tasks/services/taskService";
+import { getSubjects } from "../../../subjects/services/subjectsService";
 
 const STATUS_COLUMN_MAP = {
   NAO_INICIADO: "todo",
@@ -50,14 +51,19 @@ export default function KanbanPage() {
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 5 } })
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 150, tolerance: 5 },
+    }),
   );
 
   // 🔹 Buscar tarefas (COM JWT)
   useEffect(() => {
     async function loadTasks() {
       try {
-        const tasks = await getTasks();
+        const [tasks, subjects] = await Promise.all([
+          getTasks(),
+          getSubjects(),
+        ]);
 
         const newColumns = {
           todo: { ...columns.todo, items: [] },
@@ -69,12 +75,14 @@ export default function KanbanPage() {
           const columnKey = STATUS_COLUMN_MAP[task.status];
           if (!columnKey) return;
 
+          const subject = subjects.find((s) => s.id === task.subjectId) || null;
+
           newColumns[columnKey].items.push({
             id: task.id,
             title: task.title,
             deadline: task.deadline,
-            subject: task.subject, // 👈 objeto
-            subjectId: task.subject?.id, // 👈 ID
+            subject: subject,
+            subjectId: task.subjectId,
             status: task.status,
             description: task.description,
           });
@@ -101,7 +109,7 @@ export default function KanbanPage() {
     // No mobile, IDs dropáveis podem ser só o columnId
     const [fromCol, fromIndexStr] = activeId.split("-");
     const fromIndex = parseInt(fromIndexStr, 10);
-    
+
     // O 'over' pode ser uma coluna inteira ou um card específico
     let toCol, toIndex;
     if (overId.includes("-")) {
@@ -128,6 +136,8 @@ export default function KanbanPage() {
 
     // 🔀 Mudança de coluna
     const [moved] = fromItems.splice(fromIndex, 1);
+    console.log("moved:", moved); // ← verifica se subject está aqui
+
     const newStatus = COLUMN_STATUS_MAP[toCol];
 
     const updatedTask = {
@@ -186,8 +196,8 @@ export default function KanbanPage() {
           onDragEnd={handleDragEnd}
         >
           {Object.entries(columns).map(([columnId, column]) => (
-             <div 
-              key={columnId} 
+            <div
+              key={columnId}
               className={`${style.columnWrapper} ${activeTab === columnId ? style.activeColumn : ""}`}
             >
               <SortableContext
