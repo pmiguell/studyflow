@@ -22,7 +22,7 @@ export default function LoginForm() {
     try {
       const data = await loginUser({ email, password });
       saveToken(data.token);
-      navigate("/materias");
+      navigate("/home");
     } catch (error) {
       console.error("Erro no login:", error);
       const errorMessage = error.response?.data || "E-mail ou senha incorretos.";
